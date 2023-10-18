@@ -56,17 +56,17 @@ class Ui_MainWindow(object):
         self.Loginboton.setIcon(icon)
         self.Loginboton.setIconSize(QtCore.QSize(20, 20))
         self.Loginboton.setObjectName("Loginboton")
-        self.Loginboton_2 = QtWidgets.QPushButton(self.frame)
-        self.Loginboton_2.setGeometry(QtCore.QRect(30, 220, 141, 51))
-        self.Loginboton_2.setStyleSheet("border-radius:15px;\n"
+        self.bt_teachers = QtWidgets.QPushButton(self.frame)
+        self.bt_teachers.setGeometry(QtCore.QRect(30, 220, 141, 51))
+        self.bt_teachers.setStyleSheet("border-radius:15px;\n"
 "color:white;\n"
 "font-size:15px;\n"
 "background-color: rgb(104, 126, 255);")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\IUTA -- HORARIOS\\ui\\imagenes/chalkboard-teacher.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.Loginboton_2.setIcon(icon1)
-        self.Loginboton_2.setIconSize(QtCore.QSize(20, 20))
-        self.Loginboton_2.setObjectName("Loginboton_2")
+        self.bt_teachers.setIcon(icon1)
+        self.bt_teachers.setIconSize(QtCore.QSize(20, 20))
+        self.bt_teachers.setObjectName("bt_teachers")
         self.Loginboton_3 = QtWidgets.QPushButton(self.frame)
         self.Loginboton_3.setGeometry(QtCore.QRect(30, 280, 141, 51))
         self.Loginboton_3.setStyleSheet("border-radius:15px;\n"
@@ -114,6 +114,20 @@ class Ui_MainWindow(object):
 "font-size:14px;\n"
 "border-radius:15px;")
         self.bt_close.setObjectName("bt_close")
+        self.label_4 = QtWidgets.QLabel(self.frame)
+        self.label_4.setGeometry(QtCore.QRect(270, 200, 381, 231))
+        font = QtGui.QFont()
+        font.setFamily("Hack Nerd Font Mono")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setItalic(True)
+        font.setWeight(75)
+        self.label_4.setFont(font)
+        self.label_4.setStyleSheet("")
+        self.label_4.setText("")
+        self.label_4.setPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\IUTA -- HORARIOS\\ui\\imagenes/iutaImg.png"))
+        self.label_4.setScaledContents(True)
+        self.label_4.setObjectName("label_4")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -124,7 +138,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "MENU PRINCIPAL"))
         self.Loginboton.setText(_translate("MainWindow", "Horarios"))
-        self.Loginboton_2.setText(_translate("MainWindow", "Profesores"))
+        self.bt_teachers.setText(_translate("MainWindow", "Profesores"))
         self.Loginboton_3.setText(_translate("MainWindow", "Materias"))
         self.Loginboton_4.setText(_translate("MainWindow", "Sedes"))
         self.Loginboton_5.setText(_translate("MainWindow", "Carreras"))

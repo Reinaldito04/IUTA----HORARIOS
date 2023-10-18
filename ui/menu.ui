@@ -108,7 +108,7 @@ background-color: rgb(104, 126, 255);</string>
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="Loginboton_2">
+    <widget class="QPushButton" name="bt_teachers">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -260,6 +260,37 @@ border-radius:15px;</string>
      </property>
      <property name="text">
       <string>Cerrar Sesion</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>200</y>
+       <width>381</width>
+       <height>231</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Hack Nerd Font Mono</family>
+       <pointsize>12</pointsize>
+       <weight>75</weight>
+       <italic>true</italic>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="pixmap">
+      <pixmap>imagenes/iutaImg.png</pixmap>
+     </property>
+     <property name="scaledContents">
+      <bool>true</bool>
      </property>
     </widget>
    </widget>
