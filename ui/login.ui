@@ -154,6 +154,9 @@ border-bottom:2px solid white;
 font-size:18px;
 border-radius:10px;</string>
      </property>
+     <property name="echoMode">
+      <enum>QLineEdit::Password</enum>
+     </property>
     </widget>
     <widget class="QPushButton" name="bt_salir">
      <property name="geometry">
