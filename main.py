@@ -83,8 +83,8 @@ class MenuPrincipal(QMainWindow):
         Usuario = Users(admin=self.admin)
         widget.addWidget(Usuario)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        widget.setFixedHeight(500)
-        widget.setFixedWidth(650)   
+        widget.setFixedHeight(620)
+        widget.setFixedWidth(700)   
 class Users(QMainWindow):
     def __init__(self , admin):
         super(Users , self).__init__()
@@ -94,6 +94,78 @@ class Users(QMainWindow):
         self.bt_salir.clicked.connect(lambda : QApplication.quit())
         self.bt_clear.clicked.connect(self.clearInputs)
         self.bt_register.clicked.connect(self.AddUser)
+        self.bt_aggView.clicked.connect( lambda:self.stackedWidget.setCurrentWidget(self.page_add) )
+        self.bt_deleteView.clicked.connect( lambda:self.stackedWidget.setCurrentWidget(self.page_delete) )
+        self.bt_database.clicked.connect( lambda:self.stackedWidget.setCurrentWidget(self.page) )
+        self.bt_search.clicked.connect(self.searchUser)
+        self.bt_delete.clicked.connect(self.deleteUser)
+        self.bt_act.clicked.connect(self.reloaddata)
+    def reloaddata(self):
+        try:
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("SELECT User,Admin FROM Usuarios")
+            data = cursor.fetchall()
+            
+            
+
+            self.tableWidget.setRowCount(len(data))  
+
+            for row, row_data in enumerate(data):
+                for col, value in enumerate(row_data):
+                    item = QTableWidgetItem(str(value))
+                    self.tableWidget.setItem(row, col, item)
+
+            conexion.close()
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Error al recuperar datos: {str(e)}")
+    def searchUser(self):
+        busqueda = self.ln_busqueda.text()
+        if not busqueda :
+            QMessageBox.information(self,"Falta el usuario","Introduzca el usuario para proceder a la busqueda")
+            return
+        try:
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("SELECT User , Admin FROM Usuarios WHERE User=?", (busqueda,))
+            usuario = cursor.fetchone()
+            if usuario:
+                self.txt_name_3.setText(usuario[0])
+                if usuario[1] =="True":
+                    self.rd_si_3.setChecked(True)
+                if usuario[1] =="False":
+                    self.rd_no_3.setChecked(True)
+            else:
+                QMessageBox.information(self,"Error","El usuario no existe")
+                self.ln_busqueda.clear()
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Error al recuperar datos: {str(e)}")
+        
+    def deleteUser(self):
+        busqueda = self.ln_busqueda.text()
+        if not busqueda :
+            QMessageBox.information(self,"Falta el usuario","Introduzca el usuario para proceder a la busqueda")
+            return
+        try:
+            
+            reply = QMessageBox.question(
+            self,
+            'Confirmación',
+            '¿Deseas eliminar los registros?',
+            QMessageBox.Yes | QMessageBox.No,
+            QMessageBox.Yes
+        )
+            if reply ==QMessageBox.Yes:
+                conexion = sqlite3.connect("./db/database.db")
+                cursor = conexion.cursor()
+                cursor.execute("DELETE FROM Usuarios WHERE User =? ",(busqueda,))
+                conexion.commit()
+                conexion.close()
+                QMessageBox.information(self,"Eliminar","Se ha eliminado los datos correctamente")
+                self.txt_name_3.clear()
+                self.ln_busqueda.clear()
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Error al recuperar datos: {str(e)}")
     def AddUser(self):
         usuario = self.txt_name.text()
         password = self.txt_password.text()
@@ -111,14 +183,25 @@ class Users(QMainWindow):
         if len(usuario) <=6:
             QMessageBox.information(self,"Error","Por favor introduzca más de 6 digitos en su usuario")
             return
+        
         conexion = sqlite3.connect("./db/database.db")
         cursor = conexion.cursor()
-        cursor.execute("INSERT INTO Usuarios (User, Password,Admin)  VALUES (?, ?, ?)", (usuario, password, adminPermisos))
-        conexion.commit()
+        cursor.execute("SELECT User FROM Usuarios WHERE User=?", (usuario,))
+        existing_teacher = cursor.fetchone()
         
-        QMessageBox.information(self, "Éxito", "Los datos se almacenaron correctamente")
-        self.txt_name.clear()
-        self.txt_password.clear()
+
+        if existing_teacher:
+            QMessageBox.warning(self, "Advertencia", "Ya existe un usuario registrado con el mismo usuario.")
+            self.txt_name.clear()
+            self.txt_password.clear()
+            return
+        else:
+            cursor.execute("INSERT INTO Usuarios (User, Password,Admin)  VALUES (?, ?, ?)", (usuario, password, adminPermisos))
+            conexion.commit()
+            
+            QMessageBox.information(self, "Éxito", "Los datos se almacenaron correctamente")
+            self.txt_name.clear()
+            self.txt_password.clear()
        
        
         conexion.close()
