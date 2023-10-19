@@ -54,7 +54,9 @@ class MenuPrincipal(QMainWindow):
         loadUi("./ui/menu.ui",self)
         self.bt_salir.clicked.connect(lambda : QApplication.quit())
         self.bt_close.clicked.connect(self.backLogin)
+        self.bt_users.clicked.connect(self.verifyAdmin)
         self.bt_teachers.clicked.connect(self.teacherView)
+        
         self.admin = admin
         if self.admin == "True":
            self.text.setText("Bienvenido Administrador")
@@ -66,11 +68,70 @@ class MenuPrincipal(QMainWindow):
         widget.setCurrentIndex(widget.currentIndex()+1)
         widget.setFixedHeight(1000)
         widget.setFixedWidth(1000)   
+    def verifyAdmin(self):
+        if self.admin =="True":
+            self.userView()
+        else:
+            QMessageBox.information(self,"Permiso Denegado","No tienes permisos de administrador")
+            return
     def backLogin(self):
        self.hide()
        IngresoUsuario.show()
        IngresoUsuario.txt_name.clear()
        IngresoUsuario.txt_password.clear()
+    def userView(self):
+        Usuario = Users(admin=self.admin)
+        widget.addWidget(Usuario)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        widget.setFixedHeight(500)
+        widget.setFixedWidth(650)   
+class Users(QMainWindow):
+    def __init__(self , admin):
+        super(Users , self).__init__()
+        loadUi("./ui/register.ui",self)
+        self.admin = admin
+        self.bt_salir_2.clicked.connect(self.backMenu)
+        self.bt_salir.clicked.connect(lambda : QApplication.quit())
+        self.bt_clear.clicked.connect(self.clearInputs)
+        self.bt_register.clicked.connect(self.AddUser)
+    def AddUser(self):
+        usuario = self.txt_name.text()
+        password = self.txt_password.text()
+        adminPermisos = None
+        if self.rd_si.isChecked :
+            adminPermisos ="True"
+        if self.rd_no.isChecked:
+            adminPermisos = "False"
+        if not  usuario or not password or not adminPermisos:
+            QMessageBox.warning(self, "Error", "Por favor ingrese usuario y contraseña.")
+            return
+        if len(password) <=4 :
+            QMessageBox.information(self,"Error","Por favor introduzca más de 4 digitos en su contraseña")
+            return
+        if len(usuario) <=6:
+            QMessageBox.information(self,"Error","Por favor introduzca más de 6 digitos en su usuario")
+            return
+        conexion = sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute("INSERT INTO Usuarios (User, Password,Admin)  VALUES (?, ?, ?)", (usuario, password, adminPermisos))
+        conexion.commit()
+        
+        QMessageBox.information(self, "Éxito", "Los datos se almacenaron correctamente")
+        self.txt_name.clear()
+        self.txt_password.clear()
+       
+       
+        conexion.close()
+    def clearInputs(self):
+        self.txt_name.clear()
+        self.txt_password.clear()
+        self.rd_no.setChecked(True)
+    def backMenu(self):
+        menu = MenuPrincipal(self.admin)
+        widget.addWidget(menu)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        widget.setFixedHeight(1000)
+        widget.setFixedWidth(1000)   
 class MenuTeachers(QMainWindow):
     def __init__(self , admin):
         super(MenuTeachers , self).__init__()

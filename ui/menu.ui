@@ -293,6 +293,35 @@ border-radius:15px;</string>
       <bool>true</bool>
      </property>
     </widget>
+    <widget class="QPushButton" name="bt_users">
+     <property name="geometry">
+      <rect>
+       <x>490</x>
+       <y>500</y>
+       <width>141</width>
+       <height>51</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">border-radius:15px;
+color:white;
+font-size:15px;
+background-color: rgb(104, 126, 255);</string>
+     </property>
+     <property name="text">
+      <string>Usuarios</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>imagenes/user-fill.png</normaloff>imagenes/user-fill.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </widget>
    </widget>
   </widget>
  </widget>
