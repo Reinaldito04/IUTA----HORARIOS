@@ -56,12 +56,18 @@ class MenuPrincipal(QMainWindow):
         self.bt_close.clicked.connect(self.backLogin)
         self.bt_users.clicked.connect(self.verifyAdmin)
         self.bt_teachers.clicked.connect(self.teacherView)
-        
+        self.bt_carreras.clicked.connect(self.carrerasViews)
         self.admin = admin
         if self.admin == "True":
            self.text.setText("Bienvenido Administrador")
         else : 
             self.text.setText("Bievenido ")
+    def carrerasViews(self):
+        carreras = MenuCarreras(admin=self.admin)
+        widget.addWidget(carreras)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        widget.setFixedHeight(1000)
+        widget.setFixedWidth(1000) 
     def teacherView(self):
         teacher = MenuTeachers(admin=self.admin)
         widget.addWidget(teacher)
@@ -170,9 +176,9 @@ class Users(QMainWindow):
         usuario = self.txt_name.text()
         password = self.txt_password.text()
         adminPermisos = None
-        if self.rd_si.isChecked :
+        if self.rd_si.isChecked() :
             adminPermisos ="True"
-        if self.rd_no.isChecked:
+        if self.rd_no.isChecked():
             adminPermisos = "False"
         if not  usuario or not password or not adminPermisos:
             QMessageBox.warning(self, "Error", "Por favor ingrese usuario y contraseña.")
@@ -215,6 +221,75 @@ class Users(QMainWindow):
         widget.setCurrentIndex(widget.currentIndex()+1)
         widget.setFixedHeight(1000)
         widget.setFixedWidth(1000)   
+        
+class MenuCarreras(QMainWindow):
+    def __init__(self, admin):
+        super(MenuCarreras, self).__init__()
+        loadUi("./ui/carreras.ui",self)
+        self.admin = admin
+        self.bt_salir.clicked.connect(lambda : QApplication.quit())
+        self.bt_view.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_view))
+        self.bt_agg.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_agg))
+        self.bt_back.clicked.connect(self.backMenu)
+        self.bt_agg_2.clicked.connect(self.addData)
+        self.bt_act.clicked.connect(self.ViewData)
+       
+    def ViewData(self):
+        print("click")
+        try:
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("SELECT * FROM Carreras")
+            data = cursor.fetchall()
+            self.tableWidget.setRowCount(len(data))  
+
+            for row, row_data in enumerate(data):
+                for col, value in enumerate(row_data):
+                    item = QTableWidgetItem(str(value))
+                    self.tableWidget.setItem(row, col, item)
+
+            conexion.close()
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Error al recuperar datos: {str(e)}") 
+    def addData(self):
+        codigo = self.txt_code.text()
+        nombre = self.txt_name.text()
+       
+        if not codigo or not nombre :
+            QMessageBox.information(self,"Añadir","Por favor introduzca los campos para agregarlos")
+            return
+        try:
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+
+            # Comprobar si ya existe un profesor con la misma cédula
+            cursor.execute("SELECT CodigoCarrera FROM Carreras WHERE CodigoCarrera=?", (codigo,))
+            existing_teacher = cursor.fetchone()
+
+            if existing_teacher:
+                QMessageBox.warning(self, "Advertencia", "Ya existe una carrera con el mismo codigo.")
+                self.txt_name.clear()
+                self.txt_code.clear()
+               
+            else:
+                # Si no existe, agregar el nuevo profesor a la base de datos
+                cursor.execute("INSERT INTO Carreras (CodigoCarrera, Descripcion) VALUES (?, ?)", (codigo, nombre))
+                
+                conexion.commit()
+                QMessageBox.information(self, "Éxito", "Los datos se almacenaron correctamente")
+                self.txt_name.clear()
+                self.txt_code.clear()
+                
+    
+            conexion.close()
+        except:
+            QMessageBox.warning(self,"Error","Error con la base de datos")
+    def backMenu(self):
+        menu = MenuPrincipal(self.admin)
+        widget.addWidget(menu)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        widget.setFixedHeight(1000)
+        widget.setFixedWidth(1000)  
 class MenuTeachers(QMainWindow):
     def __init__(self , admin):
         super(MenuTeachers , self).__init__()
@@ -238,9 +313,6 @@ class MenuTeachers(QMainWindow):
             cursor = conexion.cursor()
             cursor.execute("SELECT * FROM Profesores")
             data = cursor.fetchall()
-            
-            
-
             self.tableWidget.setRowCount(len(data))  
 
             for row, row_data in enumerate(data):
@@ -364,7 +436,9 @@ class MenuTeachers(QMainWindow):
         widget.setCurrentIndex(widget.currentIndex()+1)
         widget.setFixedHeight(1000)
         widget.setFixedWidth(1000)   
-        
+
+
+ 
 app = QApplication(sys.argv)
 IngresoUsuario = IngresoUsuario()
 widget = QtWidgets.QStackedWidget()

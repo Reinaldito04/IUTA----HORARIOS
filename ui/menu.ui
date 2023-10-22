@@ -195,7 +195,7 @@ background-color: rgb(104, 126, 255);</string>
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="Loginboton_5">
+    <widget class="QPushButton" name="bt_carreras">
      <property name="geometry">
       <rect>
        <x>30</x>

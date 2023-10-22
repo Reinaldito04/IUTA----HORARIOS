@@ -89,17 +89,17 @@ class Ui_MainWindow(object):
         self.Loginboton_4.setIcon(icon3)
         self.Loginboton_4.setIconSize(QtCore.QSize(20, 20))
         self.Loginboton_4.setObjectName("Loginboton_4")
-        self.Loginboton_5 = QtWidgets.QPushButton(self.frame)
-        self.Loginboton_5.setGeometry(QtCore.QRect(30, 420, 141, 51))
-        self.Loginboton_5.setStyleSheet("border-radius:15px;\n"
+        self.bt_carreras = QtWidgets.QPushButton(self.frame)
+        self.bt_carreras.setGeometry(QtCore.QRect(30, 420, 141, 51))
+        self.bt_carreras.setStyleSheet("border-radius:15px;\n"
 "color:white;\n"
 "font-size:15px;\n"
 "background-color: rgb(104, 126, 255);")
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\IUTA -- HORARIOS\\ui\\imagenes/system-sum.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.Loginboton_5.setIcon(icon4)
-        self.Loginboton_5.setIconSize(QtCore.QSize(20, 20))
-        self.Loginboton_5.setObjectName("Loginboton_5")
+        self.bt_carreras.setIcon(icon4)
+        self.bt_carreras.setIconSize(QtCore.QSize(20, 20))
+        self.bt_carreras.setObjectName("bt_carreras")
         self.bt_salir = QtWidgets.QPushButton(self.frame)
         self.bt_salir.setGeometry(QtCore.QRect(560, 30, 75, 31))
         self.bt_salir.setStyleSheet("background-color:red;\n"
@@ -128,6 +128,17 @@ class Ui_MainWindow(object):
         self.label_4.setPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\IUTA -- HORARIOS\\ui\\imagenes/iutaImg.png"))
         self.label_4.setScaledContents(True)
         self.label_4.setObjectName("label_4")
+        self.bt_users = QtWidgets.QPushButton(self.frame)
+        self.bt_users.setGeometry(QtCore.QRect(490, 500, 141, 51))
+        self.bt_users.setStyleSheet("border-radius:15px;\n"
+"color:white;\n"
+"font-size:15px;\n"
+"background-color: rgb(104, 126, 255);")
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\IUTA -- HORARIOS\\ui\\imagenes/user-fill.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_users.setIcon(icon5)
+        self.bt_users.setIconSize(QtCore.QSize(20, 20))
+        self.bt_users.setObjectName("bt_users")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -141,6 +152,7 @@ class Ui_MainWindow(object):
         self.bt_teachers.setText(_translate("MainWindow", "Profesores"))
         self.Loginboton_3.setText(_translate("MainWindow", "Materias"))
         self.Loginboton_4.setText(_translate("MainWindow", "Sedes"))
-        self.Loginboton_5.setText(_translate("MainWindow", "Carreras"))
+        self.bt_carreras.setText(_translate("MainWindow", "Carreras"))
         self.bt_salir.setText(_translate("MainWindow", "SALIR"))
         self.bt_close.setText(_translate("MainWindow", "Cerrar Sesion"))
+        self.bt_users.setText(_translate("MainWindow", "Usuarios"))
