@@ -58,10 +58,17 @@ class MenuPrincipal(QMainWindow):
         self.bt_teachers.clicked.connect(self.teacherView)
         self.bt_carreras.clicked.connect(self.carrerasViews)
         self.admin = admin
+        self.bt_horarios.clicked.connect(self.horariosView)
         if self.admin == "True":
            self.text.setText("Bienvenido Administrador")
         else : 
             self.text.setText("Bievenido ")
+    def horariosView(self):
+        horarios = HorarioMenu(admin=self.admin)
+        widget.addWidget(horarios)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        widget.setFixedHeight(1000)
+        widget.setFixedWidth(1000) 
     def carrerasViews(self):
         carreras = MenuCarreras(admin=self.admin)
         widget.addWidget(carreras)
@@ -91,6 +98,20 @@ class MenuPrincipal(QMainWindow):
         widget.setCurrentIndex(widget.currentIndex()+1)
         widget.setFixedHeight(620)
         widget.setFixedWidth(700)   
+        
+class HorarioMenu(QMainWindow):
+    def __init__(self , admin):
+        super(HorarioMenu, self).__init__()
+        loadUi("./ui/horarios.ui",self)
+        self.admin = admin
+        self.bt_back.clicked.connect(self.backMenu)
+        self.bt_salir.clicked.connect(lambda : QApplication.quit())
+    def backMenu(self):
+        menu = MenuPrincipal(self.admin)
+        widget.addWidget(menu)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        widget.setFixedHeight(1000)
+        widget.setFixedWidth(1000) 
 class Users(QMainWindow):
     def __init__(self , admin):
         super(Users , self).__init__()

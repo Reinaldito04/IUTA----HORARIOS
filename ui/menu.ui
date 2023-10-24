@@ -17,10 +17,10 @@
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>661</width>
-      <height>581</height>
+      <x>0</x>
+      <y>0</y>
+      <width>681</width>
+      <height>601</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -79,7 +79,7 @@
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
-    <widget class="QPushButton" name="Loginboton">
+    <widget class="QPushButton" name="bt_horarios">
      <property name="geometry">
       <rect>
        <x>30</x>

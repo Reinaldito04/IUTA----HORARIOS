@@ -76,7 +76,7 @@ border-radius:15px;</string>
       <string>SALIR</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="bt_close">
+    <widget class="QPushButton" name="bt_back">
      <property name="geometry">
       <rect>
        <x>40</x>
