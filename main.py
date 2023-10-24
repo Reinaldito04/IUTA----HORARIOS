@@ -327,6 +327,9 @@ class MenuTeachers(QMainWindow):
         self.txt_name_2.clear()
         self.txt_apell_2.clear()
         self.txt_cedula_2.clear()
+        self.txt_telefono_2.clear()
+        self.txt_correo.clear()
+        self.txt_titulos.clear()
         self.ln_busqueda.clear()
     def DeleteData(self):
         busqueda = self.ln_busqueda.text()
@@ -348,10 +351,7 @@ class MenuTeachers(QMainWindow):
                 conexion.commit()
                 conexion.close()
                 QMessageBox.information(self,"Eliminar","Se ha eliminado los datos correctamente")
-                self.txt_name_2.clear()
-                self.txt_apell_2.clear()
-                self.txt_cedula_2.clear()
-                self.ln_busqueda.clear()
+                self.clearInputs()
         except:
             QMessageBox.critical(self,"Error","Error con la base de datos")
     def searchData(self):
@@ -362,12 +362,15 @@ class MenuTeachers(QMainWindow):
         try:
             conexion = sqlite3.connect("./db/database.db")
             cursor = conexion.cursor()
-            cursor.execute("SELECT Nombres, Apellidos,Cedula FROM Profesores WHERE Cedula=?" ,(busqueda,))
+            cursor.execute("SELECT Nombres, Apellidos,Cedula,Telefono,Mail,TituloProfesion FROM Profesores WHERE Cedula=?" ,(busqueda,))
             resultado = cursor.fetchone()
             if resultado:
                 self.txt_name_2.setText(resultado[0])
                 self.txt_apell_2.setText(resultado[1])
                 self.txt_cedula_2.setText(resultado[2])
+                self.txt_telefono_2.setText(resultado[3])
+                self.txt_correo.setText(resultado[4])
+                self.txt_titulos.setText(resultado[5])
             else:
                 # Limpiar la tabla existente si no se encuentra ningún registro
                 self.ln_busqueda.clear()
@@ -388,9 +391,12 @@ class MenuTeachers(QMainWindow):
             nombres = self.txt_name_2.text()
             apellidos = self.txt_apell_2.text()
             cedula = self.ln_busqueda.text()
+            telefono = self.txt_telefono_2.text()
+            correo =self.txt_correo.text()
+            titulos = self.txt_titulos.text()
             conexion = sqlite3.connect("./db/database.db")
             cursor = conexion.cursor()
-            cursor.execute("UPDATE Profesores SET Nombres=? ,Apellidos=? WHERE Cedula=?", (nombres, apellidos, cedula))
+            cursor.execute("UPDATE Profesores SET Nombres=? ,Apellidos=? ,Telefono=?,Mail=?,TituloProfesion=? WHERE Cedula=?", (nombres, apellidos,telefono,correo,titulos, cedula))
             conexion.commit()
             QMessageBox.information(self, "Éxito", "Informacion actualizada correctamente.")
             conexion.close()
@@ -401,7 +407,10 @@ class MenuTeachers(QMainWindow):
         nombres = self.txt_name.text()
         apellido = self.txt_apell.text()
         cedula = self.txt_cedula.text()
-        if not nombres or not apellido or not cedula:
+        telefono = self.txt_telefono.text()
+        correo = self.txt_mail.text()
+        titulos = self.txt_profesion.text()
+        if not nombres or not apellido or not cedula or not telefono or not correo or not titulos:
             QMessageBox.information(self,"Añadir","Por favor introduzca los campos para agregarlos")
             return
         try:
@@ -417,14 +426,21 @@ class MenuTeachers(QMainWindow):
                 self.txt_name.clear()
                 self.txt_apell.clear()
                 self.txt_cedula.clear()
+                self.txt_telefono.clear()
+                self.txt_mail.clear()
+                self.txt_profesion.clear()
             else:
                 # Si no existe, agregar el nuevo profesor a la base de datos
-                cursor.execute("INSERT INTO Profesores (Nombres, Apellidos, Cedula) VALUES (?, ?, ?)", (nombres, apellido, cedula))
+                cursor.execute("INSERT INTO Profesores (Nombres, Apellidos, Cedula,Telefono,Mail,TituloProfesion) VALUES (?, ?, ?, ?, ?,?)", (nombres, apellido, cedula, telefono, correo, titulos))
+                
                 conexion.commit()
                 QMessageBox.information(self, "Éxito", "Los datos se almacenaron correctamente")
                 self.txt_name.clear()
                 self.txt_apell.clear()
                 self.txt_cedula.clear()
+                self.txt_telefono.clear()
+                self.txt_mail.clear()
+                self.txt_profesion.clear()
     
             conexion.close()
         except:
