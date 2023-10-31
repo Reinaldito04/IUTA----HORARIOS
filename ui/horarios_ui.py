@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\reybe\OneDrive\Escritorio\IUTA -- HORARIOS\ui\horarios.ui'
+# Form implementation generated from reading ui file 'c:\Users\reybe\OneDrive\Escritorio\horarios\IUTA----HORARIOS\ui\horarios.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -41,13 +41,13 @@ class Ui_MainWindow(object):
 "font-size:14px;\n"
 "border-radius:15px;")
         self.bt_salir.setObjectName("bt_salir")
-        self.bt_close = QtWidgets.QPushButton(self.frame)
-        self.bt_close.setGeometry(QtCore.QRect(40, 30, 101, 31))
-        self.bt_close.setStyleSheet("background-color:red;\n"
+        self.bt_back = QtWidgets.QPushButton(self.frame)
+        self.bt_back.setGeometry(QtCore.QRect(40, 30, 101, 31))
+        self.bt_back.setStyleSheet("background-color:red;\n"
 "color:white;\n"
 "font-size:14px;\n"
 "border-radius:15px;")
-        self.bt_close.setObjectName("bt_close")
+        self.bt_back.setObjectName("bt_back")
         self.Loginboton = QtWidgets.QPushButton(self.frame)
         self.Loginboton.setGeometry(QtCore.QRect(80, 240, 171, 61))
         self.Loginboton.setStyleSheet("border-radius:15px;\n"
@@ -55,7 +55,7 @@ class Ui_MainWindow(object):
 "font-size:15px;\n"
 "background-color: rgb(104, 126, 255);")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\IUTA -- HORARIOS\\ui\\imagenes/calendar3 (2).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\horarios\\IUTA----HORARIOS\\ui\\imagenes/calendar3 (2).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.Loginboton.setIcon(icon)
         self.Loginboton.setIconSize(QtCore.QSize(20, 20))
         self.Loginboton.setObjectName("Loginboton")
@@ -78,6 +78,6 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "HORARIOS"))
         self.bt_salir.setText(_translate("MainWindow", "SALIR"))
-        self.bt_close.setText(_translate("MainWindow", "Volver"))
+        self.bt_back.setText(_translate("MainWindow", "Volver"))
         self.Loginboton.setText(_translate("MainWindow", "Horarios Actuales"))
         self.Loginboton_2.setText(_translate("MainWindow", "Crear Horario"))

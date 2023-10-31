@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\reybe\OneDrive\Escritorio\horarios\IUTA----HORARIOS\ui\carreras.ui'
+# Form implementation generated from reading ui file 'c:\Users\reybe\OneDrive\Escritorio\horarios\IUTA----HORARIOS\ui\materias.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -11,11 +11,11 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(776, 656)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
+class Ui_materias(object):
+    def setupUi(self, materias):
+        materias.setObjectName("materias")
+        materias.resize(599, 606)
+        self.centralwidget = QtWidgets.QWidget(materias)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -423,34 +423,34 @@ class Ui_MainWindow(object):
         self.horizontalLayout_14.addWidget(self.stackedWidget)
         self.verticalLayout_10.addLayout(self.horizontalLayout_14)
         self.verticalLayout.addWidget(self.frame)
-        MainWindow.setCentralWidget(self.centralwidget)
+        materias.setCentralWidget(self.centralwidget)
 
-        self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(0)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.retranslateUi(materias)
+        self.stackedWidget.setCurrentIndex(1)
+        QtCore.QMetaObject.connectSlotsByName(materias)
 
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, materias):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.bt_back.setText(_translate("MainWindow", "Volver"))
-        self.label.setText(_translate("MainWindow", "CARRERAS"))
-        self.bt_salir.setText(_translate("MainWindow", "SALIR"))
-        self.bt_agg.setText(_translate("MainWindow", "Agregar "))
-        self.bt_view.setText(_translate("MainWindow", "Visualizar"))
-        self.bt_edit.setText(_translate("MainWindow", "Editar"))
-        self.label_2.setText(_translate("MainWindow", "AGREGAR   "))
-        self.label_5.setText(_translate("MainWindow", "Codigo"))
-        self.label_6.setText(_translate("MainWindow", "Nombre"))
-        self.bt_agg_2.setText(_translate("MainWindow", "Agregar "))
-        self.label_3.setText(_translate("MainWindow", "EDITAR"))
-        self.label_9.setText(_translate("MainWindow", "Codigo"))
-        self.label_10.setText(_translate("MainWindow", "Nombre"))
-        self.bt_edit_2.setText(_translate("MainWindow", "Modificar"))
-        self.bt_delete.setText(_translate("MainWindow", "Eliminar"))
-        self.bt_clear.setText(_translate("MainWindow", "Limpiar"))
-        self.label_4.setText(_translate("MainWindow", "VISUALIZAR"))
+        materias.setWindowTitle(_translate("materias", "Materias"))
+        self.bt_back.setText(_translate("materias", "Volver"))
+        self.label.setText(_translate("materias", "Materias"))
+        self.bt_salir.setText(_translate("materias", "SALIR"))
+        self.bt_agg.setText(_translate("materias", "Agregar "))
+        self.bt_view.setText(_translate("materias", "Visualizar"))
+        self.bt_edit.setText(_translate("materias", "Editar"))
+        self.label_2.setText(_translate("materias", "AGREGAR   "))
+        self.label_5.setText(_translate("materias", "Codigo"))
+        self.label_6.setText(_translate("materias", "Nombre"))
+        self.bt_agg_2.setText(_translate("materias", "Agregar "))
+        self.label_3.setText(_translate("materias", "EDITAR"))
+        self.label_9.setText(_translate("materias", "<html><head/><body><p>Codigo</p></body></html>"))
+        self.label_10.setText(_translate("materias", "Nombre"))
+        self.bt_edit_2.setText(_translate("materias", "Modificar"))
+        self.bt_delete.setText(_translate("materias", "Eliminar"))
+        self.bt_clear.setText(_translate("materias", "Limpiar"))
+        self.label_4.setText(_translate("materias", "VISUALIZAR"))
         item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("MainWindow", "Codigo"))
+        item.setText(_translate("materias", "Codigo"))
         item = self.tableWidget.horizontalHeaderItem(1)
-        item.setText(_translate("MainWindow", "Nombre"))
-        self.bt_act.setText(_translate("MainWindow", "Actualizar"))
+        item.setText(_translate("materias", "Nombre"))
+        self.bt_act.setText(_translate("materias", "Actualizar"))

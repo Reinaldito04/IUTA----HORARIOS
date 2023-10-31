@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>776</width>
-    <height>656</height>
+    <width>588</width>
+    <height>666</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -91,7 +91,7 @@ border-radius:15px;</string>
             </font>
            </property>
            <property name="text">
-            <string>CARRERAS</string>
+            <string>Sedes</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
@@ -762,7 +762,7 @@ border-bottom:2px solid rgb(128, 179, 255);</string>
                     <string notr="true">font-size:15px;</string>
                    </property>
                    <property name="text">
-                    <string>Codigo</string>
+                    <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Codigo&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                    </property>
                   </widget>
                  </item>

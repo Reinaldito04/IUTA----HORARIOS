@@ -1,3 +1,5 @@
+#mira tetramardito mamawebaso por tu estar trabajando con widgtes comoq si fueran windows, resulta que yo
+# no pude hacer mas nada puesto que me da mil errores cada que declaro una clase
 import sys
 from PyQt5 import QtCore,QtGui,QtWidgets
 from PyQt5.uic import loadUi
@@ -16,14 +18,13 @@ class IngresoUsuario(QMainWindow):
         super(IngresoUsuario, self).__init__()
         loadUi("./ui/login.ui",self)
         self.Loginboton.clicked.connect(self.ingreso)
-        self.bt_salir.clicked.connect(lambda : QApplication.quit())
+        #self.bt_salir.clicked.connect(lambda : QApplication.quit())
         
     def menuPrincipal_access(self,admin):
         menuview = MenuPrincipal(admin)
         widget.addWidget(menuview)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        widget.setFixedHeight(1000)
-        widget.setFixedWidth(1000)   
+        self.hide()
     def ingreso(self):
         usuario = self.txt_name.text()
         password = self.txt_password.text()
@@ -56,6 +57,9 @@ class MenuPrincipal(QMainWindow):
         self.bt_close.clicked.connect(self.backLogin)
         self.bt_users.clicked.connect(self.verifyAdmin)
         self.bt_teachers.clicked.connect(self.teacherView)
+        self.bt_materias.clicked.connect(self.materiasView)
+        self.setWindowTitle("MenuPrincipal")
+        self.showMaximized()
         self.bt_carreras.clicked.connect(self.carrerasViews)
         self.admin = admin
         self.bt_horarios.clicked.connect(self.horariosView)
@@ -67,20 +71,26 @@ class MenuPrincipal(QMainWindow):
         horarios = HorarioMenu(admin=self.admin)
         widget.addWidget(horarios)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        widget.setFixedHeight(1000)
-        widget.setFixedWidth(1000) 
+        #widget.setFixedHeight(1000)
+        #widget.setFixedWidth(1000) 
     def carrerasViews(self):
         carreras = MenuCarreras(admin=self.admin)
         widget.addWidget(carreras)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        widget.setFixedHeight(1000)
-        widget.setFixedWidth(1000) 
+        #widget.setFixedHeight(1000)
+        #widget.setFixedWidth(1000) 
+    def materiasView(self):
+        materias = MenuMaterias(admin=self.admin)
+        widget.addWidget(materias)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        #widget.setFixedHeight(1000)
+        #widget.setFixedWidth(1000) 
     def teacherView(self):
         teacher = MenuTeachers(admin=self.admin)
         widget.addWidget(teacher)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        widget.setFixedHeight(1000)
-        widget.setFixedWidth(1000)   
+        #widget.setFixedHeight(1000)
+        #widget.setFixedWidth(1000)   
     def verifyAdmin(self):
         if self.admin =="True":
             self.userView()
@@ -88,16 +98,20 @@ class MenuPrincipal(QMainWindow):
             QMessageBox.information(self,"Permiso Denegado","No tienes permisos de administrador")
             return
     def backLogin(self):
-       self.hide()
-       IngresoUsuario.show()
-       IngresoUsuario.txt_name.clear()
-       IngresoUsuario.txt_password.clear()
+        widget.addWidget(ingreso_usuario)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        ingreso_usuario.txt_name.clear()
+      
+        ingreso_usuario.txt_password.clear()
+        self.hide()
     def userView(self):
         Usuario = Users(admin=self.admin)
         widget.addWidget(Usuario)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        widget.setFixedHeight(620)
-        widget.setFixedWidth(700)   
+        #widget.addWidget(Usuario)
+        #widget.setCurrentIndex(widget.currentIndex()+1)
+        #widget.setFixedHeight(620)
+        #widget.setFixedWidth(700)   
         
 class HorarioMenu(QMainWindow):
     def __init__(self , admin):
@@ -108,10 +122,13 @@ class HorarioMenu(QMainWindow):
         self.bt_salir.clicked.connect(lambda : QApplication.quit())
     def backMenu(self):
         menu = MenuPrincipal(self.admin)
+        
+        #maldita peste me costo una bola corregir eso pq resulta que no sirves 
         widget.addWidget(menu)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        widget.setFixedHeight(1000)
-        widget.setFixedWidth(1000) 
+        #widget.setFixedHeight(1000)
+        #widget.setFixedWidth(1000) 
+        # yury <3
 class Users(QMainWindow):
     def __init__(self , admin):
         super(Users , self).__init__()
@@ -240,8 +257,8 @@ class Users(QMainWindow):
         menu = MenuPrincipal(self.admin)
         widget.addWidget(menu)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        widget.setFixedHeight(1000)
-        widget.setFixedWidth(1000)   
+        #widget.setFixedHeight(1000)
+        #widget.setFixedWidth(1000)   
         
 class MenuCarreras(QMainWindow):
     def __init__(self, admin):
@@ -251,6 +268,7 @@ class MenuCarreras(QMainWindow):
         self.bt_salir.clicked.connect(lambda : QApplication.quit())
         self.bt_view.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_view))
         self.bt_agg.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_agg))
+        self.bt_edit.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_edit))
         self.bt_back.clicked.connect(self.backMenu)
         self.bt_agg_2.clicked.connect(self.addData)
         self.bt_act.clicked.connect(self.ViewData)
@@ -309,8 +327,77 @@ class MenuCarreras(QMainWindow):
         menu = MenuPrincipal(self.admin)
         widget.addWidget(menu)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        widget.setFixedHeight(1000)
-        widget.setFixedWidth(1000)  
+        #widget.setFixedHeight(1000)
+        #widget.setFixedWidth(1000)  
+
+class MenuMaterias(QMainWindow):
+    def __init__(self, admin):
+        super(MenuMaterias, self).__init__()
+        loadUi("./ui/materias.ui",self)
+        self.admin = admin
+        self.bt_salir.clicked.connect(lambda : QApplication.quit())
+        self.bt_view.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_view))
+        self.bt_agg.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_agg))
+        self.bt_edit.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_edit))
+        self.bt_back.clicked.connect(self.backMenu)
+        self.bt_agg_2.clicked.connect(self.addData)
+        self.bt_act.clicked.connect(self.ViewData)
+       
+    def ViewData(self):
+        print("click")
+        try:
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("SELECT * FROM Materia")
+            data = cursor.fetchall()
+            self.tableWidget.setRowCount(len(data))  
+
+            for row, row_data in enumerate(data):
+                for col, value in enumerate(row_data):
+                    item = QTableWidgetItem(str(value))
+                    self.tableWidget.setItem(row, col, item)
+
+            conexion.close()
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Error al recuperar datos: {str(e)}") 
+    def addData(self):
+        Codigo = self.txt_code.text()
+        Nombre = self.txt_name.text()
+       
+        if not Codigo or not Nombre :
+            QMessageBox.information(self,"Añadir","Por favor introduzca todos los campos para agregarlos")
+            return
+        try:
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+
+            # Comprobar si ya existe una con el mismo codigo
+            cursor.execute("SELECT Codigo FROM Materia WHERE Codigo=?", (Codigo,))
+            existing_materia = cursor.fetchone()
+
+            if existing_materia:
+                QMessageBox.warning(self, "Advertencia", "Ya existe una materia con el mismo codigo.")
+                self.txt_name.clear()
+                self.txt_code.clear()
+               
+            else:
+                # Si no existe, agregar la nueva materia a la base de datos
+                cursor.execute("INSERT INTO Materia (Codigo, Nombre) VALUES (?, ?)", (Codigo, Nombre))
+                
+                conexion.commit()
+                QMessageBox.information(self, "Éxito", "Los datos se almacenaron correctamente")
+                self.txt_name.clear()
+                self.txt_code.clear()
+                
+    
+            conexion.close()
+        except:
+            QMessageBox.warning(self,"Error","Error con la base de datos")
+    def backMenu(self):
+        menu = MenuPrincipal(self.admin)
+        widget.addWidget(menu)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
 class MenuTeachers(QMainWindow):
     def __init__(self , admin):
         super(MenuTeachers , self).__init__()
@@ -471,26 +558,19 @@ class MenuTeachers(QMainWindow):
         menu = MenuPrincipal(self.admin)
         widget.addWidget(menu)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        widget.setFixedHeight(1000)
-        widget.setFixedWidth(1000)   
-
-
- 
-app = QApplication(sys.argv)
-IngresoUsuario = IngresoUsuario()
-widget = QtWidgets.QStackedWidget()
-widget.addWidget(IngresoUsuario)
-widget.move(400, 80)
-widget.setFixedHeight(580)
-widget.setFixedWidth(750)
-widget.setWindowFlag(QtCore.Qt.FramelessWindowHint)
-widget.setAttribute(QtCore.Qt.WA_TranslucentBackground)
-widget.show()
+        #widget.setFixedHeight(1000)
+        #widget.setFixedWidth(1000)   
 
 
 
-try:
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    app.setApplicationName("IUTA")
+    ingreso_usuario = IngresoUsuario()
+    widget = QtWidgets.QStackedWidget()
+    widget.addWidget(ingreso_usuario)
+    widget.move(400, 80)
+    widget.show()
+
+
     sys.exit(app.exec_())
-except:
-    print("saliendo")
-        

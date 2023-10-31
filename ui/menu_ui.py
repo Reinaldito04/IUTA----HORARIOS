@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\reybe\OneDrive\Escritorio\IUTA -- HORARIOS\ui\menu.ui'
+# Form implementation generated from reading ui file 'c:\Users\reybe\OneDrive\Escritorio\horarios\IUTA----HORARIOS\ui\menu.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -17,14 +17,117 @@ class Ui_MainWindow(object):
         MainWindow.resize(674, 600)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
+        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_2.setSpacing(0)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setGeometry(QtCore.QRect(10, 10, 661, 581))
         self.frame.setStyleSheet("background-color:rgb(152, 228, 255);")
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.frame)
+        self.verticalLayout_5.setObjectName("verticalLayout_5")
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
+        spacerItem = QtWidgets.QSpacerItem(14, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem)
+        self.bt_close = QtWidgets.QPushButton(self.frame)
+        self.bt_close.setMinimumSize(QtCore.QSize(150, 50))
+        self.bt_close.setMaximumSize(QtCore.QSize(150, 50))
+        self.bt_close.setStyleSheet("background-color:red;\n"
+"color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;")
+        self.bt_close.setObjectName("bt_close")
+        self.verticalLayout.addWidget(self.bt_close)
+        spacerItem1 = QtWidgets.QSpacerItem(14, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem1)
+        self.bt_horarios = QtWidgets.QPushButton(self.frame)
+        self.bt_horarios.setMinimumSize(QtCore.QSize(150, 50))
+        self.bt_horarios.setMaximumSize(QtCore.QSize(150, 50))
+        self.bt_horarios.setStyleSheet("border-radius:15px;\n"
+"color:white;\n"
+"font-size:15px;\n"
+"background-color: rgb(104, 126, 255);")
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\horarios\\IUTA----HORARIOS\\ui\\imagenes/calendar3 (2).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_horarios.setIcon(icon)
+        self.bt_horarios.setIconSize(QtCore.QSize(20, 20))
+        self.bt_horarios.setObjectName("bt_horarios")
+        self.verticalLayout.addWidget(self.bt_horarios)
+        spacerItem2 = QtWidgets.QSpacerItem(14, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem2)
+        self.bt_teachers = QtWidgets.QPushButton(self.frame)
+        self.bt_teachers.setMinimumSize(QtCore.QSize(150, 50))
+        self.bt_teachers.setMaximumSize(QtCore.QSize(150, 50))
+        self.bt_teachers.setStyleSheet("border-radius:15px;\n"
+"color:white;\n"
+"font-size:15px;\n"
+"background-color: rgb(104, 126, 255);")
+        icon1 = QtGui.QIcon()
+        icon1.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\horarios\\IUTA----HORARIOS\\ui\\imagenes/chalkboard-teacher.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_teachers.setIcon(icon1)
+        self.bt_teachers.setIconSize(QtCore.QSize(20, 20))
+        self.bt_teachers.setObjectName("bt_teachers")
+        self.verticalLayout.addWidget(self.bt_teachers)
+        spacerItem3 = QtWidgets.QSpacerItem(14, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem3)
+        self.bt_materias = QtWidgets.QPushButton(self.frame)
+        self.bt_materias.setMinimumSize(QtCore.QSize(150, 50))
+        self.bt_materias.setMaximumSize(QtCore.QSize(150, 50))
+        self.bt_materias.setStyleSheet("border-radius:15px;\n"
+"color:white;\n"
+"font-size:15px;\n"
+"background-color: rgb(104, 126, 255);")
+        icon2 = QtGui.QIcon()
+        icon2.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\horarios\\IUTA----HORARIOS\\ui\\imagenes/round-class.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_materias.setIcon(icon2)
+        self.bt_materias.setIconSize(QtCore.QSize(20, 20))
+        self.bt_materias.setObjectName("bt_materias")
+        self.verticalLayout.addWidget(self.bt_materias)
+        spacerItem4 = QtWidgets.QSpacerItem(14, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem4)
+        self.Loginboton_4 = QtWidgets.QPushButton(self.frame)
+        self.Loginboton_4.setMinimumSize(QtCore.QSize(150, 50))
+        self.Loginboton_4.setMaximumSize(QtCore.QSize(150, 50))
+        self.Loginboton_4.setStyleSheet("border-radius:15px;\n"
+"color:white;\n"
+"font-size:15px;\n"
+"background-color: rgb(104, 126, 255);")
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\horarios\\IUTA----HORARIOS\\ui\\imagenes/university.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.Loginboton_4.setIcon(icon3)
+        self.Loginboton_4.setIconSize(QtCore.QSize(20, 20))
+        self.Loginboton_4.setObjectName("Loginboton_4")
+        self.verticalLayout.addWidget(self.Loginboton_4)
+        spacerItem5 = QtWidgets.QSpacerItem(14, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem5)
+        self.bt_carreras = QtWidgets.QPushButton(self.frame)
+        self.bt_carreras.setMinimumSize(QtCore.QSize(150, 50))
+        self.bt_carreras.setMaximumSize(QtCore.QSize(150, 50))
+        self.bt_carreras.setStyleSheet("border-radius:15px;\n"
+"color:white;\n"
+"font-size:15px;\n"
+"background-color: rgb(104, 126, 255);")
+        icon4 = QtGui.QIcon()
+        icon4.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\horarios\\IUTA----HORARIOS\\ui\\imagenes/system-sum.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.bt_carreras.setIcon(icon4)
+        self.bt_carreras.setIconSize(QtCore.QSize(20, 20))
+        self.bt_carreras.setObjectName("bt_carreras")
+        self.verticalLayout.addWidget(self.bt_carreras)
+        spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem6)
+        self.horizontalLayout_4.addLayout(self.verticalLayout)
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_2.setObjectName("horizontalLayout_2")
+        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem7)
         self.label = QtWidgets.QLabel(self.frame)
-        self.label.setGeometry(QtCore.QRect(240, 30, 261, 41))
         font = QtGui.QFont()
         font.setFamily("Hack Nerd Font Mono")
         font.setPointSize(12)
@@ -33,8 +136,24 @@ class Ui_MainWindow(object):
         font.setWeight(75)
         self.label.setFont(font)
         self.label.setObjectName("label")
+        self.horizontalLayout_2.addWidget(self.label)
+        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem8)
+        self.bt_salir = QtWidgets.QPushButton(self.frame)
+        self.bt_salir.setMinimumSize(QtCore.QSize(75, 31))
+        self.bt_salir.setMaximumSize(QtCore.QSize(75, 31))
+        self.bt_salir.setStyleSheet("background-color:red;\n"
+"color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;")
+        self.bt_salir.setObjectName("bt_salir")
+        self.horizontalLayout_2.addWidget(self.bt_salir)
+        self.verticalLayout_4.addLayout(self.horizontalLayout_2)
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.text = QtWidgets.QLabel(self.frame)
-        self.text.setGeometry(QtCore.QRect(150, 90, 401, 71))
+        self.text.setMinimumSize(QtCore.QSize(401, 71))
+        self.text.setMaximumSize(QtCore.QSize(401, 71))
         font = QtGui.QFont()
         font.setFamily("Hack Nerd Font Mono")
         font.setPointSize(12)
@@ -45,77 +164,14 @@ class Ui_MainWindow(object):
         self.text.setText("")
         self.text.setAlignment(QtCore.Qt.AlignCenter)
         self.text.setObjectName("text")
-        self.Loginboton = QtWidgets.QPushButton(self.frame)
-        self.Loginboton.setGeometry(QtCore.QRect(30, 160, 141, 51))
-        self.Loginboton.setStyleSheet("border-radius:15px;\n"
-"color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
-        icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\IUTA -- HORARIOS\\ui\\imagenes/calendar3 (2).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.Loginboton.setIcon(icon)
-        self.Loginboton.setIconSize(QtCore.QSize(20, 20))
-        self.Loginboton.setObjectName("Loginboton")
-        self.bt_teachers = QtWidgets.QPushButton(self.frame)
-        self.bt_teachers.setGeometry(QtCore.QRect(30, 220, 141, 51))
-        self.bt_teachers.setStyleSheet("border-radius:15px;\n"
-"color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
-        icon1 = QtGui.QIcon()
-        icon1.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\IUTA -- HORARIOS\\ui\\imagenes/chalkboard-teacher.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_teachers.setIcon(icon1)
-        self.bt_teachers.setIconSize(QtCore.QSize(20, 20))
-        self.bt_teachers.setObjectName("bt_teachers")
-        self.Loginboton_3 = QtWidgets.QPushButton(self.frame)
-        self.Loginboton_3.setGeometry(QtCore.QRect(30, 280, 141, 51))
-        self.Loginboton_3.setStyleSheet("border-radius:15px;\n"
-"color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
-        icon2 = QtGui.QIcon()
-        icon2.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\IUTA -- HORARIOS\\ui\\imagenes/round-class.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.Loginboton_3.setIcon(icon2)
-        self.Loginboton_3.setIconSize(QtCore.QSize(20, 20))
-        self.Loginboton_3.setObjectName("Loginboton_3")
-        self.Loginboton_4 = QtWidgets.QPushButton(self.frame)
-        self.Loginboton_4.setGeometry(QtCore.QRect(30, 350, 141, 51))
-        self.Loginboton_4.setStyleSheet("border-radius:15px;\n"
-"color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\IUTA -- HORARIOS\\ui\\imagenes/university.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.Loginboton_4.setIcon(icon3)
-        self.Loginboton_4.setIconSize(QtCore.QSize(20, 20))
-        self.Loginboton_4.setObjectName("Loginboton_4")
-        self.bt_carreras = QtWidgets.QPushButton(self.frame)
-        self.bt_carreras.setGeometry(QtCore.QRect(30, 420, 141, 51))
-        self.bt_carreras.setStyleSheet("border-radius:15px;\n"
-"color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
-        icon4 = QtGui.QIcon()
-        icon4.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\IUTA -- HORARIOS\\ui\\imagenes/system-sum.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_carreras.setIcon(icon4)
-        self.bt_carreras.setIconSize(QtCore.QSize(20, 20))
-        self.bt_carreras.setObjectName("bt_carreras")
-        self.bt_salir = QtWidgets.QPushButton(self.frame)
-        self.bt_salir.setGeometry(QtCore.QRect(560, 30, 75, 31))
-        self.bt_salir.setStyleSheet("background-color:red;\n"
-"color:white;\n"
-"font-size:14px;\n"
-"border-radius:15px;")
-        self.bt_salir.setObjectName("bt_salir")
-        self.bt_close = QtWidgets.QPushButton(self.frame)
-        self.bt_close.setGeometry(QtCore.QRect(40, 30, 101, 31))
-        self.bt_close.setStyleSheet("background-color:red;\n"
-"color:white;\n"
-"font-size:14px;\n"
-"border-radius:15px;")
-        self.bt_close.setObjectName("bt_close")
+        self.verticalLayout_3.addWidget(self.text)
+        self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_3.setObjectName("horizontalLayout_3")
+        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem9)
         self.label_4 = QtWidgets.QLabel(self.frame)
-        self.label_4.setGeometry(QtCore.QRect(270, 200, 381, 231))
+        self.label_4.setMinimumSize(QtCore.QSize(381, 231))
+        self.label_4.setMaximumSize(QtCore.QSize(381, 231))
         font = QtGui.QFont()
         font.setFamily("Hack Nerd Font Mono")
         font.setPointSize(12)
@@ -125,20 +181,35 @@ class Ui_MainWindow(object):
         self.label_4.setFont(font)
         self.label_4.setStyleSheet("")
         self.label_4.setText("")
-        self.label_4.setPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\IUTA -- HORARIOS\\ui\\imagenes/iutaImg.png"))
+        self.label_4.setPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\horarios\\IUTA----HORARIOS\\ui\\imagenes/iutaImg.png"))
         self.label_4.setScaledContents(True)
         self.label_4.setObjectName("label_4")
+        self.horizontalLayout_3.addWidget(self.label_4)
+        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem10)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_3)
+        self.verticalLayout_4.addLayout(self.verticalLayout_3)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        spacerItem11 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem11)
         self.bt_users = QtWidgets.QPushButton(self.frame)
-        self.bt_users.setGeometry(QtCore.QRect(490, 500, 141, 51))
+        self.bt_users.setMinimumSize(QtCore.QSize(150, 50))
+        self.bt_users.setMaximumSize(QtCore.QSize(150, 50))
         self.bt_users.setStyleSheet("border-radius:15px;\n"
 "color:white;\n"
 "font-size:15px;\n"
 "background-color: rgb(104, 126, 255);")
         icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\IUTA -- HORARIOS\\ui\\imagenes/user-fill.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon5.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\horarios\\IUTA----HORARIOS\\ui\\imagenes/user-fill.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.bt_users.setIcon(icon5)
         self.bt_users.setIconSize(QtCore.QSize(20, 20))
         self.bt_users.setObjectName("bt_users")
+        self.horizontalLayout.addWidget(self.bt_users)
+        self.verticalLayout_4.addLayout(self.horizontalLayout)
+        self.horizontalLayout_4.addLayout(self.verticalLayout_4)
+        self.verticalLayout_5.addLayout(self.horizontalLayout_4)
+        self.verticalLayout_2.addWidget(self.frame)
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -147,12 +218,12 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.label.setText(_translate("MainWindow", "MENU PRINCIPAL"))
-        self.Loginboton.setText(_translate("MainWindow", "Horarios"))
+        self.bt_close.setText(_translate("MainWindow", "Cerrar Sesion"))
+        self.bt_horarios.setText(_translate("MainWindow", "Horarios"))
         self.bt_teachers.setText(_translate("MainWindow", "Profesores"))
-        self.Loginboton_3.setText(_translate("MainWindow", "Materias"))
+        self.bt_materias.setText(_translate("MainWindow", "Materias"))
         self.Loginboton_4.setText(_translate("MainWindow", "Sedes"))
         self.bt_carreras.setText(_translate("MainWindow", "Carreras"))
+        self.label.setText(_translate("MainWindow", "MENU PRINCIPAL"))
         self.bt_salir.setText(_translate("MainWindow", "SALIR"))
-        self.bt_close.setText(_translate("MainWindow", "Cerrar Sesion"))
         self.bt_users.setText(_translate("MainWindow", "Usuarios"))

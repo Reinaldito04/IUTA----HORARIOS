@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\reybe\OneDrive\Escritorio\horarios\IUTA----HORARIOS\ui\carreras.ui'
+# Form implementation generated from reading ui file 'c:\Users\reybe\OneDrive\Escritorio\horarios\IUTA----HORARIOS\ui\sedes.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(776, 656)
+        MainWindow.resize(588, 666)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -433,7 +433,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.bt_back.setText(_translate("MainWindow", "Volver"))
-        self.label.setText(_translate("MainWindow", "CARRERAS"))
+        self.label.setText(_translate("MainWindow", "Sedes"))
         self.bt_salir.setText(_translate("MainWindow", "SALIR"))
         self.bt_agg.setText(_translate("MainWindow", "Agregar "))
         self.bt_view.setText(_translate("MainWindow", "Visualizar"))
@@ -443,7 +443,7 @@ class Ui_MainWindow(object):
         self.label_6.setText(_translate("MainWindow", "Nombre"))
         self.bt_agg_2.setText(_translate("MainWindow", "Agregar "))
         self.label_3.setText(_translate("MainWindow", "EDITAR"))
-        self.label_9.setText(_translate("MainWindow", "Codigo"))
+        self.label_9.setText(_translate("MainWindow", "<html><head/><body><p>Codigo</p></body></html>"))
         self.label_10.setText(_translate("MainWindow", "Nombre"))
         self.bt_edit_2.setText(_translate("MainWindow", "Modificar"))
         self.bt_delete.setText(_translate("MainWindow", "Eliminar"))
