@@ -1,5 +1,5 @@
-#mira tetramardito mamawebaso por tu estar trabajando con widgtes comoq si fueran windows, resulta que yo
-# no pude hacer mas nada puesto que me da mil errores cada que declaro una clase
+
+#Test
 import sys
 from PyQt5 import QtCore,QtGui,QtWidgets
 from PyQt5.uic import loadUi
