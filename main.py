@@ -226,7 +226,7 @@ class FormularioDialog(QDialog):
             QMessageBox.information(self,"Error","Todos los campos son obligatorios")
         else:
             print(f"el codigo de materia es {codigoMateria},salon {codigoSalon}, cedula profesor {cedulaProfesor}")
-            textforCheckBox = (f"{codigoMateria} \n {codigoSalon}")
+            textforCheckBox = (f"{codigoMateria}\n{codigoSalon}")
             self.checkbox.setText(textforCheckBox)
             self.hide()
 class newhorario(QMainWindow):
@@ -234,9 +234,11 @@ class newhorario(QMainWindow):
         super(newhorario,self).__init__()
         loadUi("./ui/horariocrear.ui",self)
         self.admin = admin
+        self.bt_volver.clicked.connect(self.backMenu)
         
         
         
+    
         self.checkboxLunes = [
             {self.checkBox_1: '07:30 A 08:10',
              self.checkBox_2: '08:10 A 08:50',
@@ -321,7 +323,10 @@ class newhorario(QMainWindow):
         
             
         
-   
+    def backMenu(self):
+        menu = MenuPrincipal(self.admin)
+        widget.addWidget(menu)
+        widget.setCurrentIndex(widget.currentIndex()+1)
     def conectar_eventos(self):
         # Lista de checkboxes por día para simplificar el manejo
         checkboxes_por_dia = [

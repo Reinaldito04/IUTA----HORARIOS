@@ -333,6 +333,9 @@ class Ui_MainWindow(object):
         self.checkBox_9.setText("")
         self.checkBox_9.setObjectName("checkBox_9")
         self.verticalLayout_2.addWidget(self.checkBox_9)
+        self.bt_volver = QtWidgets.QPushButton(self.centralwidget)
+        self.bt_volver.setGeometry(QtCore.QRect(520, 10, 80, 23))
+        self.bt_volver.setObjectName("bt_volver")
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
@@ -358,3 +361,4 @@ class Ui_MainWindow(object):
         self.label_13.setText(_translate("MainWindow", "11:30 A 12:10"))
         self.label_14.setText(_translate("MainWindow", "12:10 A 12:50"))
         self.label_15.setText(_translate("MainWindow", "12:50 A 01:30"))
+        self.bt_volver.setText(_translate("MainWindow", "Volver"))
