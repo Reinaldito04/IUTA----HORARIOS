@@ -11,6 +11,8 @@ from PyQt5.QtWidgets import QWidget ,QApplication ,QMainWindow,QGraphicsDropShad
 from PyQt5.QtWidgets import QMessageBox,QLabel,QTableWidgetItem
 import os
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QCheckBox, QDialog, QLabel, QLineEdit
+
 import sqlite3
 
 
@@ -114,7 +116,9 @@ class MenuPrincipal(QMainWindow):
         #widget.setCurrentIndex(widget.currentIndex()+1)
         #widget.setFixedHeight(620)
         #widget.setFixedWidth(700)   
-        
+       
+       
+ 
 class HorarioMenu(QMainWindow):
     def __init__(self , admin):
         super(HorarioMenu, self).__init__()
@@ -122,15 +126,70 @@ class HorarioMenu(QMainWindow):
         self.admin = admin
         self.bt_back.clicked.connect(self.backMenu)
         self.bt_salir.clicked.connect(lambda : QApplication.quit())
+        self.bt_crear.clicked.connect(self.crearView)
     def backMenu(self):
         menu = MenuPrincipal(self.admin)
         
-        #maldita peste me costo una bola corregir eso pq resulta que no sirves 
+        
         widget.addWidget(menu)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        #widget.setFixedHeight(1000)
-        #widget.setFixedWidth(1000) 
-        # yury <3
+       
+    def crearView(self):
+        menu = newhorario(self.admin)
+        
+        
+        widget.addWidget(menu)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        
+
+class FormularioDialog(QDialog):
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+
+    def initUI(self):
+        layout = QVBoxLayout()
+
+        # Campos del formulario
+        label_materia = QLabel('Codigo Materia:')
+        self.input_materia = QLineEdit()
+
+        label_salon = QLabel('Codigo Salon:')
+        self.input_salon = QLineEdit()
+        
+        label_profesor = QLabel('Cedula Profesor :')
+        self.input_profesor = QLineEdit()
+
+        # Botón para cerrar el diálogo
+        boton_cerrar = QPushButton('Guardar', self)
+        boton_cerrar.clicked.connect(self.accept)
+
+        # Agregar los elementos al diseño vertical
+        layout.addWidget(label_materia)
+        layout.addWidget(self.input_materia)
+        layout.addWidget(label_salon)
+        layout.addWidget(self.input_salon)
+        layout.addWidget(label_profesor)
+        layout.addWidget(self.input_profesor)
+        
+        layout.addWidget(boton_cerrar)
+        
+        
+
+        self.setLayout(layout)
+        self.setWindowTitle('Formulario Modal')
+
+class newhorario(QMainWindow):
+    def __init__(self,admin):
+        super(newhorario,self).__init__()
+        loadUi("./ui/horariocrear.ui",self)
+        self.admin = admin
+        self.bt_guardar.clicked.connect(self.guardar)
+        
+    def guardar(self):
+        dialog = FormularioDialog()
+        dialog.exec_()
 class Users(QMainWindow):
     def __init__(self , admin):
         super(Users , self).__init__()

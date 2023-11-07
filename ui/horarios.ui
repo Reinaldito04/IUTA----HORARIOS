@@ -124,7 +124,7 @@ background-color: rgb(104, 126, 255);</string>
       </size>
      </property>
     </widget>
-    <widget class="QPushButton" name="Loginboton_2">
+    <widget class="QPushButton" name="bt_crear">
      <property name="geometry">
       <rect>
        <x>420</x>
