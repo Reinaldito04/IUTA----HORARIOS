@@ -143,12 +143,12 @@ class HorarioMenu(QMainWindow):
         
 
 class FormularioDialog(QDialog):
-    def __init__(self , titulo , hora, dia):
+    def __init__(self , titulo , hora, dia ,checkbox):
         super().__init__()
         self.titulo = titulo
         self.hora = next(iter(hora)) if isinstance(hora, set) else hora  # Obtiene el primer elemento del conjunto
         self.dia = next(iter(dia)) if isinstance(dia, set) else dia  # Obtiene el primer elemento del conjunto
-      
+        self.checkbox = checkbox
         if self.dia == 1:
             self.dia = "Lunes"
         if self.dia == 2:
@@ -163,6 +163,12 @@ class FormularioDialog(QDialog):
             self.dia = "Sabado"
         self.initUI()
 
+    def cancelar(self):
+        self.desmarcar_checkbox(self.checkbox)
+
+    def desmarcar_checkbox(self, checkbox):
+        checkbox.setChecked(False)
+        self.hide()
     def initUI(self,):
         layout = QVBoxLayout()
         label_dia = QLabel('Dia :')
@@ -185,9 +191,13 @@ class FormularioDialog(QDialog):
         self.input_profesor = QLineEdit()
 
         # Botón para cerrar el diálogo
-        boton_cerrar = QPushButton('Guardar', self)
-        boton_cerrar.clicked.connect(self.accept)
-
+        boton_guardar = QPushButton('Guardar', self)
+        boton_guardar.clicked.connect(self.guardar)
+        boton_cancelar = QPushButton('Cancelar',self)
+        boton_cancelar.clicked.connect(self.cancelar)
+        
+        
+        
         # Agregar los elementos al diseño vertical
         layout.addWidget(label_dia)
         layout.addWidget(self.input_dia)
@@ -200,13 +210,25 @@ class FormularioDialog(QDialog):
         layout.addWidget(label_profesor)
         layout.addWidget(self.input_profesor)
         
-        layout.addWidget(boton_cerrar)
+        layout.addWidget(boton_guardar)
+        layout.addWidget(boton_cancelar)
         
         
 
         self.setLayout(layout)
         self.setWindowTitle(self.titulo)
 
+    def guardar(self, checkbox):
+        codigoMateria = self.input_materia.text()
+        codigoSalon= self.input_salon.text()
+        cedulaProfesor = self.input_profesor.text()
+        if not (codigoMateria and codigoSalon and cedulaProfesor ):
+            QMessageBox.information(self,"Error","Todos los campos son obligatorios")
+        else:
+            print(f"el codigo de materia es {codigoMateria},salon {codigoSalon}, cedula profesor {cedulaProfesor}")
+            textforCheckBox = (f"{codigoMateria} \n {codigoSalon}")
+            self.checkbox.setText(textforCheckBox)
+            self.hide()
 class newhorario(QMainWindow):
     def __init__(self,admin):
         super(newhorario,self).__init__()
@@ -299,7 +321,7 @@ class newhorario(QMainWindow):
         
             
         
-
+   
     def conectar_eventos(self):
         # Lista de checkboxes por día para simplificar el manejo
         checkboxes_por_dia = [
@@ -316,12 +338,15 @@ class newhorario(QMainWindow):
         if state == 2:  # 2 representa el estado "marcado"
             print(f"Checkbox {checkbox.objectName()} del día {dia} marcado a las {hora}")
             # Aquí puedes agregar la lógica que deseas para el checkbox seleccionado y su hora correspondiente en el día específico
-            self.mostrar_dialogo(titulo=f"Formulario del dia {dia} a las {hora}",
-                                 hora= {hora},
-                                 dia={dia})
-    
-    def mostrar_dialogo(self , titulo, hora, dia):
-        dialog = FormularioDialog(titulo=titulo,hora=hora , dia=dia)
+            self.mostrar_dialogo(titulo=f"Formulario del día {dia} a las {hora}", 
+                                 hora=hora, 
+                                 dia=dia, 
+                                 checkbox=checkbox)
+        else:
+            checkbox.setText("")
+
+    def mostrar_dialogo(self, titulo, hora, dia, checkbox):
+        dialog = FormularioDialog(titulo=titulo, hora=hora, dia=dia, checkbox=checkbox)
         dialog.exec_()
     
 class Users(QMainWindow):
