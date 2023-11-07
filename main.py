@@ -143,15 +143,38 @@ class HorarioMenu(QMainWindow):
         
 
 class FormularioDialog(QDialog):
-    def __init__(self):
+    def __init__(self , titulo , hora, dia):
         super().__init__()
-
+        self.titulo = titulo
+        self.hora = next(iter(hora)) if isinstance(hora, set) else hora  # Obtiene el primer elemento del conjunto
+        self.dia = next(iter(dia)) if isinstance(dia, set) else dia  # Obtiene el primer elemento del conjunto
+      
+        if self.dia == 1:
+            self.dia = "Lunes"
+        if self.dia == 2:
+            self.dia = "Martes"
+        if self.dia == 3:
+            self.dia = "Miercoles"
+        if self.dia == 4:
+            self.dia = "Jueves"
+        if self.dia == 5:
+            self.dia = "Viernes"
+        if self.dia == 6:
+            self.dia = "Sabado"
         self.initUI()
 
-    def initUI(self):
+    def initUI(self,):
         layout = QVBoxLayout()
-
+        label_dia = QLabel('Dia :')
+        self.input_dia = QLineEdit()
+        self.input_dia.setText(str(self.dia))
+        self.input_dia.setReadOnly(True)
         # Campos del formulario
+        label_Hora = QLabel('Hora :')
+        self.input_hora =QLineEdit()
+        self.input_hora.setText(str(self.hora))
+        self.input_hora.setReadOnly(True)
+        
         label_materia = QLabel('Codigo Materia:')
         self.input_materia = QLineEdit()
 
@@ -166,6 +189,10 @@ class FormularioDialog(QDialog):
         boton_cerrar.clicked.connect(self.accept)
 
         # Agregar los elementos al diseño vertical
+        layout.addWidget(label_dia)
+        layout.addWidget(self.input_dia)
+        layout.addWidget(label_Hora)
+        layout.addWidget(self.input_hora)
         layout.addWidget(label_materia)
         layout.addWidget(self.input_materia)
         layout.addWidget(label_salon)
@@ -178,18 +205,125 @@ class FormularioDialog(QDialog):
         
 
         self.setLayout(layout)
-        self.setWindowTitle('Formulario Modal')
+        self.setWindowTitle(self.titulo)
 
 class newhorario(QMainWindow):
     def __init__(self,admin):
         super(newhorario,self).__init__()
         loadUi("./ui/horariocrear.ui",self)
         self.admin = admin
-        self.bt_guardar.clicked.connect(self.guardar)
         
-    def guardar(self):
-        dialog = FormularioDialog()
+        
+        
+        self.checkboxLunes = [
+            {self.checkBox_1: '07:30 A 08:10',
+             self.checkBox_2: '08:10 A 08:50',
+             self.checkBox_3 :'08:50 A 09:30',
+             self.checkBox_4 :'09:30 A 10:10',
+             self.checkBox_5 : '10:10 A 10:50',
+             self.checkBox_6 : '10:50 A 11:30',
+             self.checkBox_7 : '11:30 A 12:10',
+             self.checkBox_8 : '12:10 A 12:50',
+             self.checkBox_9 : '12:50 A 01:30',
+             
+             },
+            # Agrega más horarios con sus respectivos checkboxes si es necesario
+        ]
+        self.checkboxMartes =  [
+            {
+                self.checkBox_10 : '07:30 A 08:10',
+                self.checkBox_11 : '08:10 A 08:50',
+                self.checkBox_12: '08:50 A 09:30',
+                self.checkBox_13 :'09:30 A 10:10',
+                self.checkBox_14 : '10:10 A 10:50',
+                self.checkBox_15 : '10:50 A 11:30',
+                self.checkBox_16 : '11:30 A 12:10',
+                self.checkBox_17 : '12:10 A 12:50',
+                self.checkBox_18 : '12:50 A 01:30'
+                
+            }
+        
+        ]
+        self.checkboxMiercoles =[{
+            self.checkBox_19 : '07:30 A 08:10',
+            self.checkBox_20 : '08:10 A 08:50',
+            self.checkBox_21 : '08:50 A 09:30',
+            self.checkBox_22 :'09:30 A 10:10',
+            self.checkBox_23 : '10:10 A 10:50',
+            self.checkBox_24 : '10:50 A 11:30',
+            self.checkBox_25 : '11:30 A 12:10',
+            self.checkBox_26 : '12:10 A 12:50' ,
+            self.checkBox_27 : '12:50 A 01:30'
+            
+        }]
+        
+        self.checkboxJueves =[{
+            self.checkBox_28 : '07:30 A 08:10',
+            self.checkBox_29 : '08:10 A 08:50',
+            self.checkBox_30 : '08:50 A 09:30',
+            self.checkBox_31 :'09:30 A 10:10',
+            self.checkBox_32 : '10:10 A 10:50',
+            self.checkBox_33 : '10:50 A 11:30',
+            self.checkBox_34 : '11:30 A 12:10',
+            self.checkBox_35 : '12:10 A 12:50' ,
+            self.checkBox_36 : '12:50 A 01:30'
+            
+        }]
+        
+        self.checkboxViernes = [{
+            self.checkBox_37 :'07:30 A 08:10',
+            self.checkBox_38 : '08:10 A 08:50',
+            self.checkBox_39 : '08:50 A 09:30' ,
+            self.checkBox_40 :'09:30 A :10:10',
+            self.checkBox_41 : '10:10 A 10:50' ,
+            self.checkBox_42 : '10:50 A 11:30',
+            self.checkBox_43 : '11:30 A 12:10',
+            self.checkBox_44 : '12:10 A 12:50',
+            self.checkBox_45 : '12:50 A 01:30'
+            
+        }]
+        self.checkboxSabado =[{
+            self.checkBox_46 : '07:30 A 08:10',
+            self.checkBox_47 : '08:10 A 08:50' ,
+            self.checkBox_48 : '08:50 A 09:30',
+            self.checkBox_49 :'09:30 A 10:10',
+            self.checkBox_50 : '10:10 A 10:50',
+            self.checkBox_51 : '10:50 A 11:30',
+            self.checkBox_52 : '11:30 A 12:10',
+            self.checkBox_53 : '12:10 A 12:50',
+            self.checkBox_54 : '12:50 A 01:30'
+            
+        }]
+        self.conectar_eventos()
+        
+        
+            
+        
+
+    def conectar_eventos(self):
+        # Lista de checkboxes por día para simplificar el manejo
+        checkboxes_por_dia = [
+            self.checkboxLunes, self.checkboxMartes, self.checkboxMiercoles,
+            self.checkboxJueves, self.checkboxViernes, self.checkboxSabado
+        ]
+        
+        for dia, checkboxes in enumerate(checkboxes_por_dia, start=1):
+            for checkbox_dict in checkboxes:
+                for checkbox, hora in checkbox_dict.items():
+                    checkbox.stateChanged.connect(lambda state, checkbox=checkbox, hora=hora, dia=dia: self.on_checkbox_changed(checkbox, state, hora, dia))
+        
+    def on_checkbox_changed(self, checkbox, state, hora, dia):
+        if state == 2:  # 2 representa el estado "marcado"
+            print(f"Checkbox {checkbox.objectName()} del día {dia} marcado a las {hora}")
+            # Aquí puedes agregar la lógica que deseas para el checkbox seleccionado y su hora correspondiente en el día específico
+            self.mostrar_dialogo(titulo=f"Formulario del dia {dia} a las {hora}",
+                                 hora= {hora},
+                                 dia={dia})
+    
+    def mostrar_dialogo(self , titulo, hora, dia):
+        dialog = FormularioDialog(titulo=titulo,hora=hora , dia=dia)
         dialog.exec_()
+    
 class Users(QMainWindow):
     def __init__(self , admin):
         super(Users , self).__init__()
