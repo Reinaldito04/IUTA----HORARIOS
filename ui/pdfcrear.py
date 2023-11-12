@@ -2,6 +2,7 @@ from weasyprint import HTML
 import os
 import base64
 import sqlite3
+from datetime import datetime
 def image_url_to_base64(image_url):
     try:
         import requests
@@ -28,6 +29,15 @@ def crear_pdf( ruta_salida):
     imagen_url = 'https://www.eduopinions.com/wp-content/uploads/2018/02/Instituto-Universitario-de-Tecnolog%C3%ADa-de-Administraci%C3%B3n-Industrial-IUTA-logo-350x181.gif'
     
     imagen_base64 = image_url_to_base64(imagen_url)
+    Especialidad = 'Informatica'
+    Semestre = '7'
+    Turno = 'Diurno'
+    Seccion ='Unica'
+    
+    fecha_actual = datetime.now()
+    fecha_formateada = fecha_actual.strftime("%Y-%m-%d")
+
+    print("Fecha actual:", fecha_formateada)
     if imagen_base64:
         # Definir los datos de la tabla
         datos_base = recuperar_datos_bd()        
@@ -46,7 +56,7 @@ def crear_pdf( ruta_salida):
                 fila_existente = nueva_fila
 
             # Colocar los datos en la celda correspondiente al día
-            fila_existente[dia.lower()] = f"{dato[2]} - {dato[3]} - {dato[4]}"
+            fila_existente[dia.lower()] = f"{dato[2]} </br> {dato[3]} </br> {dato[4]}"
         filas_datos = sorted(filas_datos, key=lambda x: x['hora'])
 
         filas_html = ""
@@ -79,7 +89,7 @@ def crear_pdf( ruta_salida):
     }}
     
     .container-tabla {{
-        margin-top: 70px;
+        margin-top: 50px;
         display: table;
         width: 107%;
         border-collapse: collapse;
@@ -99,8 +109,8 @@ def crear_pdf( ruta_salida):
     }} 
     .container-fecha{{
         display: flex;
-        margin-top: -15%;
-        margin-left: 50%;
+        margin-top: -35%;
+        margin-left: 80%;
     }}
      .date{{text-decoration: underline;
      margin-top:5%;
@@ -114,8 +124,9 @@ def crear_pdf( ruta_salida):
         font-style: italic;
     }}
     img{{
-        width: 200px;
+        width: 150px;
         height: 100px;
+        margin-left:-10px;
         
     }}
      .div-title{{
@@ -125,7 +136,7 @@ def crear_pdf( ruta_salida):
         margin-left: 18%;
       
         margin:0 auto;
-        margin-top: -15%;
+        margin-top: -25%;
         line-height: 1.0;
         font-weight: bold;
     }}
@@ -137,7 +148,7 @@ def crear_pdf( ruta_salida):
     </head>
     <body>
        <div class="container-img">
-        <img src="{imagen_base64}" width="200" height="100">
+        <img src="{imagen_base64}" width="150px" height="80px">
 
     </div>
     <div class="div-title">
@@ -157,7 +168,7 @@ def crear_pdf( ruta_salida):
         HORARIO
     </p>
     <div class="container-fecha">
-        <p class="fecha">Fecha de Impresión 11/11/2023</p>
+        <p class="fecha">Fecha de Impresión {fecha_formateada}</p>
     </div>
     <div class="container-periodo">
         <p>PERIODO:  <p class="date"> 2023-III</p> </p>
@@ -166,19 +177,19 @@ def crear_pdf( ruta_salida):
     <div class="container-tabla">
         <div class="especialidad  element-div primerelemento">
             <p>Especialidad</p>
-            <p>INFORMÁTICA</p>
+            <p><strong>{Especialidad}</strong></p>
         </div>
         <div class="semestre element-div segundoelemento">
             <p>Semestre</p>
-            <p>1</p>
+            <p><strong>{Semestre}</strong></p>
         </div>
         <div class="turno element-div tercerelemento">
             <p>Turno</p>
-            <p>DIURNO</p>
+            <p><strong>{Turno}</strong></p>
         </div>
         <div class="SECCION element-div cuartoelemento">
             <p>Sección</p>
-            <p>PRIMERO INF 01</p>
+            <p><strong>{Seccion}</strong></p>
         </div>
     </div>
         <table class="horario-table">
