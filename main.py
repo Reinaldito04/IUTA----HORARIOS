@@ -225,6 +225,13 @@ class FormularioDialog(QDialog):
         if not (codigoMateria and codigoSalon and cedulaProfesor ):
             QMessageBox.information(self,"Error","Todos los campos son obligatorios")
         else:
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("INSERT INTO HorarioTest (Dia,Hora,CodigoMat,CodigoAula,CedulaProf) VALUES (?,?,?,?,?)",(self.dia ,self.hora,codigoMateria,codigoSalon,cedulaProfesor))
+            conexion.commit()
+            conexion.close()
+            QMessageBox.information(self,"Exito","los datos fueron almacenados correctamente")
+            
             print(f"el codigo de materia es {codigoMateria},salon {codigoSalon}, cedula profesor {cedulaProfesor}")
             textforCheckBox = (f"{codigoMateria}\n{codigoSalon}")
             self.checkbox.setText(textforCheckBox)
