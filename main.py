@@ -5,14 +5,15 @@ from PyQt5 import QtCore,QtGui,QtWidgets
 from PyQt5.uic import loadUi
 from PyQt5.QtCore import QDate , QBuffer, QByteArray , QTime
 from PyQt5.QtGui import QImage,QPixmap 
+from PyQt5.QtWidgets import QSizePolicy,QHeaderView
 from PyQt5.QtCore import QIODevice
 from PyQt5.QtWidgets import QFileDialog
 from PyQt5.QtWidgets import QWidget ,QApplication ,QMainWindow,QGraphicsDropShadowEffect, QCalendarWidget , QBoxLayout
 from PyQt5.QtWidgets import QMessageBox,QLabel,QTableWidgetItem
 import os
+from PyQt5.QtWidgets import QDialog, QApplication, QPushButton, QVBoxLayout, QLabel, QLineEdit, QTableWidget, QTableWidgetItem
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QCheckBox, QDialog, QLabel, QLineEdit
-
 import sqlite3
 
 
@@ -142,9 +143,68 @@ class HorarioMenu(QMainWindow):
         widget.setCurrentIndex(widget.currentIndex()+1)
         
 
+class DialogoConsulta(QDialog):
+    def __init__(self, titulo, mensaje, consulta_sql):
+        super().__init__()
+        self.setWindowTitle(titulo)
+        layout = QVBoxLayout()
+        layout.addWidget(QLabel(mensaje))
+
+        # Crear la tabla de resultados
+        self.tabla_resultados = QTableWidget(self)
+
+        # Conectar a la base de datos SQLite
+        conexion = sqlite3.connect("./db/database.db")
+
+        # Cargar datos desde la base de datos
+        self.cargar_datos(conexion, consulta_sql)
+        self.tabla_resultados.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.tabla_resultados.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        layout.addWidget(self.tabla_resultados)
+
+        self.boton_aceptar = QPushButton("Aceptar")
+        self.boton_aceptar.clicked.connect(self.aceptar)
+        layout.addWidget(self.boton_aceptar)
+        self.setLayout(layout)
+
+        # Cerrar la conexión a la base de datos al finalizar
+        conexion.close()
+
+    def cargar_datos(self, conexion, consulta_sql):
+        cursor = conexion.cursor()
+        cursor.execute(consulta_sql)
+        datos = cursor.fetchall()
+
+        # Configurar el número de filas y columnas de la tabla
+        self.tabla_resultados.setRowCount(len(datos))
+        self.tabla_resultados.setColumnCount(len(datos[0]))
+
+        # Llenar la tabla con los datos de la consulta
+        for fila_num, fila in enumerate(datos):
+            for col_num, dato in enumerate(fila):
+                item = QTableWidgetItem(str(dato))
+                self.tabla_resultados.setItem(fila_num, col_num, item)
+
+    def item_seleccionado(self):
+       
+        # Obtener el índice de la fila seleccionada
+        fila_seleccionada = self.tabla_resultados.currentRow()
+
+        # Obtener el texto de la primera columna de la fila seleccionada
+        texto_seleccionado = self.tabla_resultados.item(fila_seleccionada, 0).text()
+
+        return texto_seleccionado
+
+
+
+    def aceptar(self):
+        self.accept()
+
+
 class FormularioDialog(QDialog):
     def __init__(self , titulo , hora, dia ,checkbox):
         super().__init__()
+        loadUi("./ui/busqueda.ui",self)
         self.titulo = titulo
         self.hora = next(iter(hora)) if isinstance(hora, set) else hora  # Obtiene el primer elemento del conjunto
         self.dia = next(iter(dia)) if isinstance(dia, set) else dia  # Obtiene el primer elemento del conjunto
@@ -170,53 +230,50 @@ class FormularioDialog(QDialog):
         checkbox.setChecked(False)
         self.hide()
     def initUI(self,):
-        layout = QVBoxLayout()
-        label_dia = QLabel('Dia :')
-        self.input_dia = QLineEdit()
+       
+        self.bt_codigoMat.clicked.connect(self.codigoMateria)
+        self.bt_codigoSalon.clicked.connect(self.codigoSalon)
+        self.bt_CedulaProf.clicked.connect(self.codigoProfesor)
+        
         self.input_dia.setText(str(self.dia))
         self.input_dia.setReadOnly(True)
-        # Campos del formulario
-        label_Hora = QLabel('Hora :')
-        self.input_hora =QLineEdit()
+       
+      
         self.input_hora.setText(str(self.hora))
         self.input_hora.setReadOnly(True)
-        
-        label_materia = QLabel('Codigo Materia:')
-        self.input_materia = QLineEdit()
-
-        label_salon = QLabel('Codigo Salon:')
-        self.input_salon = QLineEdit()
-        
-        label_profesor = QLabel('Cedula Profesor :')
-        self.input_profesor = QLineEdit()
-
-        # Botón para cerrar el diálogo
-        boton_guardar = QPushButton('Guardar', self)
-        boton_guardar.clicked.connect(self.guardar)
-        boton_cancelar = QPushButton('Cancelar',self)
-        boton_cancelar.clicked.connect(self.cancelar)
-        
-        
-        
-        # Agregar los elementos al diseño vertical
-        layout.addWidget(label_dia)
-        layout.addWidget(self.input_dia)
-        layout.addWidget(label_Hora)
-        layout.addWidget(self.input_hora)
-        layout.addWidget(label_materia)
-        layout.addWidget(self.input_materia)
-        layout.addWidget(label_salon)
-        layout.addWidget(self.input_salon)
-        layout.addWidget(label_profesor)
-        layout.addWidget(self.input_profesor)
-        
-        layout.addWidget(boton_guardar)
-        layout.addWidget(boton_cancelar)
-        
+        self.input_materia.setReadOnly(True)
+        self.input_salon.setReadOnly(True)
+        self.input_profesor.setReadOnly(True)
+        self.boton_guardar.clicked.connect(self.guardar)
+        self.boton_cancelar.clicked.connect(self.cancelar)
         
 
-        self.setLayout(layout)
+       
         self.setWindowTitle(self.titulo)
+
+    def codigoMateria(self):
+        consulta_sql_materia = "SELECT Codigo, Nombre FROM Materia;"
+
+        dialogo = DialogoConsulta("Consulta de Materia", "Seleccione una materia:", consulta_sql_materia)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_materia = dialogo.item_seleccionado()
+            self.input_materia.setText(codigo_materia) 
+            
+    def codigoSalon(self):
+        consulta_sql_salon = "SELECT  Descripcion,CodigoAula FROM Aulas;"
+
+        dialogo = DialogoConsulta("Consulta de Salon", "Seleccione un salon:", consulta_sql_salon)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigoSalon = dialogo.item_seleccionado()
+            self.input_salon.setText(codigoSalon)
+            
+    def codigoProfesor(self):
+        consulta_sql_profesor = "SELECT Nombres || ' ' || Apellidos AS Descripcion ,Cedula FROM Profesores;"
+
+        dialogo = DialogoConsulta("Consulta de Profesor", "Seleccione el nombre y apellido del profesor:" ,consulta_sql_profesor)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo = dialogo.item_seleccionado()
+            self.input_profesor.setText(codigo)
 
     def guardar(self, checkbox):
         codigoMateria = self.input_materia.text()
