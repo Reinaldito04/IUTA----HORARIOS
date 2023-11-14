@@ -237,7 +237,8 @@ class FormularioDialog(QDialog):
         
         self.input_dia.setText(str(self.dia))
         self.input_dia.setReadOnly(True)
-       
+        self.rejected.connect(self.cancelar)
+
       
         self.input_hora.setText(str(self.hora))
         self.input_hora.setReadOnly(True)
