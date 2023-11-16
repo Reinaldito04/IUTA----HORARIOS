@@ -144,47 +144,69 @@ class HorarioMenu(QMainWindow):
         
 
 class DialogoConsulta(QDialog):
-    def __init__(self, titulo, mensaje, consulta_sql):
+    def __init__(self, titulo, mensaje, consulta_sql,consulta_like):
         super().__init__()
+        
         self.setWindowTitle(titulo)
         layout = QVBoxLayout()
         layout.addWidget(QLabel(mensaje))
 
+
+        self.campo_busqueda = QLineEdit(self)
+        self.campo_busqueda.setPlaceholderText("Buscar...")
+        layout.addWidget(self.campo_busqueda)
+    
         # Crear la tabla de resultados
         self.tabla_resultados = QTableWidget(self)
-
-        # Conectar a la base de datos SQLite
-        conexion = sqlite3.connect("./db/database.db")
-
         # Cargar datos desde la base de datos
-        self.cargar_datos(conexion, consulta_sql)
+        self.cargar_datos(consulta_sql,consulta_like)
+       
+       
         self.tabla_resultados.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.tabla_resultados.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         layout.addWidget(self.tabla_resultados)
-
+       
+        
+        self.campo_busqueda.textChanged.connect(lambda : self.cargar_datos(consulta_sql,consulta_like))
         self.boton_aceptar = QPushButton("Aceptar")
         self.boton_aceptar.clicked.connect(self.aceptar)
+       
         layout.addWidget(self.boton_aceptar)
         self.setLayout(layout)
 
         # Cerrar la conexión a la base de datos al finalizar
-        conexion.close()
+        
 
-    def cargar_datos(self, conexion, consulta_sql):
+    def cargar_datos(self,  consulta_sql,consulta_like):
+        conexion = sqlite3.connect("./db/database.db")
         cursor = conexion.cursor()
-        cursor.execute(consulta_sql)
+       
+        termino_busqueda = self.campo_busqueda.text()
+        if termino_busqueda:
+            termino_busqueda = f"%{termino_busqueda}%"
+            cursor.execute(consulta_like, (termino_busqueda,))
+        else :
+             cursor.execute(consulta_sql)
+        
         datos = cursor.fetchall()
+        if len(datos) <=0:
+            QMessageBox.information(self,"Error ","No se encontraron registros.")
+            return
 
         # Configurar el número de filas y columnas de la tabla
         self.tabla_resultados.setRowCount(len(datos))
         self.tabla_resultados.setColumnCount(len(datos[0]))
+        columnas = [desc[0] for desc in cursor.description]
+
+        self.tabla_resultados.setHorizontalHeaderLabels(columnas)
 
         # Llenar la tabla con los datos de la consulta
         for fila_num, fila in enumerate(datos):
             for col_num, dato in enumerate(fila):
                 item = QTableWidgetItem(str(dato))
                 self.tabla_resultados.setItem(fila_num, col_num, item)
-
+        conexion.close()
+    
     def item_seleccionado(self):
        
         # Obtener el índice de la fila seleccionada
@@ -253,25 +275,29 @@ class FormularioDialog(QDialog):
         self.setWindowTitle(self.titulo)
 
     def codigoMateria(self):
+        consulta_like = "SELECT Codigo, Nombre FROM Materia WHERE Codigo LIKE ?"
         consulta_sql_materia = "SELECT Codigo, Nombre FROM Materia;"
-
-        dialogo = DialogoConsulta("Consulta de Materia", "Seleccione una materia:", consulta_sql_materia)
+        dialogo = DialogoConsulta("Consulta de Materia", "Seleccione una materia:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
         if dialogo.exec_() == QDialog.Accepted:
             codigo_materia = dialogo.item_seleccionado()
             self.input_materia.setText(codigo_materia) 
             
     def codigoSalon(self):
+        consulta_like = "SELECT Descripcion, CodigoAula FROM Aulas WHERE Descripcion LIKE ?"
+        
         consulta_sql_salon = "SELECT  Descripcion,CodigoAula FROM Aulas;"
 
-        dialogo = DialogoConsulta("Consulta de Salon", "Seleccione un salon:", consulta_sql_salon)
+        dialogo = DialogoConsulta("Consulta de Salon", "Seleccione un salon:", consulta_sql_salon,consulta_like)
         if dialogo.exec_() == QDialog.Accepted:
             codigoSalon = dialogo.item_seleccionado()
             self.input_salon.setText(codigoSalon)
             
     def codigoProfesor(self):
-        consulta_sql_profesor = "SELECT Nombres || ' ' || Apellidos AS Descripcion ,Cedula FROM Profesores;"
+        consulta_like = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido, Cedula FROM Profesores WHERE Nombre_Y_Apellido LIKE ?"
+        
+        consulta_sql_profesor = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido ,Cedula FROM Profesores;"
 
-        dialogo = DialogoConsulta("Consulta de Profesor", "Seleccione el nombre y apellido del profesor:" ,consulta_sql_profesor)
+        dialogo = DialogoConsulta("Consulta de Profesor", "Seleccione el nombre y apellido del profesor:" ,consulta_sql_profesor,consulta_like)
         if dialogo.exec_() == QDialog.Accepted:
             codigo = dialogo.item_seleccionado()
             self.input_profesor.setText(codigo)

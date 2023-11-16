@@ -69,76 +69,73 @@
         font-weight: bold;
     }
 </style>
-<body>
 
     <div class="container-img">
-        <img src="ui/imagenes/iutaImg.png" width="200" height="100">
+     <img src="{imagen_base64}" width="150px" height="80px">
 
-    </div>
-    <div class="div-title">
-        <p>
-            Instituto Universitario De Tecnologia 
-            
-        </p>
-        <p>
-            De Administración Industrial 
-        </p>
-        <p>
-            Extensión Puerto La Cruz
+ </div>
+ <div class="div-title">
+     <p>
+         Instituto Universitario De Tecnologia 
+         
+     </p>
+     <p>
+         De Administración Industrial 
+     </p>
+     <p>
+         Extensión Puerto La Cruz
 
-        </p>
-    </div>  
-    <p class="title">
-        HORARIO
-    </p>
-    <div class="container-fecha">
-        <p class="fecha">Fecha de Impresión 11/11/2023</p>
-    </div>
-    <div class="container-periodo">
-        <p>PERIODO:  <p class="date"> 2023-III</p> </p>
-    </div>
+     </p>
+ </div>  
+ <p class="title">
+     HORARIO
+ </p>
+ <div class="container-fecha">
+     <p class="fecha">Fecha de Impresión {fecha_formateada}</p>
+ </div>
+ <div class="container-periodo">
+     <p>PERIODO:  <p class="date"> 2023-III</p> </p>
+ </div>
 
+ <div class="contenedor">
     <div class="container-tabla">
-        <div class="especialidad  element-div primerelemento">
+        <div class="especialidad element-div primerelemento">
             <p>Especialidad</p>
-            <p>INFORMÁTICA</p>
+            <p><strong>{Especialidad}</strong></p>
         </div>
         <div class="semestre element-div segundoelemento">
             <p>Semestre</p>
-            <p>1</p>
+            <p><strong>{Semestre}</strong></p>
         </div>
         <div class="turno element-div tercerelemento">
             <p>Turno</p>
-            <p>DIURNO</p>
+            <p><strong>{Turno}</strong></p>
         </div>
         <div class="SECCION element-div cuartoelemento">
             <p>Sección</p>
-            <p>PRIMERO INF 01</p>
+            <p><strong>{Seccion}</strong></p>
         </div>
     </div>
-
-
-
-
-    <table class="horario-table">
-        <tr class="horario-header">
-            <th>HORA</th>
-            <th>LUNES</th>
-            <th>MARTES</th>
-            <th>MIERCOLES</th>
-            <th>JUEVES</th>
-            <th>VIERNES</th>
-            <th>SABADO</th>
-        </tr>
-       
-      <tr>
-        <th>
-            [datos]
-        </th>
-      </tr>
-       
-    </table>
-
+    <div class="table-container">
+        <table class="horario-table">
+            <tr class="horario-header">
+                <th>HORA</th>
+                <th>LUNES</th>
+                <th>MARTES</th>
+                <th>MIERCOLES</th>
+                <th>JUEVES</th>
+                <th>VIERNES</th>
+                <th>SABADO</th>
+            </tr>
+            
+            
+        
+        </table>
+        
+        </div>
+    </div>
+     <!-- ... (contenido HTML posterior) ... -->
+ 
    
 </body>
 </html>

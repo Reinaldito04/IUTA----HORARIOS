@@ -91,7 +91,7 @@ def crear_pdf( ruta_salida):
     .container-tabla {{
         margin-top: 50px;
         display: table;
-        width: 107%;
+        width: 109%;
         border-collapse: collapse;
     }}
      .element-div {{
@@ -140,6 +140,16 @@ def crear_pdf( ruta_salida):
         line-height: 1.0;
         font-weight: bold;
     }}
+    .horario-table th, .horario-table td {{
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    max-width: 10%; /* Ajusta el ancho máximo según tus necesidades */
+}}
+.horario-table {{
+    border-collapse: collapse;
+    max-width: 80%; /* Ajusta el ancho según tus necesidades */
+}}
         
    
     
@@ -173,7 +183,7 @@ def crear_pdf( ruta_salida):
     <div class="container-periodo">
         <p>PERIODO:  <p class="date"> 2023-III</p> </p>
     </div>
-
+<div class="contenedor">
     <div class="container-tabla">
         <div class="especialidad  element-div primerelemento">
             <p>Especialidad</p>
@@ -192,6 +202,7 @@ def crear_pdf( ruta_salida):
             <p><strong>{Seccion}</strong></p>
         </div>
     </div>
+    <div class="table-container">
         <table class="horario-table">
             <tr class="horario-header">
                 <th>HORA</th>
@@ -204,9 +215,12 @@ def crear_pdf( ruta_salida):
             </tr>
             {filas_html}
         </table>
+        </div>
+        </div>
         <!-- ... (contenido HTML posterior) ... -->
     </body>
     </html>
+    
     """
 
     HTML(string=html).write_pdf(ruta_salida)
