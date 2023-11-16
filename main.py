@@ -154,6 +154,9 @@ class DialogoConsulta(QDialog):
 
         self.campo_busqueda = QLineEdit(self)
         self.campo_busqueda.setPlaceholderText("Buscar...")
+        
+        self.campo_busqueda.textChanged.connect(lambda : self.cargar_datos(consulta_sql,consulta_like))
+       
         layout.addWidget(self.campo_busqueda)
     
         # Crear la tabla de resultados
@@ -167,7 +170,6 @@ class DialogoConsulta(QDialog):
         layout.addWidget(self.tabla_resultados)
        
         
-        self.campo_busqueda.textChanged.connect(lambda : self.cargar_datos(consulta_sql,consulta_like))
         self.boton_aceptar = QPushButton("Aceptar")
         self.boton_aceptar.clicked.connect(self.aceptar)
        
@@ -191,6 +193,7 @@ class DialogoConsulta(QDialog):
         datos = cursor.fetchall()
         if len(datos) <=0:
             QMessageBox.information(self,"Error ","No se encontraron registros.")
+            self.campo_busqueda.clear()
             return
 
         # Configurar el número de filas y columnas de la tabla
