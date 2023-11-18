@@ -314,15 +314,27 @@ class FormularioDialog(QDialog):
         else:
             conexion = sqlite3.connect("./db/database.db")
             cursor = conexion.cursor()
-            cursor.execute("INSERT INTO HorarioTest (Dia,Hora,CodigoMat,CodigoAula,CedulaProf) VALUES (?,?,?,?,?)",(self.dia ,self.hora,codigoMateria,codigoSalon,cedulaProfesor))
-            conexion.commit()
-            conexion.close()
-            QMessageBox.information(self,"Exito","los datos fueron almacenados correctamente")
             
-            print(f"el codigo de materia es {codigoMateria},salon {codigoSalon}, cedula profesor {cedulaProfesor}")
-            textforCheckBox = (f"{codigoMateria}\n{codigoSalon}")
-            self.checkbox.setText(textforCheckBox)
-            self.hide()
+            
+            verificarHorario = cursor.execute("SELECT * FROM HorarioTest WHERE Dia=? AND Hora=? AND CodigoAula=?",
+                                      (self.dia, self.hora, codigoSalon))
+
+            if verificarHorario.fetchone():
+                # Si ya hay un registro, mostrar un mensaje de alerta y no insertar el nuevo horario
+                QMessageBox.warning(self, "Error", "El salón ya está siendo utilizado en la misma hora")
+                self.input_salon.clear()
+                self.input_salon.setPlaceholderText("Ingrese un salon distinto...")
+                return
+            else:
+                cursor.execute("INSERT INTO HorarioTest (Dia,Hora,CodigoMat,CodigoAula,CedulaProf) VALUES (?,?,?,?,?)",(self.dia ,self.hora,codigoMateria,codigoSalon,cedulaProfesor))
+                conexion.commit()
+                conexion.close()
+                QMessageBox.information(self,"Exito","los datos fueron almacenados correctamente")
+                
+                print(f"el codigo de materia es {codigoMateria},salon {codigoSalon}, cedula profesor {cedulaProfesor}")
+                textforCheckBox = (f"{codigoMateria}\n{codigoSalon}")
+                self.checkbox.setText(textforCheckBox)
+                self.hide()
 class newhorario(QMainWindow):
     def __init__(self,admin):
         super(newhorario,self).__init__()
