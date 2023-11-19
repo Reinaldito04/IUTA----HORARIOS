@@ -1,8 +1,14 @@
+import sys
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QVBoxLayout, QPushButton, QFileDialog, QWidget
+from PyQt5.QtGui import QPixmap,QImage
 from weasyprint import HTML
+
 import os
 import base64
 import sqlite3
+import fitz
 from datetime import datetime
+
 def image_url_to_base64(image_url):
     try:
         import requests
@@ -14,8 +20,6 @@ def image_url_to_base64(image_url):
         print(f"Error al obtener la imagen desde la URL: {e}")
         return None 
 
-
-
 def recuperar_datos_bd():
     conexion = sqlite3.connect("db/database.db")
     cursor = conexion.cursor()
@@ -24,8 +28,8 @@ def recuperar_datos_bd():
     cursor.close()
     return datos_base
     
-    
-def crear_pdf( ruta_salida):
+
+def crear_pdf(ruta_salida):
     imagen_url = 'https://www.eduopinions.com/wp-content/uploads/2018/02/Instituto-Universitario-de-Tecnolog%C3%ADa-de-Administraci%C3%B3n-Industrial-IUTA-logo-350x181.gif'
     
     imagen_base64 = image_url_to_base64(imagen_url)
@@ -233,8 +237,113 @@ def crear_pdf( ruta_salida):
     HTML(string=html).write_pdf(ruta_salida)
 
 if __name__ == "__main__":
-    # Obtén tus datos desde la base de datos
-   
-    # Llamada a la función con tus datos y ruta de salida
+    app = QApplication(sys.argv)
+    
+    class ImagePreviewer(QMainWindow):
+        def __init__(self, pdf_path):
+            super().__init__()
+
+            self.pdf_path = pdf_path
+            self.current_page = 0  # Página actual
+            self.total_pages = 0   # Total de páginas en el PDF
+            self.initUI()
+
+        def initUI(self):
+            self.setWindowTitle('Vista Previa de PDF')
+
+            # Crear un widget central y un layout vertical
+            central_widget = QWidget(self)
+            self.setCentralWidget(central_widget)
+            layout = QVBoxLayout(central_widget)
+
+            # Crear un QLabel para mostrar la vista previa de la imagen
+            self.image_label = QLabel(self)
+            layout.addWidget(self.image_label)
+
+            # Crear botones para navegar por las páginas
+            btn_prev = QPushButton('Página Anterior', self)
+            btn_prev.clicked.connect(self.showPreviousPage)
+            layout.addWidget(btn_prev)
+            
+            btn_next = QPushButton('Página Siguiente', self)
+            btn_next.clicked.connect(self.showNextPage)
+            layout.addWidget(btn_next)
+            btn_save = QPushButton('Guardar PDF', self)
+            btn_save.clicked.connect(self.savePdf)
+            layout.addWidget(btn_save)
+            # Obtener el total de páginas en el PDF
+            self.total_pages = self.getTotalPages(self.pdf_path)
+
+            # Mostrar la primera página al iniciar la aplicación
+            self.showPdfPreview()
+
+        def showPdfPreview(self):
+            # Cargar la imagen del PDF como vista previa en el QLabel
+            pixmap = self.convertPdfPageToPixmap(self.pdf_path, self.current_page)
+
+            # Mostrar la imagen en el QLabel
+            self.image_label.setPixmap(pixmap)
+            self.image_label.show()
+        def showPreviousPage(self):
+        # Mostrar la página anterior si no estamos en la primera página
+            if self.current_page > 0:
+                self.current_page -= 1
+                self.showPdfPreview()
+                
+        def showNextPage(self):
+        # Mostrar la página siguiente si no estamos en la última página
+            if self.current_page < self.total_pages - 1:
+                self.current_page += 1
+                self.showPdfPreview()
+
+        def getTotalPages(self, pdf_path):
+            # Obtener el total de páginas en el PDF
+            doc = fitz.open(pdf_path)
+            total_pages = doc.page_count
+            doc.close()
+            return total_pages
+        
+        def convertPdfPageToPixmap(self, pdf_path, page_number):
+            # Utilizar PyMuPDF para convertir la página específica del PDF a una imagen
+            doc = fitz.open(pdf_path)
+            page = doc[page_number]
+            pixmap = page.get_pixmap()
+
+            # Convertir la imagen a un formato utilizable por QPixmap
+            img = QImage(pixmap.samples, pixmap.width, pixmap.height, pixmap.stride, QImage.Format_RGB888)
+            img = img.rgbSwapped()
+
+            # Crear un QPixmap a partir de la imagen
+            pixmap = QPixmap.fromImage(img)
+
+            doc.close()
+
+            return pixmap
+
+        def savePdf(self):
+            # Obtener el directorio actual como directorio inicial
+            current_dir = os.path.dirname(os.path.realpath(__file__))
+
+            # Abrir el cuadro de diálogo para seleccionar la ubicación y el nombre del archivo
+            options = QFileDialog.Options()
+            options |= QFileDialog.DontUseNativeDialog
+            file_dialog = QFileDialog()
+            file_dialog.setOptions(options)
+            file_dialog.setDirectory(current_dir)  # Establecer el directorio inicial
+            file_path, _ = file_dialog.getSaveFileName(self, "Guardar PDF", "", "Archivos PDF (*.pdf);;Todos los archivos (*)")
+
+            # Si el usuario eligió un archivo, guardar el PDF en esa ubicación
+            if file_path:
+                # Agregar el prefijo file:// en sistemas Linux
+                if sys.platform.startswith('linux'):
+                    file_path = 'file://' + file_path
+                crear_pdf(ruta_salida=file_path)
+
     ruta_salida = '/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/waos.pdf'
-    crear_pdf( ruta_salida=ruta_salida)
+    crear_pdf(ruta_salida=ruta_salida)
+
+    ex = ImagePreviewer(pdf_path=ruta_salida)
+    ex.setGeometry(100, 100, 800, 600)
+    ex.show()
+
+    sys.exit(app.exec_())

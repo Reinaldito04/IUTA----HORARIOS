@@ -102,7 +102,7 @@ class DialogoConsulta(QDialog):
 
 
 class FormularioDialog(QDialog):
-    def __init__(self , titulo , hora, dia ,fila,columna ,horario):
+    def __init__(self , titulo , hora, dia ,fila,columna ,horario,carrera,sesion):
         super().__init__()
         loadUi("./ui/busqueda.ui",self)
         self.titulo = titulo
@@ -111,6 +111,11 @@ class FormularioDialog(QDialog):
         self.fila = fila
         self.columna = columna
         self.horario = horario
+        self.carrera = carrera
+        self.sesion = sesion
+        
+        
+        
         if self.dia == 1:
             self.dia = "Lunes"
         if self.dia == 2:
@@ -205,14 +210,14 @@ class FormularioDialog(QDialog):
             return None  # Devuelve None si el salón ya está siendo utilizado
 
         else:
-            cursor.execute("INSERT INTO HorarioTest (Dia, Hora, CodigoMat, CodigoAula, CedulaProf) VALUES (?,?,?,?,?)",
-                           (self.dia, self.hora, codigoMateria, codigoSalon, cedulaProfesor))
+            cursor.execute("INSERT INTO HorarioTest (Dia, Hora, CodigoMat, CodigoAula, CedulaProf,Carrera,Sesion) VALUES (?,?,?,?,?,?,?)",
+                           (self.dia, self.hora, codigoMateria, codigoSalon, cedulaProfesor,self.carrera,self.sesion))
             conexion.commit()
             conexion.close()
             QMessageBox.information(self, "Exito", "Los datos fueron almacenados correctamente")
 
             print(f"El código de materia es {codigoMateria}, salón {codigoSalon}, cédula profesor {cedulaProfesor}")
-            text_for_checkbox = (f"{codigoMateria} - {codigoSalon} -{cedulaProfesor}")
+            text_for_checkbox = (f"{codigoMateria}\n{codigoSalon}\n{cedulaProfesor}")
             self.establecer_texto_en_celda(text_for_checkbox)
             self.hide()
             return text_for_checkbox
@@ -228,16 +233,32 @@ class Horario(QMainWindow):
         super(Horario,self).__init__()
         loadUi("ui/horariosTabla.ui",self)
         self.tableWidget.cellClicked.connect(self.celda_clickeada)
-    
+        self.bt_carrera.clicked.connect(self.BuscarCarrera)
+        self.bt_sesion.clicked.connect(self.buscarsesion)
         
-
+    def BuscarCarrera(self):
+        consulta_like = "SELECT Descripcion, CodigoCarrera FROM Carreras WHERE Descripcion LIKE ?"
+        consulta_sql_materia = "SELECT Descripcion, CodigoCarrera FROM Carreras;"
+        dialogo = DialogoConsulta("Consulta de Carrera", "Seleccione una Carrera:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_carrera = dialogo.item_seleccionado()
+            self.ln_carrera.setText(codigo_carrera) 
+            
+    def buscarsesion(self):
+        consulta_like = "SELECT Numero FROM SesionCarrera WHERE Numero LIKE ?"
+        consulta_sql_materia = "SELECT Numero FROM SesionCarrera;"
+        dialogo = DialogoConsulta("Consulta de Sesion", "Seleccione una Sesion:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_sesion = dialogo.item_seleccionado()
+            self.ln_sesion.setText(codigo_sesion) 
+            
     def celda_clickeada(self, fila, columna):
         # obtener fila
         if fila == 0:
             hora= ("7:30 a 8:10")
             print(hora)
         if fila == 1:
-            hora = ("8:10  A 08:50")
+            hora = ("08:10  A 08:50")
         if fila ==2:
             hora = ("08:50 A 09:30")
         if fila ==3:
@@ -265,19 +286,28 @@ class Horario(QMainWindow):
             dia =("Sabado")
             
         print(f'Celda clickeada en el dia {dia} en la hora {hora}')
+       
         self.mostrar_dialogo(titulo=f"Formulario del dia {dia} a las horas {hora}",
-                             hora=hora,
-                             dia=dia,
-                             fila=fila,
-                             columna=columna
-                             )
+                                hora=hora,
+                                dia=dia,
+                                fila=fila,
+                                columna=columna
+                                )
     def mostrar_dialogo(self, titulo, hora, dia,fila,columna ):
-        dialog = FormularioDialog(titulo=titulo, hora=hora, dia=dia, fila=fila,columna=columna,horario=self)
-        resultado = dialog.exec_()
-        if resultado == QDialog.Accepted:
-            texto_a_insertar = dialog.guardar()  # Obtener el texto desde la función guardar
-            if texto_a_insertar is not None:
-                dialog.establecer_texto_en_celda(texto_a_insertar)
+        carrera = self.ln_carrera.text()
+        sesion = self.ln_sesion.text()
+        if len(carrera) ==0 or len(sesion) ==0:
+            QMessageBox.critical(self,"Error","Es necesario ingresar la carrera y su sesion")
+            return
+        else:
+            dialog = FormularioDialog(titulo=titulo, hora=hora,
+                                      dia=dia, fila=fila,columna=columna,horario=self,
+                                      sesion=sesion,carrera=carrera)
+            resultado = dialog.exec_()
+            if resultado == QDialog.Accepted:
+                texto_a_insertar = dialog.guardar()  # Obtener el texto desde la función guardar
+                if texto_a_insertar is not None:
+                    dialog.establecer_texto_en_celda(texto_a_insertar)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
