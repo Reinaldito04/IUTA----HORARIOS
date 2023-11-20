@@ -368,8 +368,12 @@ class Horario(QMainWindow):
     def vistaPrevia(self):
         try:
             from   ui.pdfcrear import crear_pdf
-            
-            ruta_salida = '/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/waos.pdf'
+            ruta_salida, _ = QFileDialog.getSaveFileName(self, 'Guardar PDF', '', 'Archivos PDF (*.pdf)')
+
+            # Verifica si el usuario canceló la selección
+            if not ruta_salida:
+                return
+           
             sesion = self.ln_sesion.text()
             carrera= self.ln_carrera.text()
             if not sesion or not carrera:
