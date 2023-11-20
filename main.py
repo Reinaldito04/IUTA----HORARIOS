@@ -451,7 +451,7 @@ class Horario(QMainWindow):
         self.tableWidget.cellClicked.connect(self.celda_clickeada)
         self.bt_carrera.clicked.connect(self.BuscarCarrera)
         self.bt_sesion.clicked.connect(self.buscarsesion)
-        self.bt_preview.clicked.connect(self.vistaPrevia)
+        
         self.admin = admin
         self.bt_volver.clicked.connect(self.backMenu)
         self.ln_carrera.textChanged.connect(self.buscarDisponibilidad)
