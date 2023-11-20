@@ -456,6 +456,7 @@ class Horario(QMainWindow):
         self.bt_volver.clicked.connect(self.backMenu)
         self.ln_carrera.textChanged.connect(self.buscarDisponibilidad)
         self.ln_sesion.textChanged.connect(self.buscarDisponibilidad)
+        self.bt_guardar.clicked.connect(self.guardarPDF)
     def buscarDisponibilidad(self):
         carrera = self.ln_carrera.text()
         sesion = self.ln_sesion.text()
@@ -466,7 +467,7 @@ class Horario(QMainWindow):
         widget.addWidget(menu)
         widget.setCurrentIndex(widget.currentIndex()+1)
                 
-    def vistaPrevia(self):
+    def guardarPDF(self):
         try:
             from   ui.pdfcrear import crear_pdf
             
