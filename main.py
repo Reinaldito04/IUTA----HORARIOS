@@ -136,7 +136,7 @@ class HorarioMenu(QMainWindow):
         widget.setCurrentIndex(widget.currentIndex()+1)
        
     def crearView(self):
-        menu = newhorario(self.admin)
+        menu = Horario(self.admin)
         
         
         widget.addWidget(menu)
@@ -226,14 +226,22 @@ class DialogoConsulta(QDialog):
         self.accept()
 
 
+
 class FormularioDialog(QDialog):
-    def __init__(self , titulo , hora, dia ,checkbox):
+    def __init__(self , titulo , hora, dia ,fila,columna ,horario,carrera,sesion):
         super().__init__()
         loadUi("./ui/busqueda.ui",self)
         self.titulo = titulo
         self.hora = next(iter(hora)) if isinstance(hora, set) else hora  # Obtiene el primer elemento del conjunto
         self.dia = next(iter(dia)) if isinstance(dia, set) else dia  # Obtiene el primer elemento del conjunto
-        self.checkbox = checkbox
+        self.fila = fila
+        self.columna = columna
+        self.horario = horario
+        self.carrera = carrera
+        self.sesion = sesion
+        
+        
+        
         if self.dia == 1:
             self.dia = "Lunes"
         if self.dia == 2:
@@ -249,11 +257,12 @@ class FormularioDialog(QDialog):
         self.initUI()
 
     def cancelar(self):
-        self.desmarcar_checkbox(self.checkbox)
-
-    def desmarcar_checkbox(self, checkbox):
-        checkbox.setChecked(False)
+        celda = self.horario.tableWidget.item(self.fila, self.columna)
+        if celda:
+            celda.setText("")  # O puedes establecer el texto como desees
         self.hide()
+
+    
     def initUI(self,):
        
         self.bt_codigoMat.clicked.connect(self.codigoMateria)
@@ -307,158 +316,144 @@ class FormularioDialog(QDialog):
 
     def guardar(self, checkbox):
         codigoMateria = self.input_materia.text()
-        codigoSalon= self.input_salon.text()
+        codigoSalon = self.input_salon.text()
         cedulaProfesor = self.input_profesor.text()
-        if not (codigoMateria and codigoSalon and cedulaProfesor ):
-            QMessageBox.information(self,"Error","Todos los campos son obligatorios")
-        else:
-            conexion = sqlite3.connect("./db/database.db")
-            cursor = conexion.cursor()
-            
-            
-            verificarHorario = cursor.execute("SELECT * FROM HorarioTest WHERE Dia=? AND Hora=? AND CodigoAula=?",
-                                      (self.dia, self.hora, codigoSalon))
 
-            if verificarHorario.fetchone():
-                # Si ya hay un registro, mostrar un mensaje de alerta y no insertar el nuevo horario
-                QMessageBox.warning(self, "Error", "El salón ya está siendo utilizado en la misma hora")
-                self.input_salon.clear()
-                self.input_salon.setPlaceholderText("Ingrese un salon distinto...")
+        if not (codigoMateria and codigoSalon and cedulaProfesor):
+            QMessageBox.information(self, "Error", "Todos los campos son obligatorios")
+            return None  # Devuelve None si hay campos faltantes
+
+        conexion = sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+
+        verificarHorario = cursor.execute("SELECT * FROM HorarioTest WHERE Dia=? AND Hora=? AND CodigoAula=?",
+                                          (self.dia, self.hora, codigoSalon))
+
+        if verificarHorario.fetchone():
+            QMessageBox.warning(self, "Error", "El salón ya está siendo utilizado en la misma hora")
+            self.input_salon.clear()
+            self.input_salon.setPlaceholderText("Ingrese un salón distinto...")
+            return None  # Devuelve None si el salón ya está siendo utilizado
+
+        else:
+            cursor.execute("INSERT INTO HorarioTest (Dia, Hora, CodigoMat, CodigoAula, CedulaProf,Carrera,Sesion) VALUES (?,?,?,?,?,?,?)",
+                           (self.dia, self.hora, codigoMateria, codigoSalon, cedulaProfesor,self.carrera,self.sesion))
+            conexion.commit()
+            conexion.close()
+            QMessageBox.information(self, "Exito", "Los datos fueron almacenados correctamente")
+
+            print(f"El código de materia es {codigoMateria}, salón {codigoSalon}, cédula profesor {cedulaProfesor}")
+            text_for_checkbox = (f"{codigoMateria}\n{codigoSalon}\n{cedulaProfesor}")
+            self.establecer_texto_en_celda(text_for_checkbox)
+            self.hide()
+            return text_for_checkbox
+
+    def establecer_texto_en_celda(self, texto):
+        # Obtener la instancia de QTableWidget desde la instancia de Horario
+        table_widget = self.horario.tableWidget
+
+        # Establecer el texto en la celda específica
+        table_widget.setItem(self.fila, self.columna, QTableWidgetItem(texto))
+class Horario(QMainWindow):
+    def __init__(self,admin):
+        super(Horario,self).__init__()
+        loadUi("ui/horariosTabla.ui",self)
+        self.tableWidget.cellClicked.connect(self.celda_clickeada)
+        self.bt_carrera.clicked.connect(self.BuscarCarrera)
+        self.bt_sesion.clicked.connect(self.buscarsesion)
+        self.bt_preview.clicked.connect(self.vistaPrevia)
+        self.admin = admin
+
+            
+    def vistaPrevia(self):
+        try:
+            from   ui.pdfcrear import crear_pdf
+            
+            ruta_salida = '/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/waos.pdf'
+            sesion = self.ln_sesion.text()
+            carrera= self.ln_carrera.text()
+            if not sesion or not carrera:
+                QMessageBox.information(self,"Error","Es necesario ingresar la sesion y la carrera anteriormente")
                 return
             else:
-                cursor.execute("INSERT INTO HorarioTest (Dia,Hora,CodigoMat,CodigoAula,CedulaProf) VALUES (?,?,?,?,?)",(self.dia ,self.hora,codigoMateria,codigoSalon,cedulaProfesor))
-                conexion.commit()
-                conexion.close()
-                QMessageBox.information(self,"Exito","los datos fueron almacenados correctamente")
-                
-                print(f"el codigo de materia es {codigoMateria},salon {codigoSalon}, cedula profesor {cedulaProfesor}")
-                textforCheckBox = (f"{codigoMateria}\n{codigoSalon}")
-                self.checkbox.setText(textforCheckBox)
-                self.hide()
-class newhorario(QMainWindow):
-    def __init__(self,admin):
-        super(newhorario,self).__init__()
-        loadUi("./ui/horariocrear.ui",self)
-        self.admin = admin
-        self.bt_volver.clicked.connect(self.backMenu)
-        
-        
-        
-    
-        self.checkboxLunes = [
-            {self.checkBox_1: '07:30 A 08:10',
-             self.checkBox_2: '08:10 A 08:50',
-             self.checkBox_3 :'08:50 A 09:30',
-             self.checkBox_4 :'09:30 A 10:10',
-             self.checkBox_5 : '10:10 A 10:50',
-             self.checkBox_6 : '10:50 A 11:30',
-             self.checkBox_7 : '11:30 A 12:10',
-             self.checkBox_8 : '12:10 A 12:50',
-             self.checkBox_9 : '12:50 A 01:30',
-             
-             },
-            # Agrega más horarios con sus respectivos checkboxes si es necesario
-        ]
-        self.checkboxMartes =  [
-            {
-                self.checkBox_10 : '07:30 A 08:10',
-                self.checkBox_11 : '08:10 A 08:50',
-                self.checkBox_12: '08:50 A 09:30',
-                self.checkBox_13 :'09:30 A 10:10',
-                self.checkBox_14 : '10:10 A 10:50',
-                self.checkBox_15 : '10:50 A 11:30',
-                self.checkBox_16 : '11:30 A 12:10',
-                self.checkBox_17 : '12:10 A 12:50',
-                self.checkBox_18 : '12:50 A 01:30'
-                
-            }
-        
-        ]
-        self.checkboxMiercoles =[{
-            self.checkBox_19 : '07:30 A 08:10',
-            self.checkBox_20 : '08:10 A 08:50',
-            self.checkBox_21 : '08:50 A 09:30',
-            self.checkBox_22 :'09:30 A 10:10',
-            self.checkBox_23 : '10:10 A 10:50',
-            self.checkBox_24 : '10:50 A 11:30',
-            self.checkBox_25 : '11:30 A 12:10',
-            self.checkBox_26 : '12:10 A 12:50' ,
-            self.checkBox_27 : '12:50 A 01:30'
+                crear_pdf(ruta_salida=ruta_salida,sesion=sesion,carrera=carrera)
+                if crear_pdf:
+                    print("Exito")            
+        except Exception as e:
+            print(f"Error en vistaPrevia: {e}")
+    def BuscarCarrera(self):
+        consulta_like = "SELECT Descripcion, CodigoCarrera FROM Carreras WHERE Descripcion LIKE ?"
+        consulta_sql_materia = "SELECT Descripcion, CodigoCarrera FROM Carreras;"
+        dialogo = DialogoConsulta("Consulta de Carrera", "Seleccione una Carrera:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_carrera = dialogo.item_seleccionado()
+            self.ln_carrera.setText(codigo_carrera) 
             
-        }]
-        
-        self.checkboxJueves =[{
-            self.checkBox_28 : '07:30 A 08:10',
-            self.checkBox_29 : '08:10 A 08:50',
-            self.checkBox_30 : '08:50 A 09:30',
-            self.checkBox_31 :'09:30 A 10:10',
-            self.checkBox_32 : '10:10 A 10:50',
-            self.checkBox_33 : '10:50 A 11:30',
-            self.checkBox_34 : '11:30 A 12:10',
-            self.checkBox_35 : '12:10 A 12:50' ,
-            self.checkBox_36 : '12:50 A 01:30'
+    def buscarsesion(self):
+        consulta_like = "SELECT Numero FROM SesionCarrera WHERE Numero LIKE ?"
+        consulta_sql_materia = "SELECT Numero FROM SesionCarrera;"
+        dialogo = DialogoConsulta("Consulta de Sesion", "Seleccione una Sesion:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_sesion = dialogo.item_seleccionado()
+            self.ln_sesion.setText(codigo_sesion) 
             
-        }]
-        
-        self.checkboxViernes = [{
-            self.checkBox_37 :'07:30 A 08:10',
-            self.checkBox_38 : '08:10 A 08:50',
-            self.checkBox_39 : '08:50 A 09:30' ,
-            self.checkBox_40 :'09:30 A :10:10',
-            self.checkBox_41 : '10:10 A 10:50' ,
-            self.checkBox_42 : '10:50 A 11:30',
-            self.checkBox_43 : '11:30 A 12:10',
-            self.checkBox_44 : '12:10 A 12:50',
-            self.checkBox_45 : '12:50 A 01:30'
+    def celda_clickeada(self, fila, columna):
+        # obtener fila
+        if fila == 0:
+            hora= ("7:30 a 8:10")
+            print(hora)
+        if fila == 1:
+            hora = ("08:10  A 08:50")
+        if fila ==2:
+            hora = ("08:50 A 09:30")
+        if fila ==3:
+            hora = ("09:30 A 10:10")
+        if fila ==4 :
+            hora= ("10:10 A 10:50")
+        if fila == 5:
+            hora = ( "10:50 A 11:30")
+        if fila == 6:
+            hora = ("11:30 A 12:50")
+        if fila == 7:
+            hora =("12:50 A 1:30")
             
-        }]
-        self.checkboxSabado =[{
-            self.checkBox_46 : '07:30 A 08:10',
-            self.checkBox_47 : '08:10 A 08:50' ,
-            self.checkBox_48 : '08:50 A 09:30',
-            self.checkBox_49 :'09:30 A 10:10',
-            self.checkBox_50 : '10:10 A 10:50',
-            self.checkBox_51 : '10:50 A 11:30',
-            self.checkBox_52 : '11:30 A 12:10',
-            self.checkBox_53 : '12:10 A 12:50',
-            self.checkBox_54 : '12:50 A 01:30'
+        if columna ==0:
+            dia=("Lunes")
+        if columna ==1:
+            dia =("Martes")
+        if columna ==2:
+            dia =("Miercoles")
+        if columna ==3:
+            dia= ("Jueves")
+        if columna ==4:
+            dia =("Viernes")
+        if columna ==5:
+            dia =("Sabado")
             
-        }]
-        self.conectar_eventos()
-        
-        
-            
-        
-    def backMenu(self):
-        menu = MenuPrincipal(self.admin)
-        widget.addWidget(menu)
-        widget.setCurrentIndex(widget.currentIndex()+1)
-    def conectar_eventos(self):
-        # Lista de checkboxes por día para simplificar el manejo
-        checkboxes_por_dia = [
-            self.checkboxLunes, self.checkboxMartes, self.checkboxMiercoles,
-            self.checkboxJueves, self.checkboxViernes, self.checkboxSabado
-        ]
-        
-        for dia, checkboxes in enumerate(checkboxes_por_dia, start=1):
-            for checkbox_dict in checkboxes:
-                for checkbox, hora in checkbox_dict.items():
-                    checkbox.stateChanged.connect(lambda state, checkbox=checkbox, hora=hora, dia=dia: self.on_checkbox_changed(checkbox, state, hora, dia))
-        
-    def on_checkbox_changed(self, checkbox, state, hora, dia):
-        if state == 2:  # 2 representa el estado "marcado"
-            print(f"Checkbox {checkbox.objectName()} del día {dia} marcado a las {hora}")
-            # Aquí puedes agregar la lógica que deseas para el checkbox seleccionado y su hora correspondiente en el día específico
-            self.mostrar_dialogo(titulo=f"Formulario del día {dia} a las {hora}", 
-                                 hora=hora, 
-                                 dia=dia, 
-                                 checkbox=checkbox)
+        print(f'Celda clickeada en el dia {dia} en la hora {hora}')
+       
+        self.mostrar_dialogo(titulo=f"Formulario del dia {dia} a las horas {hora}",
+                                hora=hora,
+                                dia=dia,
+                                fila=fila,
+                                columna=columna
+                                )
+    def mostrar_dialogo(self, titulo, hora, dia,fila,columna ):
+        carrera = self.ln_carrera.text()
+        sesion = self.ln_sesion.text()
+        if len(carrera) ==0 or len(sesion) ==0:
+            QMessageBox.critical(self,"Error","Es necesario ingresar la carrera y su sesion")
+            return
         else:
-            checkbox.setText("")
+            dialog = FormularioDialog(titulo=titulo, hora=hora,
+                                      dia=dia, fila=fila,columna=columna,horario=self,
+                                      sesion=sesion,carrera=carrera)
+            resultado = dialog.exec_()
+            if resultado == QDialog.Accepted:
+                texto_a_insertar = dialog.guardar()  # Obtener el texto desde la función guardar
+                if texto_a_insertar is not None:
+                    dialog.establecer_texto_en_celda(texto_a_insertar)
 
-    def mostrar_dialogo(self, titulo, hora, dia, checkbox):
-        dialog = FormularioDialog(titulo=titulo, hora=hora, dia=dia, checkbox=checkbox)
-        dialog.exec_()
     
 class Users(QMainWindow):
     def __init__(self , admin):

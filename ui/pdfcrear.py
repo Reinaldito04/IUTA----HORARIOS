@@ -16,21 +16,21 @@ def image_url_to_base64(image_url):
 
 
 
-def recuperar_datos_bd():
+def recuperar_datos_bd(carrera,sesion):
     conexion = sqlite3.connect("db/database.db")
     cursor = conexion.cursor()
-    cursor.execute("SELECT Dia,Hora,CodigoMat,CodigoAula,CedulaProf FROM HorarioTest")
+    cursor.execute("SELECT Dia, Hora, CodigoMat, CodigoAula, CedulaProf FROM HorarioTest WHERE Carrera=? AND Sesion=?", (carrera, sesion))
     datos_base = cursor.fetchall()
     cursor.close()
     return datos_base
     
     
-def crear_pdf( ruta_salida):
+def crear_pdf( ruta_salida,carrera,sesion):
     imagen_url = 'https://www.eduopinions.com/wp-content/uploads/2018/02/Instituto-Universitario-de-Tecnolog%C3%ADa-de-Administraci%C3%B3n-Industrial-IUTA-logo-350x181.gif'
     
     imagen_base64 = image_url_to_base64(imagen_url)
-    Especialidad = 'Informatica'
-    Semestre = '7'
+    Especialidad = f'{carrera}'
+    Semestre = f'{sesion}'
     Turno = 'Diurno'
     Seccion ='Unica'
     
@@ -40,7 +40,7 @@ def crear_pdf( ruta_salida):
     print("Fecha actual:", fecha_formateada)
     if imagen_base64:
         # Definir los datos de la tabla
-        datos_base = recuperar_datos_bd()        
+        datos_base = recuperar_datos_bd(carrera,sesion)        
         filas_datos = []
         for dato in datos_base:
             dia = dato[0]

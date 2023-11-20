@@ -114,15 +114,15 @@ class Ui_MainWindow(object):
         self.tableWidget.verticalHeader().setSortIndicatorShown(False)
         self.tableWidget.verticalHeader().setStretchLastSection(False)
         self.verticalLayout.addWidget(self.tableWidget)
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setMinimumSize(QtCore.QSize(50, 30))
-        self.pushButton.setSizeIncrement(QtCore.QSize(50, 0))
-        self.pushButton.setStyleSheet("border-radius:10px;\n"
+        self.bt_preview = QtWidgets.QPushButton(self.centralwidget)
+        self.bt_preview.setMinimumSize(QtCore.QSize(50, 30))
+        self.bt_preview.setSizeIncrement(QtCore.QSize(50, 0))
+        self.bt_preview.setStyleSheet("border-radius:10px;\n"
 "background-color:rgb(0, 169, 255);\n"
 "color:black;")
-        self.pushButton.setIconSize(QtCore.QSize(20, 20))
-        self.pushButton.setObjectName("pushButton")
-        self.verticalLayout.addWidget(self.pushButton)
+        self.bt_preview.setIconSize(QtCore.QSize(20, 20))
+        self.bt_preview.setObjectName("bt_preview")
+        self.verticalLayout.addWidget(self.bt_preview)
         self.verticalLayout_2.addLayout(self.verticalLayout)
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -167,4 +167,4 @@ class Ui_MainWindow(object):
         __sortingEnabled = self.tableWidget.isSortingEnabled()
         self.tableWidget.setSortingEnabled(False)
         self.tableWidget.setSortingEnabled(__sortingEnabled)
-        self.pushButton.setText(_translate("MainWindow", "Guardar"))
+        self.bt_preview.setText(_translate("MainWindow", "VistarPrevia"))
