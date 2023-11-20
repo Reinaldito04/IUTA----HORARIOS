@@ -354,6 +354,35 @@ class FormularioDialog(QDialog):
 
         # Establecer el texto en la celda específica
         table_widget.setItem(self.fila, self.columna, QTableWidgetItem(texto))
+        
+class QuestionHorario(QDialog):
+    def __init__(self,horario_instance):
+        super(QuestionHorario,self).__init__()
+        loadUi("ui/eliminarhorarioquestion.ui",self)
+        self.setWindowTitle("Ya existe un horario")
+        self.bt_eliminar.clicked.connect(self.eliminar)
+        self.bt_view.clicked.connect(self.ver)
+        self.horario_instance = horario_instance
+        
+    def eliminar(self):
+        QMessageBox.information(self,"Eliminar","se ha eliminado")
+        self.accept()
+
+    def ver(self):
+        QMessageBox.information(self, "Ver", "Se ha añadido a la tabla actual")
+        conexion = sqlite3.connect("db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute(
+            "SELECT Dia,Hora,CodigoMat,CodigoAula,CedulaProf FROM HorarioTest WHERE Carrera=? AND Sesion=?",
+            (self.horario_instance.ln_carrera.text(), self.horario_instance.ln_sesion.text())
+        )
+        datos = cursor.fetchall()
+        self.horario_instance.tableWidget.clearContents()
+        for row, result in enumerate(datos):
+            for col, value in enumerate(result):
+                item = QTableWidgetItem(str(value))
+                self.horario_instance.tableWidget.setItem(row, col, item)
+        self.accept()
 class Horario(QMainWindow):
     def __init__(self,admin):
         super(Horario,self).__init__()
@@ -389,6 +418,23 @@ class Horario(QMainWindow):
                     print("Exito")            
         except Exception as e:
             print(f"Error en vistaPrevia: {e}")
+            
+    def searchHorario(self):
+        sesion =self.ln_sesion.text()
+        carrera= self.ln_carrera.text()
+        conexion = sqlite3.connect("db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute("SELECT COUNT(*) FROM HorarioTest WHERE Sesion = ? AND Carrera=? ",(sesion,carrera))
+        existeHorario = cursor.fetchone()[0]
+        if existeHorario:
+            QMessageBox.information(self, "Advertencia", f"Ya existe un horario creado para {carrera} {sesion}")
+            
+            dialogo = QuestionHorario(self)
+            dialogo.exec_()
+            return True
+        
+        return False
+           
     def BuscarCarrera(self):
         consulta_like = "SELECT Descripcion, CodigoCarrera FROM Carreras WHERE Descripcion LIKE ?"
         consulta_sql_materia = "SELECT Descripcion, CodigoCarrera FROM Carreras;"
@@ -439,8 +485,10 @@ class Horario(QMainWindow):
             dia =("Sabado")
             
         print(f'Celda clickeada en el dia {dia} en la hora {hora}')
-       
-        self.mostrar_dialogo(titulo=f"Formulario del dia {dia} a las horas {hora}",
+        carrera = self.ln_carrera.text()
+        sesion = self.ln_sesion.text()
+        if not self.searchHorario():
+            self.mostrar_dialogo(titulo=f"Formulario del dia {dia} a las horas {hora}",
                                 hora=hora,
                                 dia=dia,
                                 fila=fila,
