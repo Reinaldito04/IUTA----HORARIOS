@@ -20,6 +20,15 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.bt_volver = QtWidgets.QPushButton(self.centralwidget)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.bt_volver.sizePolicy().hasHeightForWidth())
+        self.bt_volver.setSizePolicy(sizePolicy)
+        self.bt_volver.setMinimumSize(QtCore.QSize(20, 0))
+        self.bt_volver.setObjectName("bt_volver")
+        self.verticalLayout_2.addWidget(self.bt_volver)
         self.label = QtWidgets.QLabel(self.centralwidget)
         font = QtGui.QFont()
         font.setFamily("3270 Nerd Font Mono")
@@ -132,6 +141,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.bt_volver.setText(_translate("MainWindow", "Volver"))
         self.label.setText(_translate("MainWindow", "Horario"))
         self.label_2.setText(_translate("MainWindow", "Carrera"))
         self.label_3.setText(_translate("MainWindow", "Sesion"))

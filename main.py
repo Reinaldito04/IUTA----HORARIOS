@@ -363,21 +363,25 @@ class Horario(QMainWindow):
         self.bt_sesion.clicked.connect(self.buscarsesion)
         self.bt_preview.clicked.connect(self.vistaPrevia)
         self.admin = admin
-
-            
+        self.bt_volver.clicked.connect(self.backMenu)
+    def backMenu(self):
+        menu = MenuPrincipal(self.admin)
+        widget.addWidget(menu)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+                
     def vistaPrevia(self):
         try:
             from   ui.pdfcrear import crear_pdf
-            ruta_salida, _ = QFileDialog.getSaveFileName(self, 'Guardar PDF', '', 'Archivos PDF (*.pdf)')
-
-            # Verifica si el usuario canceló la selección
-            if not ruta_salida:
-                return
-           
+            
             sesion = self.ln_sesion.text()
             carrera= self.ln_carrera.text()
             if not sesion or not carrera:
                 QMessageBox.information(self,"Error","Es necesario ingresar la sesion y la carrera anteriormente")
+                return
+            ruta_salida, _ = QFileDialog.getSaveFileName(self, 'Guardar PDF', '', 'Archivos PDF (*.pdf)')
+
+            # Verifica si el usuario canceló la selección
+            if not ruta_salida:
                 return
             else:
                 crear_pdf(ruta_salida=ruta_salida,sesion=sesion,carrera=carrera)
