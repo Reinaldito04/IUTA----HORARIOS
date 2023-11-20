@@ -363,7 +363,19 @@ class QuestionHorario(QDialog):
         self.bt_eliminar.clicked.connect(self.eliminar)
         self.bt_view.clicked.connect(self.ver)
         self.horario_instance = horario_instance
-        
+        self.horas = [
+        "7:30 a 8:10",
+        "08:10 A 08:50",
+        "08:50 A 09:30",
+        "09:30 A 10:10",
+        "10:10 A 10:50",
+        "10:50 A 11:30",
+        "11:30 A 12:50",
+        "12:50 A 1:30"
+    ]
+
+        self.dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"]
+
     def eliminar(self):
         QMessageBox.information(self,"Eliminar","se ha eliminado")
         self.accept()
@@ -373,16 +385,67 @@ class QuestionHorario(QDialog):
         conexion = sqlite3.connect("db/database.db")
         cursor = conexion.cursor()
         cursor.execute(
-            "SELECT Dia,Hora,CodigoMat,CodigoAula,CedulaProf FROM HorarioTest WHERE Carrera=? AND Sesion=?",
+            "SELECT Dia, Hora, CodigoMat, CodigoAula, CedulaProf FROM HorarioTest WHERE Carrera=? AND Sesion=?",
             (self.horario_instance.ln_carrera.text(), self.horario_instance.ln_sesion.text())
         )
         datos = cursor.fetchall()
         self.horario_instance.tableWidget.clearContents()
-        for row, result in enumerate(datos):
-            for col, value in enumerate(result):
-                item = QTableWidgetItem(str(value))
-                self.horario_instance.tableWidget.setItem(row, col, item)
+
+        # Estructura de datos para almacenar la información
+        filas_datos = {}
+
+        for result in datos:
+            dia = result[0]
+            hora = result[1]
+            codigo_mat = result[2]
+            codigo_aula = result[3]
+            cedula_prof = result[4]
+
+            # Asignar la hora y el día a las posiciones correspondientes
+            if hora == "07:30 a 08:10":
+                fila = 0
+            elif hora == "08:10 A 08:50":
+                fila = 1
+            elif hora == "08:50 A 09:30":
+                fila = 2
+            elif hora == "09:30 A 10:10":
+                fila = 3
+            elif hora == "10:10 A 10:50":
+                fila = 4
+            elif hora == "10:50 A 11:30":
+                fila = 5
+            elif hora == "11:30 A 12:50":
+                fila = 6
+            elif hora == "12:50 A 1:30":
+                fila = 7
+            else:
+                # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
+                continue
+
+            # Asignar el día a la columna correspondiente
+            if dia == "Lunes":
+                columna = 0
+            elif dia == "Martes":
+                columna = 1
+            elif dia == "Miercoles":
+                columna = 2
+            elif dia == "Jueves":
+                columna = 3
+            elif dia == "Viernes":
+                columna = 4
+            elif dia == "Sabado":
+                columna = 5
+            else:
+                # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
+                continue
+
+            # Colocar los datos en la tabla
+            item = QTableWidgetItem(f"{codigo_mat}\n{codigo_aula}\n{cedula_prof}")
+            self.horario_instance.tableWidget.setItem(fila, columna, item)
+
+
         self.accept()
+   
 class Horario(QMainWindow):
     def __init__(self,admin):
         super(Horario,self).__init__()
@@ -454,7 +517,7 @@ class Horario(QMainWindow):
     def celda_clickeada(self, fila, columna):
         # obtener fila
         if fila == 0:
-            hora= ("7:30 a 8:10")
+            hora= ("07:30 a 08:10")
             print(hora)
         if fila == 1:
             hora = ("08:10  A 08:50")
