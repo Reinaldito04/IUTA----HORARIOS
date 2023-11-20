@@ -314,7 +314,7 @@ class FormularioDialog(QDialog):
             codigo = dialogo.item_seleccionado()
             self.input_profesor.setText(codigo)
 
-    def guardar(self, checkbox):
+    def guardar(self):
         codigoMateria = self.input_materia.text()
         codigoSalon = self.input_salon.text()
         cedulaProfesor = self.input_profesor.text()
@@ -336,17 +336,18 @@ class FormularioDialog(QDialog):
             return None  # Devuelve None si el salón ya está siendo utilizado
 
         else:
-            cursor.execute("INSERT INTO HorarioTest (Dia, Hora, CodigoMat, CodigoAula, CedulaProf,Carrera,Sesion) VALUES (?,?,?,?,?,?,?)",
-                           (self.dia, self.hora, codigoMateria, codigoSalon, cedulaProfesor,self.carrera,self.sesion))
+            cursor.execute("INSERT INTO HorarioTest (Dia,Hora,CodigoMat,CodigoAula,CedulaProf,Carrera,Sesion) VALUES (?,?,?,?,?,?,?)",
+                           (self.dia,self.hora,codigoMateria,codigoSalon,cedulaProfesor,self.carrera,self.sesion))
+            QMessageBox.information(self,"Exito","Se ha almacenado los datos correctamente")
             conexion.commit()
             conexion.close()
-            QMessageBox.information(self, "Exito", "Los datos fueron almacenados correctamente")
+           
 
             print(f"El código de materia es {codigoMateria}, salón {codigoSalon}, cédula profesor {cedulaProfesor}")
             text_for_checkbox = (f"{codigoMateria}\n{codigoSalon}\n{cedulaProfesor}")
             self.establecer_texto_en_celda(text_for_checkbox)
             self.hide()
-            return text_for_checkbox
+            return  codigoMateria,codigoSalon,cedulaProfesor
 
     def establecer_texto_en_celda(self, texto):
         # Obtener la instancia de QTableWidget desde la instancia de Horario
@@ -390,7 +391,7 @@ class QuestionHorario(QDialog):
             cedula_prof = result[4]
 
             # Asignar la hora y el día a las posiciones correspondientes
-            if hora == "07:30 a 08:10":
+            if hora == "07:30 A 08:10":
                 fila = 0
             elif hora == "08:10 A 08:50":
                 fila = 1
@@ -444,6 +445,13 @@ class Horario(QMainWindow):
         self.bt_preview.clicked.connect(self.vistaPrevia)
         self.admin = admin
         self.bt_volver.clicked.connect(self.backMenu)
+        self.ln_carrera.textChanged.connect(self.buscarDisponibilidad)
+        self.ln_sesion.textChanged.connect(self.buscarDisponibilidad)
+    def buscarDisponibilidad(self):
+        carrera = self.ln_carrera.text()
+        sesion = self.ln_sesion.text()
+        if carrera or sesion:
+            self.searchHorario()
     def backMenu(self):
         menu = MenuPrincipal(self.admin)
         widget.addWidget(menu)
@@ -483,8 +491,7 @@ class Horario(QMainWindow):
             dialogo = QuestionHorario(self)
             dialogo.exec_()
             return True
-        else:
-            self.tableWidget.clearContents()
+       
         return False
            
     def BuscarCarrera(self):
@@ -539,8 +546,8 @@ class Horario(QMainWindow):
         print(f'Celda clickeada en el dia {dia} en la hora {hora}')
         carrera = self.ln_carrera.text()
         sesion = self.ln_sesion.text()
-        if not self.searchHorario():
-            self.mostrar_dialogo(titulo=f"Formulario del dia {dia} a las horas {hora}",
+       
+        self.mostrar_dialogo(titulo=f"Formulario del dia {dia} a las horas {hora}",
                                 hora=hora,
                                 dia=dia,
                                 fila=fila,
@@ -561,6 +568,7 @@ class Horario(QMainWindow):
                 texto_a_insertar = dialog.guardar()  # Obtener el texto desde la función guardar
                 if texto_a_insertar is not None:
                     dialog.establecer_texto_en_celda(texto_a_insertar)
+                   
 
     
 class Users(QMainWindow):
