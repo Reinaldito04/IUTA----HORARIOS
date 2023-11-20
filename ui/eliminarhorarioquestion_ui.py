@@ -58,4 +58,4 @@ class Ui_Dialog(object):
         self.label.setText(_translate("Dialog", "¿Deseas eliminar el horario \n"
 "actual o visualizarlo?"))
         self.bt_eliminar.setText(_translate("Dialog", "Eliminar"))
-        self.bt_view.setText(_translate("Dialog", "Visualizar"))
+        self.bt_view.setText(_translate("Dialog", "Visualizar U Agregar"))
