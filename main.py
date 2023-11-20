@@ -367,7 +367,16 @@ class QuestionHorario(QDialog):
         
 
     def eliminar(self):
-        QMessageBox.information(self,"Eliminar","se ha eliminado")
+        conexion = sqlite3.connect("db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute(
+            "DELETE FROM HorarioTest WHERE Carrera=? AND Sesion=?",
+            (self.horario_instance.ln_carrera.text(), self.horario_instance.ln_sesion.text())
+        )
+        QMessageBox.information(self,"Eliminar","se ha eliminado correctamente")
+        conexion.commit()
+        conexion.close()
+        
         self.accept()
 
     def ver(self):
