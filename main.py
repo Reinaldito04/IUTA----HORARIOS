@@ -15,6 +15,7 @@ from PyQt5.QtWidgets import QDialog, QApplication, QPushButton, QVBoxLayout, QLa
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QCheckBox, QDialog, QLabel, QLineEdit
 import sqlite3
+import fitz
 
 
 #test
@@ -444,6 +445,62 @@ class QuestionHorario(QDialog):
 
         self.accept()
    
+class PreviewPDF(QDialog):
+    def __init__(self,pdf_path):
+        super(PreviewPDF,self).__init__()
+        loadUi("ui/preview.ui",self)
+        self.pdf_path = pdf_path
+        self.current_page = 0  # Página actual
+        self.total_pages = 0  
+        self.initUI()
+        
+    def initUI(self):
+        self.setWindowTitle('Vista Previa de PDF')
+        self.btn_anterior.clicked.connect(self.showPreviousPage)
+        self.btn_siguiente.clicked.connect(self.showNextPage)
+        self.showPdfPreview()
+        self.total_pages = self.getTotalPages(self.pdf_path)
+        
+    def showPdfPreview(self):
+            # Cargar la imagen del PDF como vista previa en el QLabel
+        pixmap = self.convertPdfPageToPixmap(self.pdf_path, self.current_page)
+
+        # Mostrar la imagen en el QLabel
+        self.foto.setPixmap(pixmap)
+        self.foto.show()
+    def showPreviousPage(self):
+        # Mostrar la página anterior si no estamos en la primera página
+        if self.current_page > 0:
+            self.current_page -= 1
+            self.showPdfPreview()
+                
+    def showNextPage(self):
+        # Mostrar la página siguiente si no estamos en la última página
+        if self.current_page < self.total_pages - 1:
+            self.current_page += 1
+            self.showPdfPreview()
+    def getTotalPages(self, pdf_path):
+        # Obtener el total de páginas en el PDF
+        doc = fitz.open(pdf_path)
+        total_pages = doc.page_count
+        doc.close()
+        return total_pages       
+    def convertPdfPageToPixmap(self, pdf_path, page_number):
+            # Utilizar PyMuPDF para convertir la página específica del PDF a una imagen
+        doc = fitz.open(pdf_path)
+        page = doc[page_number]
+        pixmap = page.get_pixmap()
+
+            # Convertir la imagen a un formato utilizable por QPixmap
+        img = QImage(pixmap.samples, pixmap.width, pixmap.height, pixmap.stride, QImage.Format_RGB888)
+        img = img.rgbSwapped()
+
+            # Crear un QPixmap a partir de la imagen
+        pixmap = QPixmap.fromImage(img)
+
+        doc.close()
+
+        return pixmap
 class Horario(QMainWindow):
     def __init__(self,admin):
         super(Horario,self).__init__()
@@ -451,12 +508,22 @@ class Horario(QMainWindow):
         self.tableWidget.cellClicked.connect(self.celda_clickeada)
         self.bt_carrera.clicked.connect(self.BuscarCarrera)
         self.bt_sesion.clicked.connect(self.buscarsesion)
-        
+        self.bt_preview.clicked.connect(self.previewpdf)
         self.admin = admin
         self.bt_volver.clicked.connect(self.backMenu)
         self.ln_carrera.textChanged.connect(self.buscarDisponibilidad)
         self.ln_sesion.textChanged.connect(self.buscarDisponibilidad)
         self.bt_guardar.clicked.connect(self.guardarPDF)
+    def previewpdf(self):
+        
+        pdf = self.guardarPDF()
+        if not pdf:
+            QMessageBox.information(self,"PDF","Necesitas la ruta para poder visualizar el PDF")
+            return
+        else:
+            dialogo=PreviewPDF(pdf_path=pdf)
+            dialogo.exec_()
+        
     def buscarDisponibilidad(self):
         carrera = self.ln_carrera.text()
         sesion = self.ln_sesion.text()
@@ -484,7 +551,7 @@ class Horario(QMainWindow):
             else:
                 crear_pdf(ruta_salida=ruta_salida,sesion=sesion,carrera=carrera)
                 if crear_pdf:
-                    print("Exito")            
+                    return ruta_salida   
         except Exception as e:
             print(f"Error en vistaPrevia: {e}")
             
