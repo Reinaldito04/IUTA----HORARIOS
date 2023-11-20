@@ -363,18 +363,7 @@ class QuestionHorario(QDialog):
         self.bt_eliminar.clicked.connect(self.eliminar)
         self.bt_view.clicked.connect(self.ver)
         self.horario_instance = horario_instance
-        self.horas = [
-        "7:30 a 8:10",
-        "08:10 A 08:50",
-        "08:50 A 09:30",
-        "09:30 A 10:10",
-        "10:10 A 10:50",
-        "10:50 A 11:30",
-        "11:30 A 12:50",
-        "12:50 A 1:30"
-    ]
-
-        self.dias = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"]
+        
 
     def eliminar(self):
         QMessageBox.information(self,"Eliminar","se ha eliminado")
@@ -391,8 +380,7 @@ class QuestionHorario(QDialog):
         datos = cursor.fetchall()
         self.horario_instance.tableWidget.clearContents()
 
-        # Estructura de datos para almacenar la información
-        filas_datos = {}
+        
 
         for result in datos:
             dia = result[0]
@@ -495,7 +483,8 @@ class Horario(QMainWindow):
             dialogo = QuestionHorario(self)
             dialogo.exec_()
             return True
-        
+        else:
+            self.tableWidget.clearContents()
         return False
            
     def BuscarCarrera(self):
