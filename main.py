@@ -540,6 +540,7 @@ class Horario(QMainWindow):
             
             sesion = self.ln_sesion.text()
             carrera= self.ln_carrera.text()
+          
             if not sesion or not carrera:
                 QMessageBox.information(self,"Error","Es necesario ingresar la sesion y la carrera anteriormente")
                 return
@@ -549,7 +550,7 @@ class Horario(QMainWindow):
             if not ruta_salida:
                 return
             else:
-                crear_pdf(ruta_salida=ruta_salida,sesion=sesion,carrera=carrera)
+                crear_pdf(ruta_salida=ruta_salida,sesion=sesion,carrera=carrera )
                 if crear_pdf:
                     return ruta_salida   
         except Exception as e:
@@ -590,10 +591,10 @@ class Horario(QMainWindow):
     def celda_clickeada(self, fila, columna):
         # obtener fila
         if fila == 0:
-            hora= ("07:30 a 08:10")
+            hora= ("07:30 A 08:10")
             print(hora)
         if fila == 1:
-            hora = ("08:10  A 08:50")
+            hora = ("08:10 A 08:50")
         if fila ==2:
             hora = ("08:50 A 09:30")
         if fila ==3:
