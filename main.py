@@ -17,7 +17,6 @@ from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QCh
 import sqlite3
 import fitz
 
-
 #test
 class IngresoUsuario(QMainWindow):
     def __init__(self):
@@ -129,6 +128,202 @@ class HorarioMenu(QMainWindow):
         self.bt_back.clicked.connect(self.backMenu)
         self.bt_salir.clicked.connect(lambda : QApplication.quit())
         self.bt_crear.clicked.connect(self.crearView)
+        
+        
+        self.diasLunesAulas = [{
+            "07:30 A 08:10" : self.checkBox_0,
+            "08:10 A 08:50" : self.checkBox_4,
+            "08:50 A 09:30" : self.checkBox_11,
+            "09:30 A 10:10": self.checkBox_5,
+            "10:10 A 10:50" : self.checkBox_6,
+            "10:50 A 11:30" : self.checkBox_7,
+            "11:30 A 12:10" : self.checkBox_8,
+            "12:10 A 12:50" : self.checkBox_9,
+            "12:50 A 1:30" : self.checkBox_10
+            
+        }]
+        self.diasMartesAulas = [{
+            "07:30 A 08:10" : self.checkBox_12,
+            "08:10 A 08:50" : self.checkBox_13,
+            "08:50 A 09:30" : self.checkBox_14,
+            "09:30 A 10:10" : self.checkBox_15,
+            "10:10 A 10:50" : self.checkBox_16,
+            "10:50 A 11:30" : self.checkBox_17,
+            "11:30 A 12:10" : self.checkBox_18,
+            "12:10 A 12:50" : self.checkBox_19,
+            "12:50 A 1:30" : self.checkBox_20
+        }]
+        self.diasMiercolesAulas = [{
+            "07:30 A 08:10" : self.checkBox_40,
+            "08:10 A 08:50" : self.checkBox_66,
+            "08:50 A 09:30" : self.checkBox_67,
+            "09:30 A 10:10" : self.checkBox_68,
+            "10:10 A 10:50" : self.checkBox_69,
+            "10:50 A 11:30" : self.checkBox_70,
+            "11:30 A 12:10" : self.checkBox_71,
+            "12:10 A 12:50" : self.checkBox_72,
+            "12:50 A 1:30" : self.checkBox_73
+        }]
+        self.diasJuevesAulas = [{
+            "07:30 A 08:10" : self.checkBox_39,
+            "08:10 A 08:50" : self.checkBox_49,
+            "08:50 A 09:30" : self.checkBox_50,
+            "09:30 A 10:10" : self.checkBox_51,
+            "10:10 A 10:50" : self.checkBox_52,
+            "10:50 A 11:30" : self.checkBox_53,
+            "11:30 A 12:10" : self.checkBox_54,
+            "12:10 A 12:50" : self.checkBox_55,
+            "12:50 A 1:30" : self.checkBox_56
+        }]
+        self.diasViernesAulas = [{
+            "07:30 A 08:10" : self.checkBox_57,
+            "08:10 A 08:50" : self.checkBox_58,
+            "08:50 A 09:30" : self.checkBox_59,
+            "09:30 A 10:10" : self.checkBox_60,
+            "10:10 A 10:50" : self.checkBox_61,
+            "10:50 A 11:30" : self.checkBox_62,
+            "11:30 A 12:10" : self.checkBox_63,
+            "12:10 A 12:50" : self.checkBox_64,
+            "12:50 A 1:30" : self.checkBox_65
+        }]
+        self.diasSabadoAulas = [{
+            "07:30 A 08:10" : self.checkBox_21,
+            "08:10 A 08:50" : self.checkBox_22,
+            "08:50 A 09:30" : self.checkBox_23,
+            "09:30 A 10:10" : self.checkBox_24,
+            "10:10 A 10:50" : self.checkBox_25,
+            "10:50 A 11:30" : self.checkBox_26,
+            "11:30 A 12:10" : self.checkBox_27,
+            "12:10 A 12:50" : self.checkBox_28,
+            "12:50 A 1:30" : self.checkBox_29
+        }]
+        self.bt_buscar.clicked.connect(self.realizar_busquedaAula)
+        
+        self.diasLunesSeccion = [{
+            "07:30 A 08:10" : self.checkBox_163,
+            "08:10 A 08:50" : self.checkBox_164,
+            "08:50 A 09:30" : self.checkBox_165,
+            "09:30 A 10:10": self.checkBox_166,
+            "10:10 A 10:50" : self.checkBox_167,
+            "10:50 A 11:30" : self.checkBox_168,
+            "11:30 A 12:10" : self.checkBox_169,
+            "12:10 A 12:50" : self.checkBox_170,
+            "12:50 A 1:30" : self.checkBox_171
+            
+        }]
+        self.diasMartesSeccion = [{
+            "07:30 A 08:10" : self.checkBox_172,
+            "08:10 A 08:50" : self.checkBox_173,
+            "08:50 A 09:30" : self.checkBox_174,
+            "09:30 A 10:10" : self.checkBox_175,
+            "10:10 A 10:50" : self.checkBox_176,
+            "10:50 A 11:30" : self.checkBox_177,
+            "11:30 A 12:10" : self.checkBox_178,
+            "12:10 A 12:50" : self.checkBox_179,
+            "12:50 A 1:30" : self.checkBox_180
+        }]
+        self.diasMiercolesSeccion = [{
+            "07:30 A 08:10" : self.checkBox_181,
+            "08:10 A 08:50" : self.checkBox_182,
+            "08:50 A 09:30" : self.checkBox_183,
+            "09:30 A 10:10" : self.checkBox_184,
+            "10:10 A 10:50" : self.checkBox_185,
+            "10:50 A 11:30" : self.checkBox_186,
+            "11:30 A 12:10" : self.checkBox_187,
+            "12:10 A 12:50" : self.checkBox_188,
+            "12:50 A 1:30" : self.checkBox_189
+        }]
+        self.diasJuevesSeccion = [{
+            "07:30 A 08:10" : self.checkBox_190,
+            "08:10 A 08:50" : self.checkBox_191,
+            "08:50 A 09:30" : self.checkBox_192,
+            "09:30 A 10:10" : self.checkBox_193,
+            "10:10 A 10:50" : self.checkBox_194,
+            "10:50 A 11:30" : self.checkBox_195,
+            "11:30 A 12:10" : self.checkBox_196,
+            "12:10 A 12:50" : self.checkBox_197,
+            "12:50 A 1:30" : self.checkBox_198
+        }]
+        self.diasViernesSeccion = [{
+            "07:30 A 08:10" : self.checkBox_199,
+            "08:10 A 08:50" : self.checkBox_200,
+            "08:50 A 09:30" : self.checkBox_201,
+            "09:30 A 10:10" : self.checkBox_202,
+            "10:10 A 10:50" : self.checkBox_203,
+            "10:50 A 11:30" : self.checkBox_204,
+            "11:30 A 12:10" : self.checkBox_205,
+            "12:10 A 12:50" : self.checkBox_206,
+            "12:50 A 1:30" : self.checkBox_207
+        }]
+        self.diasSabadoSeccion = [{
+            "07:30 A 08:10" : self.checkBox_208,
+            "08:10 A 08:50" : self.checkBox_209,
+            "08:50 A 09:30" : self.checkBox_210,
+            "09:30 A 10:10" : self.checkBox_211,
+            "10:10 A 10:50" : self.checkBox_212,
+            "10:50 A 11:30" : self.checkBox_213,
+            "11:30 A 12:10" : self.checkBox_214,
+            "12:10 A 12:50" : self.checkBox_215,
+            "12:50 A 1:30" : self.checkBox_216
+        }]
+        self.bt_buscar3.clicked.connect(self.r3alizarbusqueda_Seccion)
+        
+    def r3alizarbusqueda_Seccion(self):
+        #obtnern el valor de la seccion a buscar
+        seccion = self.ln_disponibilidad_seccion.text()
+        
+        conexion = sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        
+        for dia, checkboxes in zip(["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"],
+                                   [self.diasLunesSeccion, self.diasMartesSeccion, self.diasMiercolesSeccion, self.diasJuevesSeccion, self.diasViernesSeccion, self.diasSabadoSeccion]):
+            for hora_inicio, checkbox in checkboxes[0].items():
+                checkbox.setChecked(False)
+
+                # Construir y ejecutar la consulta SQL para verificar la disponibilidad
+                query = """
+                    SELECT COUNT(*) FROM HorarioTest
+                    WHERE Dia = ? AND Hora = ? AND Sesion = ?
+                """
+                cursor.execute(query, (dia, hora_inicio, seccion))
+                resultado = cursor.fetchone()
+
+                # Activar el checkbox si hay al menos un registro para esa hora
+                if resultado[0] > 0:
+                    checkbox.setChecked(True)
+
+        # Cerrar la conexión a la base de datos
+        conexion.close()
+        
+    def realizar_busquedaAula(self):
+        # Obtener el valor del QLineEdit
+        aula = self.ln_disponibilidad_aula.text()
+
+        # Conectar a la base de datos
+        conexion = sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+
+        # Iterar sobre las horas y días y desmarcar todos los checkboxes
+        for dia, checkboxes in zip(["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"],
+                                   [self.diasLunesAulas, self.diasMartesAulas, self.diasMiercolesAulas, self.diasJuevesAulas, self.diasViernesAulas, self.diasSabadoAulas]):
+            for hora_inicio, checkbox in checkboxes[0].items():
+                checkbox.setChecked(False)
+
+                # Construir y ejecutar la consulta SQL para verificar la disponibilidad
+                query = """
+                    SELECT COUNT(*) FROM HorarioTest
+                    WHERE Dia = ? AND Hora = ? AND CodigoAula = ?
+                """
+                cursor.execute(query, (dia, hora_inicio, aula))
+                resultado = cursor.fetchone()
+
+                # Activar el checkbox si hay al menos un registro para esa hora
+                if resultado[0] > 0:
+                    checkbox.setChecked(True)
+
+        # Cerrar la conexión a la base de datos
+        conexion.close()
+   
     def backMenu(self):
         menu = MenuPrincipal(self.admin)
         
@@ -142,7 +337,7 @@ class HorarioMenu(QMainWindow):
         
         widget.addWidget(menu)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        
+    
 
 class DialogoConsulta(QDialog):
     def __init__(self, titulo, mensaje, consulta_sql,consulta_like):
@@ -413,10 +608,12 @@ class QuestionHorario(QDialog):
                 fila = 4
             elif hora == "10:50 A 11:30":
                 fila = 5
-            elif hora == "11:30 A 12:50":
+            elif hora == "11:30 A 12:10":
                 fila = 6
-            elif hora == "12:50 A 1:30":
+            elif hora == "12:10 A 12:50":
                 fila = 7
+            elif hora == "12:50 A 1:30":
+                fila = 8
             else:
                 # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
                 continue
@@ -604,8 +801,10 @@ class Horario(QMainWindow):
         if fila == 5:
             hora = ( "10:50 A 11:30")
         if fila == 6:
-            hora = ("11:30 A 12:50")
+            hora = ("11:30 A 12:10")
         if fila == 7:
+            hora =("12:10 A 12:50")
+        if fila == 8:
             hora =("12:50 A 1:30")
             
         if columna ==0:
