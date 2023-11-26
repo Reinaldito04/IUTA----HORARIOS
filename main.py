@@ -824,6 +824,8 @@ class PreviewPDF(QDialog):
         doc.close()
 
         return pixmap
+    
+    
 class Horario(QMainWindow):
     def __init__(self,admin):
         super(Horario,self).__init__()
@@ -837,6 +839,7 @@ class Horario(QMainWindow):
         self.ln_carrera.textChanged.connect(self.buscarDisponibilidad)
         self.ln_sesion.textChanged.connect(self.buscarDisponibilidad)
         self.bt_guardar.clicked.connect(self.guardarPDF)
+        
     def previewpdf(self):
         
         pdf = self.guardarPDF()
@@ -1455,8 +1458,6 @@ class MenuTeachers(QMainWindow):
         widget.setCurrentIndex(widget.currentIndex()+1)
         #widget.setFixedHeight(1000)
         #widget.setFixedWidth(1000)   
-
-
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
