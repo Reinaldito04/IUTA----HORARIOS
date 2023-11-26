@@ -248,7 +248,7 @@ background-color: rgb(104, 126, 255);</string>
          <item>
           <widget class="QToolBox" name="toolBox">
            <property name="currentIndex">
-            <number>0</number>
+            <number>2</number>
            </property>
            <widget class="QWidget" name="page">
             <property name="geometry">
@@ -292,7 +292,10 @@ background-color: rgb(104, 126, 255);</string>
                <item>
                 <widget class="QLineEdit" name="ln_disponibilidad_aula">
                  <property name="readOnly">
-                  <bool>false</bool>
+                  <bool>true</bool>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Aula</string>
                  </property>
                 </widget>
                </item>
@@ -1812,7 +1815,7 @@ background-color: rgb(104, 126, 255);</string>
               <x>0</x>
               <y>0</y>
               <width>541</width>
-              <height>523</height>
+              <height>522</height>
              </rect>
             </property>
             <attribute name="icon">
@@ -1849,6 +1852,9 @@ background-color: rgb(104, 126, 255);</string>
                 <widget class="QLineEdit" name="ln_disponibilidad_profesores">
                  <property name="readOnly">
                   <bool>true</bool>
+                 </property>
+                 <property name="placeholderText">
+                  <string>Profesor</string>
                  </property>
                 </widget>
                </item>
@@ -3407,7 +3413,7 @@ background-color: rgb(104, 126, 255);</string>
               <x>0</x>
               <y>0</y>
               <width>541</width>
-              <height>524</height>
+              <height>522</height>
              </rect>
             </property>
             <attribute name="icon">
@@ -3444,6 +3450,9 @@ background-color: rgb(104, 126, 255);</string>
                  </item>
                  <item>
                   <widget class="QLineEdit" name="ln_disponibilidad_carrera">
+                   <property name="readOnly">
+                    <bool>true</bool>
+                   </property>
                    <property name="placeholderText">
                     <string>Carrera</string>
                    </property>
@@ -3463,7 +3472,7 @@ background-color: rgb(104, 126, 255);</string>
                  <item>
                   <widget class="QLineEdit" name="ln_disponibilidad_seccion">
                    <property name="readOnly">
-                    <bool>false</bool>
+                    <bool>true</bool>
                    </property>
                    <property name="placeholderText">
                     <string>Seccion</string>
