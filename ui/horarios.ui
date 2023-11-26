@@ -72,7 +72,7 @@
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap>imagenes/calendar3 (2).png</pixmap>
+            <pixmap>../../../../.designer/backup/imagenes/calendar3 (2).png</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
@@ -235,7 +235,7 @@ background-color: rgb(104, 126, 255);</string>
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>imagenes/calendar3 (2).png</normaloff>imagenes/calendar3 (2).png</iconset>
+             <normaloff>../../../../.designer/backup/imagenes/calendar3 (2).png</normaloff>../../../../.designer/backup/imagenes/calendar3 (2).png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -261,7 +261,7 @@ background-color: rgb(104, 126, 255);</string>
             </property>
             <attribute name="icon">
              <iconset>
-              <normaloff>imagenes/system-sum.png</normaloff>imagenes/system-sum.png</iconset>
+              <normaloff>../../../../.designer/backup/imagenes/system-sum.png</normaloff>../../../../.designer/backup/imagenes/system-sum.png</iconset>
             </attribute>
             <attribute name="label">
              <string>Disponibilidad Aulas</string>
@@ -306,7 +306,7 @@ background-color: rgb(104, 126, 255);</string>
                  </property>
                  <property name="icon">
                   <iconset>
-                   <normaloff>imagenes/baseline-search.png</normaloff>imagenes/baseline-search.png</iconset>
+                   <normaloff>../../../../.designer/backup/imagenes/baseline-search.png</normaloff>../../../../.designer/backup/imagenes/baseline-search.png</iconset>
                  </property>
                 </widget>
                </item>
@@ -1820,7 +1820,7 @@ background-color: rgb(104, 126, 255);</string>
             </property>
             <attribute name="icon">
              <iconset>
-              <normaloff>imagenes/university.png</normaloff>imagenes/university.png</iconset>
+              <normaloff>../../../../.designer/backup/imagenes/university.png</normaloff>../../../../.designer/backup/imagenes/university.png</iconset>
             </attribute>
             <attribute name="label">
              <string>Disponibilidad Profesores</string>
@@ -1865,7 +1865,7 @@ background-color: rgb(104, 126, 255);</string>
                  </property>
                  <property name="icon">
                   <iconset>
-                   <normaloff>imagenes/baseline-search.png</normaloff>imagenes/baseline-search.png</iconset>
+                   <normaloff>../../../../.designer/backup/imagenes/baseline-search.png</normaloff>../../../../.designer/backup/imagenes/baseline-search.png</iconset>
                  </property>
                 </widget>
                </item>
@@ -2030,7 +2030,7 @@ background-color: rgb(104, 126, 255);</string>
                  <item>
                   <widget class="QLabel" name="label_43">
                    <property name="text">
-                    <string>10:10 a 10:30</string>
+                    <string>10:10 a 10:50</string>
                    </property>
                   </widget>
                  </item>
@@ -2050,7 +2050,7 @@ background-color: rgb(104, 126, 255);</string>
                  <item>
                   <widget class="QLabel" name="label_44">
                    <property name="text">
-                    <string>10:30 a 11:30</string>
+                    <string>10:50 a 11:30</string>
                    </property>
                   </widget>
                  </item>
@@ -3418,7 +3418,7 @@ background-color: rgb(104, 126, 255);</string>
             </property>
             <attribute name="icon">
              <iconset>
-              <normaloff>imagenes/adduser.png</normaloff>imagenes/adduser.png</iconset>
+              <normaloff>../../../../.designer/backup/imagenes/adduser.png</normaloff>../../../../.designer/backup/imagenes/adduser.png</iconset>
             </attribute>
             <attribute name="label">
              <string>Disponibilidad Seccion</string>
@@ -3465,7 +3465,7 @@ background-color: rgb(104, 126, 255);</string>
                    </property>
                    <property name="icon">
                     <iconset>
-                     <normaloff>imagenes/baseline-search.png</normaloff>imagenes/baseline-search.png</iconset>
+                     <normaloff>../../../../.designer/backup/imagenes/baseline-search.png</normaloff>../../../../.designer/backup/imagenes/baseline-search.png</iconset>
                    </property>
                   </widget>
                  </item>
@@ -3486,7 +3486,7 @@ background-color: rgb(104, 126, 255);</string>
                    </property>
                    <property name="icon">
                     <iconset>
-                     <normaloff>imagenes/baseline-search.png</normaloff>imagenes/baseline-search.png</iconset>
+                     <normaloff>../../../../.designer/backup/imagenes/baseline-search.png</normaloff>../../../../.designer/backup/imagenes/baseline-search.png</iconset>
                    </property>
                   </widget>
                  </item>
@@ -3640,7 +3640,7 @@ background-color: rgb(104, 126, 255);</string>
                  <item>
                   <widget class="QLabel" name="label_60">
                    <property name="text">
-                    <string>10:10 a 10:30</string>
+                    <string>10:10 a 10:50</string>
                    </property>
                   </widget>
                  </item>
@@ -3660,7 +3660,7 @@ background-color: rgb(104, 126, 255);</string>
                  <item>
                   <widget class="QLabel" name="label_61">
                    <property name="text">
-                    <string>10:30 a 11:30</string>
+                    <string>10:50 a 11:30</string>
                    </property>
                   </widget>
                  </item>
