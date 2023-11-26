@@ -235,7 +235,7 @@ background-color: rgb(104, 126, 255);</string>
            </property>
            <property name="icon">
             <iconset>
-             <normaloff>../../../../.designer/backup/imagenes/calendar3 (2).png</normaloff>../../../../.designer/backup/imagenes/calendar3 (2).png</iconset>
+             <normaloff>imagenes/calendar3 (2).png</normaloff>imagenes/calendar3 (2).png</iconset>
            </property>
            <property name="iconSize">
             <size>
@@ -261,7 +261,7 @@ background-color: rgb(104, 126, 255);</string>
             </property>
             <attribute name="icon">
              <iconset>
-              <normaloff>../../../../.designer/backup/imagenes/system-sum.png</normaloff>../../../../.designer/backup/imagenes/system-sum.png</iconset>
+              <normaloff>imagenes/university.png</normaloff>imagenes/university.png</iconset>
             </attribute>
             <attribute name="label">
              <string>Disponibilidad Aulas</string>
@@ -306,7 +306,7 @@ background-color: rgb(104, 126, 255);</string>
                  </property>
                  <property name="icon">
                   <iconset>
-                   <normaloff>../../../../.designer/backup/imagenes/baseline-search.png</normaloff>../../../../.designer/backup/imagenes/baseline-search.png</iconset>
+                   <normaloff>imagenes/baseline-search.png</normaloff>imagenes/baseline-search.png</iconset>
                  </property>
                 </widget>
                </item>
@@ -1820,7 +1820,7 @@ background-color: rgb(104, 126, 255);</string>
             </property>
             <attribute name="icon">
              <iconset>
-              <normaloff>../../../../.designer/backup/imagenes/university.png</normaloff>../../../../.designer/backup/imagenes/university.png</iconset>
+              <normaloff>imagenes/adduser.png</normaloff>imagenes/adduser.png</iconset>
             </attribute>
             <attribute name="label">
              <string>Disponibilidad Profesores</string>
@@ -1865,7 +1865,7 @@ background-color: rgb(104, 126, 255);</string>
                  </property>
                  <property name="icon">
                   <iconset>
-                   <normaloff>../../../../.designer/backup/imagenes/baseline-search.png</normaloff>../../../../.designer/backup/imagenes/baseline-search.png</iconset>
+                   <normaloff>imagenes/baseline-search.png</normaloff>imagenes/baseline-search.png</iconset>
                  </property>
                 </widget>
                </item>
@@ -3418,7 +3418,7 @@ background-color: rgb(104, 126, 255);</string>
             </property>
             <attribute name="icon">
              <iconset>
-              <normaloff>../../../../.designer/backup/imagenes/adduser.png</normaloff>../../../../.designer/backup/imagenes/adduser.png</iconset>
+              <normaloff>imagenes/users-line.png</normaloff>imagenes/users-line.png</iconset>
             </attribute>
             <attribute name="label">
              <string>Disponibilidad Seccion</string>
@@ -3465,7 +3465,7 @@ background-color: rgb(104, 126, 255);</string>
                    </property>
                    <property name="icon">
                     <iconset>
-                     <normaloff>../../../../.designer/backup/imagenes/baseline-search.png</normaloff>../../../../.designer/backup/imagenes/baseline-search.png</iconset>
+                     <normaloff>imagenes/baseline-search.png</normaloff>imagenes/baseline-search.png</iconset>
                    </property>
                   </widget>
                  </item>
@@ -3486,7 +3486,7 @@ background-color: rgb(104, 126, 255);</string>
                    </property>
                    <property name="icon">
                     <iconset>
-                     <normaloff>../../../../.designer/backup/imagenes/baseline-search.png</normaloff>../../../../.designer/backup/imagenes/baseline-search.png</iconset>
+                     <normaloff>imagenes/baseline-search.png</normaloff>imagenes/baseline-search.png</iconset>
                    </property>
                   </widget>
                  </item>
