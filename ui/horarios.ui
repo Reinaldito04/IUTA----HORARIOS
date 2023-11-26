@@ -248,7 +248,7 @@ background-color: rgb(104, 126, 255);</string>
          <item>
           <widget class="QToolBox" name="toolBox">
            <property name="currentIndex">
-            <number>2</number>
+            <number>0</number>
            </property>
            <widget class="QWidget" name="page">
             <property name="geometry">
@@ -256,9 +256,13 @@ background-color: rgb(104, 126, 255);</string>
               <x>0</x>
               <y>0</y>
               <width>541</width>
-              <height>524</height>
+              <height>522</height>
              </rect>
             </property>
+            <attribute name="icon">
+             <iconset>
+              <normaloff>imagenes/system-sum.png</normaloff>imagenes/system-sum.png</iconset>
+            </attribute>
             <attribute name="label">
              <string>Disponibilidad Aulas</string>
             </attribute>
@@ -1808,9 +1812,13 @@ background-color: rgb(104, 126, 255);</string>
               <x>0</x>
               <y>0</y>
               <width>541</width>
-              <height>524</height>
+              <height>523</height>
              </rect>
             </property>
+            <attribute name="icon">
+             <iconset>
+              <normaloff>imagenes/university.png</normaloff>imagenes/university.png</iconset>
+            </attribute>
             <attribute name="label">
              <string>Disponibilidad Profesores</string>
             </attribute>
@@ -1845,7 +1853,7 @@ background-color: rgb(104, 126, 255);</string>
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="pushButton_3">
+                <widget class="QPushButton" name="bt_profesor">
                  <property name="text">
                   <string/>
                  </property>
@@ -3435,14 +3443,35 @@ background-color: rgb(104, 126, 255);</string>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLineEdit" name="ln_disponibilidad_seccion">
-                   <property name="readOnly">
-                    <bool>false</bool>
+                  <widget class="QLineEdit" name="ln_disponibilidad_carrera">
+                   <property name="placeholderText">
+                    <string>Carrera</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="bt_buscar3">
+                  <widget class="QPushButton" name="bt_carrerabuscar">
+                   <property name="text">
+                    <string/>
+                   </property>
+                   <property name="icon">
+                    <iconset>
+                     <normaloff>imagenes/baseline-search.png</normaloff>imagenes/baseline-search.png</iconset>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="ln_disponibilidad_seccion">
+                   <property name="readOnly">
+                    <bool>false</bool>
+                   </property>
+                   <property name="placeholderText">
+                    <string>Seccion</string>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="bt_seccionbuscar">
                    <property name="text">
                     <string/>
                    </property>

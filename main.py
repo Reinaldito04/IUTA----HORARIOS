@@ -128,8 +128,11 @@ class HorarioMenu(QMainWindow):
         self.bt_back.clicked.connect(self.backMenu)
         self.bt_salir.clicked.connect(lambda : QApplication.quit())
         self.bt_crear.clicked.connect(self.crearView)
-        
-        
+        self.bt_buscar.clicked.connect(self.buscarAula)
+        self.bt_profesor.clicked.connect(self.buscarprofesor)
+        self.bt_profesor.clicked.connect(self.realizarbusquedaProfesor)
+        self.bt_carrerabuscar.clicked.connect(self.buscarCarrera)
+        self.bt_seccionbuscar.clicked.connect(self.buscarSeccion)
         self.diasLunesAulas = [{
             "07:30 A 08:10" : self.checkBox_0,
             "08:10 A 08:50" : self.checkBox_4,
@@ -266,10 +269,133 @@ class HorarioMenu(QMainWindow):
             "12:10 A 12:50" : self.checkBox_215,
             "12:50 A 1:30" : self.checkBox_216
         }]
-        self.bt_buscar3.clicked.connect(self.r3alizarbusqueda_Seccion)
         
+        self.diasLunesProfesor =[{
+            "07:30 A 08:10":self.checkBox_3,
+            "08:10 A 08:50" : self.checkBox_110,
+            "08:50 A 09:30" : self.checkBox_111,
+            "09:30 A 10:10" : self.checkBox_112,
+            "10:10 A 10:50" : self.checkBox_113,
+            "10:50 A 11:30" : self.checkBox_114,
+            "11:30 A 12:10" : self.checkBox_115,
+            "12:10 A 12:50" : self.checkBox_116,
+            "12:50 A 1:30" : self.checkBox_117
+        }]
+        self.diasMartesProfesor =[{
+            "07:30 A 08:10":self.checkBox_118,
+            "08:10 A 08:50" : self.checkBox_119,
+            "08:50 A 09:30" : self.checkBox_120,
+            "09:30 A 10:10" : self.checkBox_121,
+            "10:10 A 10:50" : self.checkBox_122,
+            "10:50 A 11:30" : self.checkBox_123,
+            "11:30 A 12:10" : self.checkBox_124,
+            "12:10 A 12:50" : self.checkBox_125,
+            "12:50 A 1:30" : self.checkBox_126
+        }]
+        self.diasMiercolesProfesor =[{
+            "07:30 A 08:10":self.checkBox_127,
+            "08:10 A 08:50" : self.checkBox_128,
+            "08:50 A 09:30" : self.checkBox_129,
+            "09:30 A 10:10" : self.checkBox_130,
+            "10:10 A 10:50" : self.checkBox_131,
+            "10:50 A 11:30" : self.checkBox_132,
+            "11:30 A 12:10" : self.checkBox_133,
+            "12:10 A 12:50" : self.checkBox_134,
+            "12:50 A 1:30" : self.checkBox_135
+        }]
+        self.diasJuevesProfesor =[{
+            "07:30 A 08:10":self.checkBox_136,
+            "08:10 A 08:50" : self.checkBox_137,
+            "08:50 A 09:30" : self.checkBox_138,
+            "09:30 A 10:10" : self.checkBox_139,
+            "10:10 A 10:50" : self.checkBox_140,
+            "10:50 A 11:30" : self.checkBox_141,
+            "11:30 A 12:10" : self.checkBox_142,
+            "12:10 A 12:50" : self.checkBox_143,
+            "12:50 A 1:30" : self.checkBox_144
+        }]
+        self.diasViernesProfesor =[{
+            "07:30 A 08:10":self.checkBox_145,
+            "08:10 A 08:50" : self.checkBox_146,
+            "08:50 A 09:30" : self.checkBox_147,
+            "09:30 A 10:10" : self.checkBox_148,
+            "10:10 A 10:50" : self.checkBox_149,
+            "10:50 A 11:30" : self.checkBox_150,
+            "11:30 A 12:10" : self.checkBox_151,
+            "12:10 A 12:50" : self.checkBox_152,
+            "12:50 A 1:30" : self.checkBox_153
+        }]
+        self.diasSabadoProfesor =[{
+            "07:30 A 08:10":self.checkBox_154,
+            "08:10 A 08:50" : self.checkBox_155,
+            "08:50 A 09:30" : self.checkBox_156,
+            "09:30 A 10:10" : self.checkBox_157,
+            "10:10 A 10:50" : self.checkBox_158,
+            "10:50 A 11:30" : self.checkBox_159,
+            "11:30 A 12:10" : self.checkBox_160,
+            "12:10 A 12:50" : self.checkBox_161,
+            "12:50 A 1:30" : self.checkBox_162
+        }]
+        self.ln_disponibilidad_carrera.textChanged.connect(self.r3alizarbusqueda_Seccion)
+        self.ln_disponibilidad_seccion.textChanged.connect(self.r3alizarbusqueda_Seccion)
+    def buscarAula(self):
+        consulta_like = "SELECT Descripcion, CodigoAula,codigo_sede FROM Aulas WHERE Descripcion LIKE ?"
+        consulta_sql_materia = "SELECT Descripcion, CodigoAula,codigo_sede FROM Aulas;"
+        dialogo = DialogoConsulta("Consulta de Aula", "Seleccione una aula:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_materia = dialogo.item_seleccionado()
+            self.ln_disponibilidad_aula.setText(codigo_materia) 
+    
+    def buscarprofesor(self):
+        consulta_like = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido, Cedula FROM Profesores WHERE Nombre_Y_Apellido LIKE ?"
+        consulta_sql_profesor = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido ,Cedula FROM Profesores;"
+        dialogo = DialogoConsulta("Consulta de Profesor", "Seleccione un profesor:", consulta_sql=consulta_sql_profesor,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_materia = dialogo.item_seleccionado()
+            self.ln_disponibilidad_profesores.setText(codigo_materia) 
+    def buscarCarrera(self):
+        consulta_like = "SELECT Descripcion, CodigoCarrera FROM Carreras WHERE Descripcion LIKE ?"
+        consulta_sql_materia = "SELECT Descripcion, CodigoCarrera FROM Carreras;"
+        dialogo = DialogoConsulta("Consulta de Carrera", "Seleccione una carrera:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_materia = dialogo.item_seleccionado()
+            self.ln_disponibilidad_carrera.setText(codigo_materia) 
+    def buscarSeccion(self):
+        consulta_like = "SELECT Numero FROM SesionCarrera WHERE Numero LIKE ?"
+        consulta_sql_materia = "SELECT Numero FROM SesionCarrera;"
+        dialogo = DialogoConsulta("Consulta de Seccion", "Seleccione una seccion:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_materia = dialogo.item_seleccionado()
+            self.ln_disponibilidad_seccion.setText(codigo_materia) 
+    def realizarbusquedaProfesor(self):
+        #obtnern el valor de la seccion a buscar
+        profesor = self.ln_disponibilidad_profesores.text()
+        
+        conexion = sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        
+        for dia, checkboxes in zip(["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"],
+                                   [self.diasLunesProfesor, self.diasMartesProfesor, self.diasMiercolesProfesor, self.diasJuevesProfesor, self.diasViernesProfesor, self.diasSabadoProfesor]):
+            for hora_inicio, checkbox in checkboxes[0].items():
+                checkbox.setChecked(False)
+
+                # Construir y ejecutar la consulta SQL para verificar la disponibilidad
+                query = """
+                    SELECT COUNT(*) FROM HorarioTest
+                    WHERE Dia = ? AND Hora = ? AND CedulaProf = ?
+                """
+                cursor.execute(query, (dia, hora_inicio, profesor))
+                resultado = cursor.fetchone()
+
+                # Activar el checkbox si hay al menos un registro para esa hora
+                if resultado[0] > 0:
+                    checkbox.setChecked(True)
+
+        # Cerrar la conexión a la base de datos
+        conexion.close()
     def r3alizarbusqueda_Seccion(self):
         #obtnern el valor de la seccion a buscar
+        carrera= self.ln_disponibilidad_carrera.text()
         seccion = self.ln_disponibilidad_seccion.text()
         
         conexion = sqlite3.connect("./db/database.db")
@@ -283,9 +409,9 @@ class HorarioMenu(QMainWindow):
                 # Construir y ejecutar la consulta SQL para verificar la disponibilidad
                 query = """
                     SELECT COUNT(*) FROM HorarioTest
-                    WHERE Dia = ? AND Hora = ? AND Sesion = ?
+                    WHERE Dia = ? AND Hora = ? AND Carrera = ? AND Sesion = ?
                 """
-                cursor.execute(query, (dia, hora_inicio, seccion))
+                cursor.execute(query, (dia, hora_inicio,carrera, seccion))
                 resultado = cursor.fetchone()
 
                 # Activar el checkbox si hay al menos un registro para esa hora
