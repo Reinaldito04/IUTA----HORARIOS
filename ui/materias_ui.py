@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'c:\Users\reybe\OneDrive\Escritorio\horarios\IUTA----HORARIOS\ui\materias.ui'
+# Form implementation generated from reading ui file '/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/materias.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.9
 #
@@ -256,7 +256,7 @@ class Ui_materias(object):
         self.bt_search.setStyleSheet("border:none;")
         self.bt_search.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("c:\\Users\\reybe\\OneDrive\\Escritorio\\horarios\\IUTA----HORARIOS\\ui\\imagenes/search.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/search.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.bt_search.setIcon(icon)
         self.bt_search.setIconSize(QtCore.QSize(20, 20))
         self.bt_search.setObjectName("bt_search")
@@ -426,7 +426,7 @@ class Ui_materias(object):
         materias.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(materias)
-        self.stackedWidget.setCurrentIndex(1)
+        self.stackedWidget.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(materias)
 
     def retranslateUi(self, materias):

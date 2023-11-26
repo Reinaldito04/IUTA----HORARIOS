@@ -1187,7 +1187,57 @@ class MenuMaterias(QMainWindow):
         self.bt_back.clicked.connect(self.backMenu)
         self.bt_agg_2.clicked.connect(self.addData)
         self.bt_act.clicked.connect(self.ViewData)
-       
+        self.bt_search.clicked.connect(self.searchData)
+        self.bt_delete.clicked.connect(self.deleteData)
+        self.bt_edit_2.clicked.connect(self.modifyData)
+    def searchData(self):
+        busqueda = self.ln_busqueda.text()
+        if not busqueda:
+            QMessageBox.information(self,"Error","Se necesita el codigo para realizar la busqueda")
+            return
+        else:
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("SELECT Codigo,Nombre FROM Materia WHERE Codigo=?",(busqueda,))
+            resultado = cursor.fetchone()
+            if not resultado:
+                QMessageBox.information(self,"No existe","No existe una materia con ese codigo")
+            if resultado:
+                self.txt_name_2.setText(str(resultado[0]))
+                self.txt_apell_2.setText(str(resultado[1]))
+            conexion.close()
+        
+    def limpiaredit(self):
+        self.txt_name_2.clear()
+        self.ln_busqueda.clear()
+        self.txt_apell_2.clear()
+    def deleteData(self):
+        busqueda = self.ln_busqueda.text()
+        if not busqueda:
+            QMessageBox.information(self,"Error","Se necesita el codigo para realizar la busqueda")
+            return
+        else:
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("DELETE FROM Materia WHERE Codigo=?",(busqueda,))
+            conexion.commit()
+            QMessageBox.information(self,"Eliminado","Ha sido eliminado correctamente")
+            self.limpiaredit()
+    def modifyData(self):
+        busqueda = self.ln_busqueda.text()
+        if not busqueda:
+            QMessageBox.information(self,"Error","Se necesita el codigo para realizar la busqueda")
+            return
+        else:
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            codigo = self.txt_name_2.text()
+            nombre = self.txt_apell_2.text()
+            cursor.execute("UPDATE Materia SET Codigo=?, Nombre=? WHERE Codigo=?",(codigo,nombre,busqueda))
+            conexion.commit()
+            QMessageBox.information(self,"Modificado","La informacion ha sido actualizada correctamente")
+            self.limpiaredit()
+            
     def ViewData(self):
         print("click")
         try:
