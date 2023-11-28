@@ -975,7 +975,20 @@ class Horario(QMainWindow):
                 if texto_a_insertar is not None:
                     dialog.establecer_texto_en_celda(texto_a_insertar)
                    
-
+class horario_sabatino(QMainWindos):
+    def __init__(self,admin):
+        super(Horario,self).__init__()
+        loadUi("ui/horarios_sabatinocrear.ui",self)
+        self.tableWidget.cellClicked.connect(self.celda_clickeada)
+        self.bt_carrera.clicked.connect(self.BuscarCarrera)
+        self.bt_sesion.clicked.connect(self.buscarsesion)
+        self.bt_preview.clicked.connect(self.previewpdf)
+        self.admin = admin
+        self.bt_volver.clicked.connect(self.backMenu)
+        self.ln_carrera.textChanged.connect(self.buscarDisponibilidad)
+        self.ln_sesion.textChanged.connect(self.buscarDisponibilidad)
+        self.bt_guardar.clicked.connect(self.guardarPDF)
+        
     
 class Users(QMainWindow):
     def __init__(self , admin):
