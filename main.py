@@ -1,6 +1,7 @@
 
 #Test
 import sys
+import typing
 from PyQt5 import QtCore,QtGui,QtWidgets
 from PyQt5.uic import loadUi
 from PyQt5.QtCore import QDate , QBuffer, QByteArray , QTime
@@ -67,7 +68,7 @@ class MenuPrincipal(QMainWindow):
         self.showMaximized()
         self.bt_carreras.clicked.connect(self.carrerasViews)
         self.admin = admin
-        self.bt_horarios.clicked.connect(self.horariosView)
+        self.bt_horarios.clicked.connect(self.menuprincipalHorariosView)
         if self.admin == "True":
            self.text.setText("Bienvenido Administrador")
         else : 
@@ -76,8 +77,7 @@ class MenuPrincipal(QMainWindow):
         horarios = HorarioMenu(admin=self.admin)
         widget.addWidget(horarios)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        #widget.setFixedHeight(1000)
-        #widget.setFixedWidth(1000) 
+        
     def carrerasViews(self):
         carreras = MenuCarreras(admin=self.admin)
         widget.addWidget(carreras)
@@ -113,13 +113,34 @@ class MenuPrincipal(QMainWindow):
         Usuario = Users(admin=self.admin)
         widget.addWidget(Usuario)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        #widget.addWidget(Usuario)
-        #widget.setCurrentIndex(widget.currentIndex()+1)
-        #widget.setFixedHeight(620)
-        #widget.setFixedWidth(700)   
        
-       
- 
+    def menuprincipalHorariosView(self):
+        menuprincipalHorarios = horarios_menu(admin=self.admin)
+        widget.addWidget(menuprincipalHorarios)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+class horarios_menu(QMainWindow):
+    def __init__(self, admin):
+        super(horarios_menu, self).__init__()
+        loadUi("./ui/menu-horarios_principal.ui")
+        self.admin = admin
+        self.bt_stckwdgt_individualSeccion.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_seccion))
+        self.bt_stckwdgt_individualProfe.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_profesor))
+        self.bt_stckwdgt_individualAula.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_aula))
+        self.bt_stckwdgt_ctrlAfacilit.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_controldeasistencia))
+        self.btn_horaiosdiurnos.clicked.connect(self.horariosdiurnosView)
+        self.btn_volver_menu.clicked.connect(self.backMenu)
+
+    def horariosdiurnosView(self):
+        horarios = HorarioMenu(admin=self.admin)
+        widget.addWidget(horarios)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        
+    def backMenu(self):
+        menu = MenuPrincipal(self.admin)
+        widget.addWidget(menu)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        
 class HorarioMenu(QMainWindow):
     def __init__(self , admin):
         super(HorarioMenu, self).__init__()
@@ -975,19 +996,154 @@ class Horario(QMainWindow):
                 if texto_a_insertar is not None:
                     dialog.establecer_texto_en_celda(texto_a_insertar)
                    
-class horario_sabatino(QMainWindos):
+class horario_sabatino(QMainWindow):
     def __init__(self,admin):
         super(Horario,self).__init__()
         loadUi("ui/horarios_sabatinocrear.ui",self)
-        self.tableWidget.cellClicked.connect(self.celda_clickeada)
-        self.bt_carrera.clicked.connect(self.BuscarCarrera)
-        self.bt_sesion.clicked.connect(self.buscarsesion)
-        self.bt_preview.clicked.connect(self.previewpdf)
+        self.tableWidget_HORARIO_sabado.cellClicked.connect(self.celda_clickeada)
+        self.btn_buscarCarr.clicked.connect(self.BuscarCarrera)
+        self.btn_buscarSecc.clicked.connect(self.buscarsesion)
+        self.btn_vistaPrevia.clicked.connect(self.previewpdf)
         self.admin = admin
         self.bt_volver.clicked.connect(self.backMenu)
-        self.ln_carrera.textChanged.connect(self.buscarDisponibilidad)
-        self.ln_sesion.textChanged.connect(self.buscarDisponibilidad)
-        self.bt_guardar.clicked.connect(self.guardarPDF)
+        self.lineEdit_Carrera.textChanged.connect(self.buscarDisponibilidad)
+        self.lineEdit_Seccion.textChanged.connect(self.buscarDisponibilidad)
+        self.btn_guardar.clicked.connect(self.guardarPDF)
+        
+    def previewpdf(self):
+        
+        pdf = self.guardarPDF()
+        if not pdf:
+            QMessageBox.information(self,"PDF","Necesitas la ruta para poder visualizar el PDF")
+            return
+        else:
+            dialogo=PreviewPDF(pdf_path=pdf)
+            dialogo.exec_()
+        
+    def buscarDisponibilidad(self):
+        carrera = self.ln_carrera.text()
+        sesion = self.ln_sesion.text()
+        if carrera or sesion:
+            self.searchHorario()
+    def backMenu(self):
+        menu = MenuPrincipal(self.admin)
+        widget.addWidget(menu)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+                
+    def guardarPDF(self):
+        try:
+            from   ui.pdfcrear import crear_pdf
+            
+            sesion = self.ln_sesion.text()
+            carrera= self.ln_carrera.text()
+          
+            if not sesion or not carrera:
+                QMessageBox.information(self,"Error","Es necesario ingresar la sesion y la carrera anteriormente")
+                return
+            ruta_salida, _ = QFileDialog.getSaveFileName(self, 'Guardar PDF', '', 'Archivos PDF (*.pdf)')
+
+            # Verifica si el usuario canceló la selección
+            if not ruta_salida:
+                return
+            else:
+                crear_pdf(ruta_salida=ruta_salida,sesion=sesion,carrera=carrera )
+                if crear_pdf:
+                    return ruta_salida   
+        except Exception as e:
+            print(f"Error en vistaPrevia: {e}")
+            
+    def searchHorario(self):
+        sesion =self.ln_sesion.text()
+        carrera= self.ln_carrera.text()
+        conexion = sqlite3.connect("db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute("SELECT COUNT(*) FROM HorarioTest WHERE Sesion = ? AND Carrera=? ",(sesion,carrera))
+        existeHorario = cursor.fetchone()[0]
+        if existeHorario:
+            QMessageBox.information(self, "Advertencia", f"Ya existe un horario creado para {carrera} {sesion}")
+            
+            dialogo = QuestionHorario(self)
+            dialogo.exec_()
+            return True
+       
+        return False
+           
+    def BuscarCarrera(self):
+        consulta_like = "SELECT Descripcion, CodigoCarrera FROM Carreras WHERE Descripcion LIKE ?"
+        consulta_sql_materia = "SELECT Descripcion, CodigoCarrera FROM Carreras;"
+        dialogo = DialogoConsulta("Consulta de Carrera", "Seleccione una Carrera:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_carrera = dialogo.item_seleccionado()
+            self.ln_carrera.setText(codigo_carrera) 
+            
+    def buscarsesion(self):
+        consulta_like = "SELECT Numero FROM SesionCarrera WHERE Numero LIKE ?"
+        consulta_sql_materia = "SELECT Numero FROM SesionCarrera;"
+        dialogo = DialogoConsulta("Consulta de Sesion", "Seleccione una Sesion:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_sesion = dialogo.item_seleccionado()
+            self.ln_sesion.setText(codigo_sesion) 
+            
+    def celda_clickeada(self, fila, columna):
+        # obtener fila
+        if fila == 0:
+            hora= ("07:30 A 08:10")
+            print(hora)
+        if fila == 1:
+            hora = ("08:10 A 08:50")
+        if fila ==2:
+            hora = ("08:50 A 09:30")
+        if fila ==3:
+            hora = ("09:30 A 10:10")
+        if fila ==4 :
+            hora= ("10:10 A 10:50")
+        if fila == 5:
+            hora = ( "10:50 A 11:30")
+        if fila == 6:
+            hora = ("11:30 A 12:10")
+        if fila == 7:
+            hora =("12:10 A 12:50")
+        if fila == 8:
+            hora =("12:50 A 1:30")
+            
+        if columna ==0:
+            dia=("Lunes")
+        if columna ==1:
+            dia =("Martes")
+        if columna ==2:
+            dia =("Miercoles")
+        if columna ==3:
+            dia= ("Jueves")
+        if columna ==4:
+            dia =("Viernes")
+        if columna ==5:
+            dia =("Sabado")
+            
+        print(f'Celda clickeada en el dia {dia} en la hora {hora}')
+        carrera = self.ln_carrera.text()
+        sesion = self.ln_sesion.text()
+       
+        self.mostrar_dialogo(titulo=f"Formulario del dia {dia} a las horas {hora}",
+                                hora=hora,
+                                dia=dia,
+                                fila=fila,
+                                columna=columna
+                                )
+    def mostrar_dialogo(self, titulo, hora, dia,fila,columna ):
+        carrera = self.ln_carrera.text()
+        sesion = self.ln_sesion.text()
+        if len(carrera) ==0 or len(sesion) ==0:
+            QMessageBox.critical(self,"Error","Es necesario ingresar la carrera y su sesion")
+            return
+        else:
+            dialog = FormularioDialog(titulo=titulo, hora=hora,
+                                      dia=dia, fila=fila,columna=columna,horario=self,
+                                      sesion=sesion,carrera=carrera)
+            resultado = dialog.exec_()
+            if resultado == QDialog.Accepted:
+                texto_a_insertar = dialog.guardar()  # Obtener el texto desde la función guardar
+                if texto_a_insertar is not None:
+                    dialog.establecer_texto_en_celda(texto_a_insertar)
         
     
 class Users(QMainWindow):

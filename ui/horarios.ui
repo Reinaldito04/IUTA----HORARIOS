@@ -161,7 +161,7 @@ border-radius:15px;</string>
             </font>
            </property>
            <property name="text">
-            <string>HORARIOS</string>
+            <string>HORARIOS DIURNOS</string>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
@@ -255,8 +255,8 @@ background-color: rgb(104, 126, 255);</string>
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>541</width>
-              <height>522</height>
+              <width>469</width>
+              <height>368</height>
              </rect>
             </property>
             <attribute name="icon">
@@ -1814,8 +1814,8 @@ background-color: rgb(104, 126, 255);</string>
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>541</width>
-              <height>522</height>
+              <width>483</width>
+              <height>375</height>
              </rect>
             </property>
             <attribute name="icon">
@@ -3412,8 +3412,8 @@ background-color: rgb(104, 126, 255);</string>
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>541</width>
-              <height>522</height>
+              <width>536</width>
+              <height>495</height>
              </rect>
             </property>
             <attribute name="icon">
