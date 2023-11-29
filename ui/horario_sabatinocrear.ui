@@ -54,7 +54,7 @@
        <string notr="true">background-color:rgb(152, 228, 255);</string>
       </property>
       <property name="text">
-       <string>Horario</string>
+       <string>Horario Sabatino</string>
       </property>
       <property name="textFormat">
        <enum>Qt::AutoText</enum>
@@ -109,7 +109,32 @@
      </layout>
     </item>
     <item>
+     <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
      <widget class="QTableWidget" name="tableWidget_HORARIO_sabado">
+      <attribute name="horizontalHeaderCascadingSectionResizes">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="horizontalHeaderDefaultSectionSize">
+       <number>550</number>
+      </attribute>
+      <attribute name="verticalHeaderCascadingSectionResizes">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderMinimumSectionSize">
+       <number>23</number>
+      </attribute>
+      <attribute name="verticalHeaderShowSortIndicator" stdset="0">
+       <bool>true</bool>
+      </attribute>
+      <attribute name="verticalHeaderStretchLastSection">
+       <bool>true</bool>
+      </attribute>
       <row>
        <property name="text">
         <string>07:30 A 08:10</string>
@@ -152,7 +177,42 @@
       </row>
       <row>
        <property name="text">
-        <string>12:50 A 1:30</string>
+        <string>12:50 A 01:30</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>01:30 A 02:10</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>02:10 A 02:50</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>02:50 A 03:10</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>03:10 A 03:50</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>03:50 A 04:10</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>04:10 A 04:50</string>
+       </property>
+      </row>
+      <row>
+       <property name="text">
+        <string>04:50 A 05:30</string>
        </property>
       </row>
       <column>

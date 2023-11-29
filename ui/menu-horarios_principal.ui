@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>996</width>
-    <height>812</height>
+    <width>693</width>
+    <height>627</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,9 +18,9 @@
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout_2">
       <item>
-       <widget class="QPushButton" name="btn_volver">
+       <widget class="QPushButton" name="btn_volver_menu">
         <property name="text">
-         <string>Volver</string>
+         <string>Volver al menu Principal</string>
         </property>
        </widget>
       </item>
@@ -57,13 +57,6 @@
         </property>
        </spacer>
       </item>
-      <item>
-       <widget class="QPushButton" name="btn_volver_menu">
-        <property name="text">
-         <string>Volver al menu Principal</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </item>
     <item>
@@ -82,10 +75,10 @@
         </property>
         <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <widget class="QPushButton" name="bt_stckwdgt_individualSeccion">
+          <widget class="QPushButton" name="bt_seccionView">
            <property name="text">
-            <string>Horario Individual
- de seccion</string>
+            <string>Horario individual 
+ de Seccion</string>
            </property>
           </widget>
          </item>
@@ -115,12 +108,16 @@ Facilitadores</string>
           </widget>
          </item>
         </layout>
+        <zorder>bt_stckwdgt_individualAula</zorder>
+        <zorder>bt_stckwdgt_ctrlAfacilit</zorder>
+        <zorder>bt_stckwdgt_individualProfe</zorder>
+        <zorder>bt_seccionView</zorder>
        </widget>
       </item>
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>1</number>
+         <number>2</number>
         </property>
         <widget class="QWidget" name="page_aula">
          <layout class="QVBoxLayout" name="verticalLayout_5">

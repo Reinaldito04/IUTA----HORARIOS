@@ -122,9 +122,9 @@ class MenuPrincipal(QMainWindow):
 class horarios_menu(QMainWindow):
     def __init__(self, admin):
         super(horarios_menu, self).__init__()
-        loadUi("./ui/menu-horarios_principal.ui")
+        loadUi("./ui/menu-horarios_principal.ui",self)
         self.admin = admin
-        self.bt_stckwdgt_individualSeccion.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_seccion))
+        self.bt_seccionView.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_seccion))
         self.bt_stckwdgt_individualProfe.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_profesor))
         self.bt_stckwdgt_individualAula.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_aula))
         self.bt_stckwdgt_ctrlAfacilit.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_controldeasistencia))
