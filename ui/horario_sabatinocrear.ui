@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>597</height>
+    <width>905</width>
+    <height>767</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -192,17 +192,12 @@
       </row>
       <row>
        <property name="text">
-        <string>02:50 A 03:10</string>
+        <string>02:50 A 03:30</string>
        </property>
       </row>
       <row>
        <property name="text">
-        <string>03:10 A 03:50</string>
-       </property>
-      </row>
-      <row>
-       <property name="text">
-        <string>03:50 A 04:10</string>
+        <string>03:30 A 04:10</string>
        </property>
       </row>
       <row>

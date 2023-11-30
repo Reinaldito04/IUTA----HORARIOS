@@ -82,20 +82,17 @@ class MenuPrincipal(QMainWindow):
         carreras = MenuCarreras(admin=self.admin)
         widget.addWidget(carreras)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        #widget.setFixedHeight(1000)
-        #widget.setFixedWidth(1000) 
+
     def materiasView(self):
         materias = MenuMaterias(admin=self.admin)
         widget.addWidget(materias)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        #widget.setFixedHeight(1000)
-        #widget.setFixedWidth(1000) 
+ 
     def teacherView(self):
         teacher = MenuTeachers(admin=self.admin)
         widget.addWidget(teacher)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        #widget.setFixedHeight(1000)
-        #widget.setFixedWidth(1000)   
+        
     def verifyAdmin(self):
         if self.admin =="True":
             self.userView()
@@ -106,9 +103,9 @@ class MenuPrincipal(QMainWindow):
         widget.addWidget(ingreso_usuario)
         widget.setCurrentIndex(widget.currentIndex()+1)
         ingreso_usuario.txt_name.clear()
-      
         ingreso_usuario.txt_password.clear()
         self.hide()
+        
     def userView(self):
         Usuario = Users(admin=self.admin)
         widget.addWidget(Usuario)
@@ -119,6 +116,7 @@ class MenuPrincipal(QMainWindow):
         widget.addWidget(menuprincipalHorarios)
         widget.setCurrentIndex(widget.currentIndex()+1)
 
+# MEnu principal de horarios
 class horarios_menu(QMainWindow):
     def __init__(self, admin):
         super(horarios_menu, self).__init__()
@@ -128,6 +126,7 @@ class horarios_menu(QMainWindow):
         self.bt_stckwdgt_individualProfe.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_profesor))
         self.bt_stckwdgt_individualAula.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_aula))
         self.bt_stckwdgt_ctrlAfacilit.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_controldeasistencia))
+        self.btn_horaiossabatinos.clicked.connect(self.horariosSabatinosview)
         self.btn_horaiosdiurnos.clicked.connect(self.horariosdiurnosView)
         self.btn_volver_menu.clicked.connect(self.backMenu)
 
@@ -135,12 +134,17 @@ class horarios_menu(QMainWindow):
         horarios = HorarioMenu(admin=self.admin)
         widget.addWidget(horarios)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        
+    def horariosSabatinosview(self):
+        horarrios=Horario_SabatinoMenu(admin=self.admin)
+        widget.addWidget(horarrios)
+        widget.setCurrentIndex(widget.currentIndex()+1)
     def backMenu(self):
         menu = MenuPrincipal(self.admin)
         widget.addWidget(menu)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        
+
+### Clase horariosdiurnosView ###
+# MENU DE HORARIOS DIURNOS
 class HorarioMenu(QMainWindow):
     def __init__(self , admin):
         super(HorarioMenu, self).__init__()
@@ -154,6 +158,8 @@ class HorarioMenu(QMainWindow):
         self.bt_profesor.clicked.connect(self.realizarbusquedaProfesor)
         self.bt_carrerabuscar.clicked.connect(self.buscarCarrera)
         self.bt_seccionbuscar.clicked.connect(self.buscarSeccion)
+        
+        # DEFINIR VALORES PARA LOS CHECKBOX DE CONSULTAR DISPONIBILIDAD AULAS
         self.diasLunesAulas = [{
             "07:30 A 08:10" : self.checkBox_0,
             "08:10 A 08:50" : self.checkBox_4,
@@ -223,6 +229,8 @@ class HorarioMenu(QMainWindow):
         }]
         self.bt_buscar.clicked.connect(self.realizar_busquedaAula)
         
+        # DEFINIR VALORES PARA LOS CHECKBOX DE CONSULTAR DISPONIBILIDAD SECCION
+
         self.diasLunesSeccion = [{
             "07:30 A 08:10" : self.checkBox_163,
             "08:10 A 08:50" : self.checkBox_164,
@@ -290,7 +298,9 @@ class HorarioMenu(QMainWindow):
             "12:10 A 12:50" : self.checkBox_215,
             "12:50 A 1:30" : self.checkBox_216
         }]
-        
+
+        # DEFINIR VALORES PARA LOS CHECKBOX DE CONSULTAR DISPONIBILIDAD PROFESOR
+
         self.diasLunesProfesor =[{
             "07:30 A 08:10":self.checkBox_3,
             "08:10 A 08:50" : self.checkBox_110,
@@ -359,6 +369,8 @@ class HorarioMenu(QMainWindow):
         }]
         self.ln_disponibilidad_carrera.textChanged.connect(self.r3alizarbusqueda_Seccion)
         self.ln_disponibilidad_seccion.textChanged.connect(self.r3alizarbusqueda_Seccion)
+        
+    # METODO DE BUSCAR AULA
     def buscarAula(self):
         consulta_like = "SELECT Descripcion, CodigoAula,codigo_sede FROM Aulas WHERE Descripcion LIKE ?"
         consulta_sql_materia = "SELECT Descripcion, CodigoAula,codigo_sede FROM Aulas;"
@@ -366,14 +378,15 @@ class HorarioMenu(QMainWindow):
         if dialogo.exec_() == QDialog.Accepted:
             codigo_materia = dialogo.item_seleccionado()
             self.ln_disponibilidad_aula.setText(codigo_materia) 
-    
+    # METODO DE BUSCAR PROFESOR
     def buscarprofesor(self):
         consulta_like = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido, Cedula FROM Profesores WHERE Nombre_Y_Apellido LIKE ?"
         consulta_sql_profesor = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido ,Cedula FROM Profesores;"
         dialogo = DialogoConsulta("Consulta de Profesor", "Seleccione un profesor:", consulta_sql=consulta_sql_profesor,consulta_like=consulta_like)
         if dialogo.exec_() == QDialog.Accepted:
             codigo_materia = dialogo.item_seleccionado()
-            self.ln_disponibilidad_profesores.setText(codigo_materia) 
+            self.ln_disponibilidad_profesores.setText(codigo_materia)
+    # METODO DE BUSCAR CARRERA 
     def buscarCarrera(self):
         consulta_like = "SELECT Descripcion, CodigoCarrera FROM Carreras WHERE Descripcion LIKE ?"
         consulta_sql_materia = "SELECT Descripcion, CodigoCarrera FROM Carreras;"
@@ -381,13 +394,15 @@ class HorarioMenu(QMainWindow):
         if dialogo.exec_() == QDialog.Accepted:
             codigo_materia = dialogo.item_seleccionado()
             self.ln_disponibilidad_carrera.setText(codigo_materia) 
+    # METODOD DE BUSCAR SECCION
     def buscarSeccion(self):
         consulta_like = "SELECT Numero FROM SesionCarrera WHERE Numero LIKE ?"
         consulta_sql_materia = "SELECT Numero FROM SesionCarrera;"
         dialogo = DialogoConsulta("Consulta de Seccion", "Seleccione una seccion:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
         if dialogo.exec_() == QDialog.Accepted:
             codigo_materia = dialogo.item_seleccionado()
-            self.ln_disponibilidad_seccion.setText(codigo_materia) 
+            self.ln_disponibilidad_seccion.setText(codigo_materia)
+    # METODO DE BUSCAR PROFES 
     def realizarbusquedaProfesor(self):
         #obtnern el valor de la seccion a buscar
         profesor = self.ln_disponibilidad_profesores.text()
@@ -480,11 +495,27 @@ class HorarioMenu(QMainWindow):
        
     def crearView(self):
         menu = Horario(self.admin)
-        
-        
         widget.addWidget(menu)
         widget.setCurrentIndex(widget.currentIndex()+1)
     
+class Horario_SabatinoMenu(QMainWindow):
+    def __init__(self , admin):
+        super(Horario_SabatinoMenu, self).__init__()
+        loadUi("./ui/menuprincipalsabantino.ui",self)
+        self.admin = admin
+        #self.bt_back.clicked.connect(self.backMenu)
+        #self.bt_salir.clicked.connect(lambda : QApplication.quit())
+        self.bt_crear.clicked.connect(self.crearView)
+        #self.bt_buscar.clicked.connect(self.buscarAula)
+        #self.bt_profesor.clicked.connect(self.buscarprofesor)
+        #self.bt_profesor.clicked.connect(self.realizarbusquedaProfesor)
+        #self.bt_carrerabuscar.clicked.connect(self.buscarCarrera)
+        #self.bt_seccionbuscar.clicked.connect(self.buscarSeccion)
+    
+    def crearView(self):
+        menu = horario_sabatino(self.admin)
+        widget.addWidget(menu)
+        widget.setCurrentIndex(widget.currentIndex()+1)
 
 class DialogoConsulta(QDialog):
     def __init__(self, titulo, mensaje, consulta_sql,consulta_like):
@@ -567,8 +598,6 @@ class DialogoConsulta(QDialog):
 
     def aceptar(self):
         self.accept()
-
-
 
 class FormularioDialog(QDialog):
     def __init__(self , titulo , hora, dia ,fila,columna ,horario,carrera,sesion):
@@ -847,6 +876,7 @@ class PreviewPDF(QDialog):
         return pixmap
     
     
+# CREAR HORARIOS DIURNOS   
 class Horario(QMainWindow):
     def __init__(self,admin):
         super(Horario,self).__init__()
@@ -995,7 +1025,8 @@ class Horario(QMainWindow):
                 texto_a_insertar = dialog.guardar()  # Obtener el texto desde la función guardar
                 if texto_a_insertar is not None:
                     dialog.establecer_texto_en_celda(texto_a_insertar)
-                   
+
+### CREAR HORARIO SABATINO
 class horario_sabatino(QMainWindow):
     def __init__(self,admin):
         super(Horario,self).__init__()
@@ -1105,23 +1136,25 @@ class horario_sabatino(QMainWindow):
             hora =("12:10 A 12:50")
         if fila == 8:
             hora =("12:50 A 1:30")
-            
+        if fila == 9:
+            hora=("1:30 A 2:10")
+        if fila == 10:
+            hora=("2:10 A 2:50")
+        if fila == 11:
+            hora=("2:50 A 3:30")
+        if fila == 12:
+            hora=("3:30 A 4:10")
+        if fila == 13:
+            hora= ("4:10 A 4:50")
+        if fila== 14:
+            hora=("4:50 A 5:30")
+
         if columna ==0:
-            dia=("Lunes")
-        if columna ==1:
-            dia =("Martes")
-        if columna ==2:
-            dia =("Miercoles")
-        if columna ==3:
-            dia= ("Jueves")
-        if columna ==4:
-            dia =("Viernes")
-        if columna ==5:
             dia =("Sabado")
             
         print(f'Celda clickeada en el dia {dia} en la hora {hora}')
-        carrera = self.ln_carrera.text()
-        sesion = self.ln_sesion.text()
+        carrera = self.lineEdit_Carrera.text()
+        sesion = self.lineEdit_Seccion.text()
        
         self.mostrar_dialogo(titulo=f"Formulario del dia {dia} a las horas {hora}",
                                 hora=hora,
