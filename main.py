@@ -503,7 +503,7 @@ class Horario_SabatinoMenu(QMainWindow):
         super(Horario_SabatinoMenu, self).__init__()
         loadUi("./ui/menuprincipalsabantino.ui",self)
         self.admin = admin
-        #self.bt_back.clicked.connect(self.backMenu)
+        self.bt_back.clicked.connect(self.backMenu)
         #self.bt_salir.clicked.connect(lambda : QApplication.quit())
         self.bt_crear.clicked.connect(self.crearView)
         #self.bt_buscar.clicked.connect(self.buscarAula)
