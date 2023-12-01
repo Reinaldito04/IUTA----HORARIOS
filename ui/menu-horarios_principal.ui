@@ -117,7 +117,7 @@ Facilitadores</string>
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>2</number>
+         <number>0</number>
         </property>
         <widget class="QWidget" name="page_aula">
          <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -185,7 +185,7 @@ Facilitadores</string>
               <item>
                <widget class="QLabel" name="label_7">
                 <property name="text">
-                 <string>Codigo de Aula</string>
+                 <string>Aula</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -205,7 +205,11 @@ Facilitadores</string>
               <item>
                <widget class="QPushButton" name="btn_buscar_codAula">
                 <property name="text">
-                 <string>Buscar</string>
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>imagenes/search.png</normaloff>imagenes/search.png</iconset>
                 </property>
                </widget>
               </item>
@@ -234,7 +238,87 @@ Facilitadores</string>
            </widget>
           </item>
           <item>
-           <widget class="QTableWidget" name="tableWidget_hor_IndAula"/>
+           <widget class="QTableWidget" name="tableWidget_hor_IndAula">
+            <attribute name="horizontalHeaderDefaultSectionSize">
+             <number>115</number>
+            </attribute>
+            <attribute name="verticalHeaderMinimumSectionSize">
+             <number>55</number>
+            </attribute>
+            <attribute name="verticalHeaderDefaultSectionSize">
+             <number>59</number>
+            </attribute>
+            <row>
+             <property name="text">
+              <string>07:30 A 08:10</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>08:10 A 08:50</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>08:50 A 09:30</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>09:30 A 10:10</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>10:10 A 10:50</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>10:50 A 11:30</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>11:30 A 12:10</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>12:50 A 1:30</string>
+             </property>
+            </row>
+            <column>
+             <property name="text">
+              <string>Lunes</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Martes</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Miercoles</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Jueves</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Viernes</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Sabado</string>
+             </property>
+            </column>
+           </widget>
           </item>
           <item>
            <widget class="Line" name="line_13">
@@ -563,7 +647,7 @@ Facilitadores</string>
             </attribute>
             <row>
              <property name="text">
-              <string>07:30 A 08:30</string>
+              <string>07:30 A 08:10</string>
              </property>
             </row>
             <row>
@@ -767,7 +851,7 @@ Facilitadores</string>
               <item>
                <widget class="QLabel" name="label_5">
                 <property name="text">
-                 <string>Cedula Profesor</string>
+                 <string>Profesor</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -787,7 +871,11 @@ Facilitadores</string>
               <item>
                <widget class="QPushButton" name="btn_buscar_cedulaprof">
                 <property name="text">
-                 <string>Buscar</string>
+                 <string/>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normaloff>imagenes/search.png</normaloff>imagenes/search.png</iconset>
                 </property>
                </widget>
               </item>
@@ -816,7 +904,96 @@ Facilitadores</string>
            </widget>
           </item>
           <item>
-           <widget class="QTableWidget" name="tableWidget_horIndprof"/>
+           <widget class="QTableWidget" name="tableWidget_horIndprof">
+            <attribute name="horizontalHeaderMinimumSectionSize">
+             <number>50</number>
+            </attribute>
+            <attribute name="horizontalHeaderDefaultSectionSize">
+             <number>116</number>
+            </attribute>
+            <attribute name="horizontalHeaderShowSortIndicator" stdset="0">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="horizontalHeaderStretchLastSection">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="verticalHeaderCascadingSectionResizes">
+             <bool>false</bool>
+            </attribute>
+            <attribute name="verticalHeaderDefaultSectionSize">
+             <number>59</number>
+            </attribute>
+            <row>
+             <property name="text">
+              <string>07:30 A 08:10</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>08:10 A 08:50</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>08:50 A 09:30</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>09:30 A 10:10</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>10:10 A 10:50</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>10:50 A 11:30</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>11:30 A 12:10</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>12:50 A 1:30</string>
+             </property>
+            </row>
+            <column>
+             <property name="text">
+              <string>Lunes</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Martes</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Miercoles</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Jueves</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Viernes</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Sabado</string>
+             </property>
+            </column>
+           </widget>
           </item>
           <item>
            <widget class="Line" name="line_10">

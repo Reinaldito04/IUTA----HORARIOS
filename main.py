@@ -129,6 +129,255 @@ class horarios_menu(QMainWindow):
         self.btn_horaiossabatinos.clicked.connect(self.horariosSabatinosview)
         self.btn_horaiosdiurnos.clicked.connect(self.horariosdiurnosView)
         self.btn_volver_menu.clicked.connect(self.backMenu)
+        
+        #metodos para realizar la busqueda por cambio de texto
+        self.ln_carrera.textChanged.connect(self.llamarBuscarseccion)
+        self.ln_sesion.textChanged.connect(self.llamarBuscarseccion)
+        self.ln_cedula_profesor.textChanged.connect(self.llamarbuscarProfesor)
+        self.ln_codigo_aula.textChanged.connect(self.llamarbuscarAula)
+        #Metodos para realizar busqueda con el dialog
+        self.bt_carrera.clicked.connect(self.searchCarreraSeccion)
+        self.bt_sesion.clicked.connect(self.buscarCarreraSeccion)
+        self.btn_buscar_cedulaprof.clicked.connect(self.buscarprofesor)
+        self.btn_buscar_codAula.clicked.connect(self.buscarAula)
+       
+    def buscarAula(self):
+        consulta_like = "SELECT Descripcion,codigo_sede,CodigoAula FROM Aulas WHERE Descripcion LIKE ?"
+        consulta_sql_materia = "SELECT  Descripcion,codigo_sede,CodigoAula FROM Aulas;"
+        dialogo = DialogoConsulta("Consulta de Aula", "Seleccione una aula:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_materia = dialogo.item_seleccionado()
+            self.ln_codigo_aula.setText(codigo_materia)
+          
+    def buscarprofesor(self):
+        consulta_like = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido, Cedula FROM Profesores WHERE Nombre_Y_Apellido LIKE ?"
+        consulta_sql_profesor = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido ,Cedula FROM Profesores;"
+        dialogo = DialogoConsulta("Consulta de Profesor", "Seleccione un profesor:", consulta_sql=consulta_sql_profesor,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_materia = dialogo.item_seleccionado()
+            self.ln_cedula_profesor.setText(codigo_materia)
+            
+    def llamarbuscarAula(self):
+        descripcion = self.ln_codigo_aula.text()
+        if descripcion :
+            self.verDisponibilidadAula()
+    def llamarbuscarProfesor(self):
+        cedula = self.ln_cedula_profesor.text()
+        if cedula:
+            self.verDisponibilidadProfesor()
+    def llamarBuscarseccion(self):
+        carrera = self.ln_carrera.text()
+        seccion = self.ln_sesion.text()
+        if carrera and seccion:
+            self.verDisponibilidadSeccion()
+    def searchCarreraSeccion(self):
+        consulta_like = "SELECT Descripcion, CodigoCarrera FROM Carreras WHERE Descripcion LIKE ?"
+        consulta_sql_materia = "SELECT Descripcion, CodigoCarrera FROM Carreras;"
+        dialogo = DialogoConsulta("Consulta de Carrera", "Seleccione una carrera:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_materia = dialogo.item_seleccionado()
+            self.ln_carrera.setText(codigo_materia) 
+    def buscarCarreraSeccion(self):
+        consulta_like = "SELECT Numero FROM SesionCarrera WHERE Numero LIKE ?"
+        consulta_sql_materia = "SELECT Numero FROM SesionCarrera;"
+        dialogo = DialogoConsulta("Consulta de Seccion", "Seleccione una seccion:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_materia = dialogo.item_seleccionado()
+            self.ln_sesion.setText(codigo_materia)
+       
+    def verDisponibilidadAula(self):
+        conexion = sqlite3.connect("db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute(
+            "SELECT Dia, Hora, CodigoMat, CodigoAula, CedulaProf ,Sesion,Carrera FROM HorarioTest WHERE CodigoAula=? ",
+            (self.ln_codigo_aula.text(),)
+        )
+        datos = cursor.fetchall()
+        self.tableWidget_hor_IndAula.clearContents()
+
+        
+
+        for result in datos:
+            dia = result[0]
+            hora = result[1]
+            codigo_mat = result[2]
+            codigo_aula = result[3]
+            cedula_prof = result[4]
+            seccion = result[5]
+            carrera = result[6]
+
+            # Asignar la hora y el día a las posiciones correspondientes
+            if hora == "07:30 A 08:10":
+                fila = 0
+            elif hora == "08:10 A 08:50":
+                fila = 1
+            elif hora == "08:50 A 09:30":
+                fila = 2
+            elif hora == "09:30 A 10:10":
+                fila = 3
+            elif hora == "10:10 A 10:50":
+                fila = 4
+            elif hora == "10:50 A 11:30":
+                fila = 5
+            elif hora == "11:30 A 12:10":
+                fila = 6
+            elif hora == "12:10 A 12:50":
+                fila = 7
+            elif hora == "12:50 A 1:30":
+                fila = 8
+            else:
+                # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
+                continue
+
+            # Asignar el día a la columna correspondiente
+            if dia == "Lunes":
+                columna = 0
+            elif dia == "Martes":
+                columna = 1
+            elif dia == "Miercoles":
+                columna = 2
+            elif dia == "Jueves":
+                columna = 3
+            elif dia == "Viernes":
+                columna = 4
+            elif dia == "Sabado":
+                columna = 5
+            else:
+                # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
+                continue
+
+            # Colocar los datos en la tabla
+            item = QTableWidgetItem(f"{codigo_mat}\n{codigo_aula}\n{cedula_prof}\n{carrera}\n{seccion}")
+            self.tableWidget_hor_IndAula.setItem(fila, columna, item) 
+             
+    def verDisponibilidadProfesor(self):
+        conexion = sqlite3.connect("db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute(
+            "SELECT Dia, Hora, CodigoMat, CodigoAula, CedulaProf ,Sesion,Carrera FROM HorarioTest WHERE CedulaProf=? ",
+            (self.ln_cedula_profesor.text(),)
+        )
+        datos = cursor.fetchall()
+        self.tableWidget_horIndprof.clearContents()
+
+        
+
+        for result in datos:
+            dia = result[0]
+            hora = result[1]
+            codigo_mat = result[2]
+            codigo_aula = result[3]
+            cedula_prof = result[4]
+            seccion = result[5]
+            carrera = result[6]
+
+            # Asignar la hora y el día a las posiciones correspondientes
+            if hora == "07:30 A 08:10":
+                fila = 0
+            elif hora == "08:10 A 08:50":
+                fila = 1
+            elif hora == "08:50 A 09:30":
+                fila = 2
+            elif hora == "09:30 A 10:10":
+                fila = 3
+            elif hora == "10:10 A 10:50":
+                fila = 4
+            elif hora == "10:50 A 11:30":
+                fila = 5
+            elif hora == "11:30 A 12:10":
+                fila = 6
+            elif hora == "12:10 A 12:50":
+                fila = 7
+            elif hora == "12:50 A 1:30":
+                fila = 8
+            else:
+                # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
+                continue
+
+            # Asignar el día a la columna correspondiente
+            if dia == "Lunes":
+                columna = 0
+            elif dia == "Martes":
+                columna = 1
+            elif dia == "Miercoles":
+                columna = 2
+            elif dia == "Jueves":
+                columna = 3
+            elif dia == "Viernes":
+                columna = 4
+            elif dia == "Sabado":
+                columna = 5
+            else:
+                # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
+                continue
+
+            # Colocar los datos en la tabla
+            item = QTableWidgetItem(f"{codigo_mat}\n{codigo_aula}\n{cedula_prof}\n{carrera}\n{seccion}")
+            self.tableWidget_horIndprof.setItem(fila, columna, item) 
+          
+            
+    def verDisponibilidadSeccion(self):
+        conexion = sqlite3.connect("db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute(
+            "SELECT Dia, Hora, CodigoMat, CodigoAula, CedulaProf FROM HorarioTest WHERE Carrera=? AND Sesion=?",
+            (self.ln_carrera.text(), self.ln_sesion.text())
+        )
+        datos = cursor.fetchall()
+        self.tableWidget_2.clearContents()
+
+        
+
+        for result in datos:
+            dia = result[0]
+            hora = result[1]
+            codigo_mat = result[2]
+            codigo_aula = result[3]
+            cedula_prof = result[4]
+
+            # Asignar la hora y el día a las posiciones correspondientes
+            if hora == "07:30 A 08:10":
+                fila = 0
+            elif hora == "08:10 A 08:50":
+                fila = 1
+            elif hora == "08:50 A 09:30":
+                fila = 2
+            elif hora == "09:30 A 10:10":
+                fila = 3
+            elif hora == "10:10 A 10:50":
+                fila = 4
+            elif hora == "10:50 A 11:30":
+                fila = 5
+            elif hora == "11:30 A 12:10":
+                fila = 6
+            elif hora == "12:10 A 12:50":
+                fila = 7
+            elif hora == "12:50 A 1:30":
+                fila = 8
+            else:
+                # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
+                continue
+
+            # Asignar el día a la columna correspondiente
+            if dia == "Lunes":
+                columna = 0
+            elif dia == "Martes":
+                columna = 1
+            elif dia == "Miercoles":
+                columna = 2
+            elif dia == "Jueves":
+                columna = 3
+            elif dia == "Viernes":
+                columna = 4
+            elif dia == "Sabado":
+                columna = 5
+            else:
+                # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
+                continue
+
+            # Colocar los datos en la tabla
+            item = QTableWidgetItem(f"{codigo_mat}\n{codigo_aula}\n{cedula_prof}")
+            self.tableWidget_2.setItem(fila, columna, item)
 
     def horariosdiurnosView(self):
         horarios = HorarioMenu(admin=self.admin)
@@ -503,7 +752,7 @@ class Horario_SabatinoMenu(QMainWindow):
         super(Horario_SabatinoMenu, self).__init__()
         loadUi("./ui/menuprincipalsabantino.ui",self)
         self.admin = admin
-        self.bt_back.clicked.connect(self.backMenu)
+        # self.bt_back.clicked.connect(self.backMenu)
         #self.bt_salir.clicked.connect(lambda : QApplication.quit())
         self.bt_crear.clicked.connect(self.crearView)
         #self.bt_buscar.clicked.connect(self.buscarAula)
@@ -1029,8 +1278,8 @@ class Horario(QMainWindow):
 ### CREAR HORARIO SABATINO
 class horario_sabatino(QMainWindow):
     def __init__(self,admin):
-        super(Horario,self).__init__()
-        loadUi("ui/horarios_sabatinocrear.ui",self)
+        super(horario_sabatino,self).__init__()
+        loadUi("./ui/horario_sabatinocrear.ui",self)
         self.tableWidget_HORARIO_sabado.cellClicked.connect(self.celda_clickeada)
         self.btn_buscarCarr.clicked.connect(self.BuscarCarrera)
         self.btn_buscarSecc.clicked.connect(self.buscarsesion)
