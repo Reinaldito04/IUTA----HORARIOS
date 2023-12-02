@@ -18,7 +18,290 @@ from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QCh
 import sqlite3
 import fitz
 
-#test
+
+
+
+
+class FormularioDialog(QDialog):
+    def __init__(self , titulo , hora, dia ,fila,columna ,horario,carrera,sesion):
+        super().__init__()
+        loadUi("./ui/busqueda.ui",self)
+        self.titulo = titulo
+        self.hora = next(iter(hora)) if isinstance(hora, set) else hora  # Obtiene el primer elemento del conjunto
+        self.dia = next(iter(dia)) if isinstance(dia, set) else dia  # Obtiene el primer elemento del conjunto
+        self.fila = fila
+        self.columna = columna
+        self.horario = horario
+        self.carrera = carrera
+        self.sesion = sesion
+        
+        
+        
+        if self.dia == 1:
+            self.dia = "Lunes"
+        if self.dia == 2:
+            self.dia = "Martes"
+        if self.dia == 3:
+            self.dia = "Miercoles"
+        if self.dia == 4:
+            self.dia = "Jueves"
+        if self.dia == 5:
+            self.dia = "Viernes"
+        if self.dia == 6:
+            self.dia = "Sabado"
+        self.initUI()
+
+    def cancelar(self):
+        celda = self.horario.tableWidget.item(self.fila, self.columna)
+        if celda:
+            celda.setText("")  # O puedes establecer el texto como desees
+        self.hide()
+
+    
+    def initUI(self,):
+       
+        self.bt_codigoMat.clicked.connect(self.codigoMateria)
+        self.bt_codigoSalon.clicked.connect(self.codigoSalon)
+        self.bt_CedulaProf.clicked.connect(self.codigoProfesor)
+        
+        self.input_dia.setText(str(self.dia))
+        self.input_dia.setReadOnly(True)
+        self.rejected.connect(self.cancelar)
+
+      
+        self.input_hora.setText(str(self.hora))
+        self.input_hora.setReadOnly(True)
+        self.input_materia.setReadOnly(True)
+        self.input_salon.setReadOnly(True)
+        self.input_profesor.setReadOnly(True)
+        self.boton_guardar.clicked.connect(self.guardar)
+        self.boton_cancelar.clicked.connect(self.cancelar)
+        
+
+       
+        self.setWindowTitle(self.titulo)
+
+    def codigoMateria(self):
+        consulta_like = "SELECT Codigo, Nombre FROM Materia WHERE Codigo LIKE ?"
+        consulta_sql_materia = "SELECT Codigo, Nombre FROM Materia;"
+        dialogo = DialogoConsulta("Consulta de Materia", "Seleccione una materia:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_materia = dialogo.item_seleccionado()
+            self.input_materia.setText(codigo_materia) 
+            
+    def codigoSalon(self):
+        consulta_like = "SELECT Descripcion, CodigoAula FROM Aulas WHERE Descripcion LIKE ?"
+        
+        consulta_sql_salon = "SELECT  Descripcion,CodigoAula FROM Aulas;"
+
+        dialogo = DialogoConsulta("Consulta de Salon", "Seleccione un salon:", consulta_sql_salon,consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigoSalon = dialogo.item_seleccionado()
+            self.input_salon.setText(codigoSalon)
+            
+    def codigoProfesor(self):
+        consulta_like = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido, Cedula FROM Profesores WHERE Nombre_Y_Apellido LIKE ?"
+        
+        consulta_sql_profesor = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido ,Cedula FROM Profesores;"
+
+        dialogo = DialogoConsulta("Consulta de Profesor", "Seleccione el nombre y apellido del profesor:" ,consulta_sql_profesor,consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo = dialogo.item_seleccionado()
+            self.input_profesor.setText(codigo)
+
+    def guardar(self):
+        codigoMateria = self.input_materia.text()
+        codigoSalon = self.input_salon.text()
+        cedulaProfesor = self.input_profesor.text()
+
+        if not (codigoMateria and codigoSalon and cedulaProfesor):
+            QMessageBox.information(self, "Error", "Todos los campos son obligatorios")
+            return None  # Devuelve None si hay campos faltantes
+
+        conexion = sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+
+        verificarHorario = cursor.execute("SELECT * FROM HorarioTest WHERE Dia=? AND Hora=? AND CodigoAula=?",
+                                          (self.dia, self.hora, codigoSalon))
+
+        if verificarHorario.fetchone():
+            QMessageBox.warning(self, "Error", "El salón ya está siendo utilizado en la misma hora")
+            self.input_salon.clear()
+            self.input_salon.setPlaceholderText("Ingrese un salón distinto...")
+            return None  # Devuelve None si el salón ya está siendo utilizado
+
+        else:
+            cursor.execute("INSERT INTO HorarioTest (Dia,Hora,CodigoMat,CodigoAula,CedulaProf,Carrera,Sesion) VALUES (?,?,?,?,?,?,?)",
+                           (self.dia,self.hora,codigoMateria,codigoSalon,cedulaProfesor,self.carrera,self.sesion))
+            QMessageBox.information(self,"Exito","Se ha almacenado los datos correctamente")
+            conexion.commit()
+            conexion.close()
+           
+
+            print(f"El código de materia es {codigoMateria}, salón {codigoSalon}, cédula profesor {cedulaProfesor}")
+            text_for_checkbox = (f"{codigoMateria}\n{codigoSalon}\n{cedulaProfesor}")
+            self.establecer_texto_en_celda(text_for_checkbox)
+            self.hide()
+            return  codigoMateria,codigoSalon,cedulaProfesor
+
+    def establecer_texto_en_celda(self, texto):
+        # Obtener la instancia de QTableWidget desde la instancia de Horario
+        table_widget = self.horario.tableWidget
+
+        # Establecer el texto en la celda específica
+        table_widget.setItem(self.fila, self.columna, QTableWidgetItem(texto))
+        
+class QuestionHorario(QDialog):
+    def __init__(self,horario_instance):
+        super(QuestionHorario,self).__init__()
+        loadUi("ui/eliminarhorarioquestion.ui",self)
+        self.setWindowTitle("Ya existe un horario")
+        self.bt_eliminar.clicked.connect(self.eliminar)
+        self.bt_view.clicked.connect(self.ver)
+        self.horario_instance = horario_instance
+        
+
+    def eliminar(self):
+        conexion = sqlite3.connect("db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute(
+            "DELETE FROM HorarioTest WHERE Carrera=? AND Sesion=?",
+            (self.horario_instance.ln_carrera.text(), self.horario_instance.ln_sesion.text())
+        )
+        QMessageBox.information(self,"Eliminar","se ha eliminado correctamente")
+        conexion.commit()
+        conexion.close()
+        
+        self.accept()
+
+    def ver(self):
+        QMessageBox.information(self, "Ver", "Se ha añadido a la tabla actual")
+        conexion = sqlite3.connect("db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute(
+            "SELECT Dia, Hora, CodigoMat, CodigoAula, CedulaProf FROM HorarioTest WHERE Carrera=? AND Sesion=?",
+            (self.horario_instance.ln_carrera.text(), self.horario_instance.ln_sesion.text())
+        )
+        datos = cursor.fetchall()
+        self.horario_instance.tableWidget.clearContents()
+
+        
+
+        for result in datos:
+            dia = result[0]
+            hora = result[1]
+            codigo_mat = result[2]
+            codigo_aula = result[3]
+            cedula_prof = result[4]
+
+            # Asignar la hora y el día a las posiciones correspondientes
+            if hora == "07:30 A 08:10":
+                fila = 0
+            elif hora == "08:10 A 08:50":
+                fila = 1
+            elif hora == "08:50 A 09:30":
+                fila = 2
+            elif hora == "09:30 A 10:10":
+                fila = 3
+            elif hora == "10:10 A 10:50":
+                fila = 4
+            elif hora == "10:50 A 11:30":
+                fila = 5
+            elif hora == "11:30 A 12:10":
+                fila = 6
+            elif hora == "12:10 A 12:50":
+                fila = 7
+            elif hora == "12:50 A 1:30":
+                fila = 8
+            else:
+                # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
+                continue
+
+            # Asignar el día a la columna correspondiente
+            if dia == "Lunes":
+                columna = 0
+            elif dia == "Martes":
+                columna = 1
+            elif dia == "Miercoles":
+                columna = 2
+            elif dia == "Jueves":
+                columna = 3
+            elif dia == "Viernes":
+                columna = 4
+            elif dia == "Sabado":
+                columna = 5
+            else:
+                # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
+                continue
+
+            # Colocar los datos en la tabla
+            item = QTableWidgetItem(f"{codigo_mat}\n{codigo_aula}\n{cedula_prof}")
+            self.horario_instance.tableWidget.setItem(fila, columna, item)
+
+
+        self.accept()
+   
+class PreviewPDF(QDialog):
+    def __init__(self,pdf_path):
+        super(PreviewPDF,self).__init__()
+        loadUi("ui/preview.ui",self)
+        self.pdf_path = pdf_path
+        self.current_page = 0  # Página actual
+        self.total_pages = 0  
+        self.initUI()
+        
+    def initUI(self):
+        self.setWindowTitle('Vista Previa de PDF')
+        self.btn_anterior.clicked.connect(self.showPreviousPage)
+        self.btn_siguiente.clicked.connect(self.showNextPage)
+        self.showPdfPreview()
+        self.total_pages = self.getTotalPages(self.pdf_path)
+        
+    def showPdfPreview(self):
+            # Cargar la imagen del PDF como vista previa en el QLabel
+        pixmap = self.convertPdfPageToPixmap(self.pdf_path, self.current_page)
+
+        # Mostrar la imagen en el QLabel
+        self.foto.setPixmap(pixmap)
+        self.foto.show()
+    def showPreviousPage(self):
+        # Mostrar la página anterior si no estamos en la primera página
+        if self.current_page > 0:
+            self.current_page -= 1
+            self.showPdfPreview()
+                
+    def showNextPage(self):
+        # Mostrar la página siguiente si no estamos en la última página
+        if self.current_page < self.total_pages - 1:
+            self.current_page += 1
+            self.showPdfPreview()
+    def getTotalPages(self, pdf_path):
+        # Obtener el total de páginas en el PDF
+        doc = fitz.open(pdf_path)
+        total_pages = doc.page_count
+        doc.close()
+        return total_pages       
+    def convertPdfPageToPixmap(self, pdf_path, page_number):
+            # Utilizar PyMuPDF para convertir la página específica del PDF a una imagen
+        doc = fitz.open(pdf_path)
+        page = doc[page_number]
+        pixmap = page.get_pixmap()
+
+            # Convertir la imagen a un formato utilizable por QPixmap
+        img = QImage(pixmap.samples, pixmap.width, pixmap.height, pixmap.stride, QImage.Format_RGB888)
+        img = img.rgbSwapped()
+
+            # Crear un QPixmap a partir de la imagen
+        pixmap = QPixmap.fromImage(img)
+
+        doc.close()
+
+        return pixmap
+    
+
+
+
+# Clase del login
 class IngresoUsuario(QMainWindow):
     def __init__(self):
         super(IngresoUsuario, self).__init__()
@@ -54,6 +337,7 @@ class IngresoUsuario(QMainWindow):
             QMessageBox.information(self,"Error","Usuario no encontrado en la base de datos")
         conexion.close()
 
+# Clase Menu Principal
 
 class MenuPrincipal(QMainWindow):
     def __init__(self , admin):
@@ -73,44 +357,54 @@ class MenuPrincipal(QMainWindow):
            self.text.setText("Bienvenido Administrador")
         else : 
             self.text.setText("Bievenido ")
-    def horariosView(self):
-        horarios = HorarioMenu(admin=self.admin)
-        widget.addWidget(horarios)
-        widget.setCurrentIndex(widget.currentIndex()+1)
-        
+    
+    
+    #def horariosView(self):
+        #horarios = HorarioMenu(admin=self.admin)
+        #widget.addWidget(horarios)
+        #widget.setCurrentIndex(widget.currentIndex()+1)
+    
+    # desplegar ventana de gestionar carreras   
     def carrerasViews(self):
         carreras = MenuCarreras(admin=self.admin)
         widget.addWidget(carreras)
         widget.setCurrentIndex(widget.currentIndex()+1)
 
+    # desplegar ventana de gestionar materias 
     def materiasView(self):
         materias = MenuMaterias(admin=self.admin)
         widget.addWidget(materias)
         widget.setCurrentIndex(widget.currentIndex()+1)
- 
+    
+    # desplegar ventana de gestionar profesores 
     def teacherView(self):
         teacher = MenuTeachers(admin=self.admin)
         widget.addWidget(teacher)
         widget.setCurrentIndex(widget.currentIndex()+1)
-        
+    
+    # Verificar permisos de administrador    
     def verifyAdmin(self):
         if self.admin =="True":
             self.userView()
         else:
             QMessageBox.information(self,"Permiso Denegado","No tienes permisos de administrador")
             return
+        
+    # Cerrar Sesion
     def backLogin(self):
         widget.addWidget(ingreso_usuario)
         widget.setCurrentIndex(widget.currentIndex()+1)
         ingreso_usuario.txt_name.clear()
         ingreso_usuario.txt_password.clear()
         self.hide()
-        
+    
+    # Desplegar ventana de configuracion de ususarios(solo permisos admin)    
     def userView(self):
         Usuario = Users(admin=self.admin)
         widget.addWidget(Usuario)
         widget.setCurrentIndex(widget.currentIndex()+1)
-       
+    
+    # desplegar menu principal de horarios
     def menuprincipalHorariosView(self):
         menuprincipalHorarios = horarios_menu(admin=self.admin)
         widget.addWidget(menuprincipalHorarios)
@@ -161,22 +455,26 @@ class horarios_menu(QMainWindow):
         descripcion = self.ln_codigo_aula.text()
         if descripcion :
             self.verDisponibilidadAula()
+            
     def llamarbuscarProfesor(self):
         cedula = self.ln_cedula_profesor.text()
         if cedula:
             self.verDisponibilidadProfesor()
+            
     def llamarBuscarseccion(self):
         carrera = self.ln_carrera.text()
         seccion = self.ln_sesion.text()
         if carrera and seccion:
             self.verDisponibilidadSeccion()
+            
     def searchCarreraSeccion(self):
         consulta_like = "SELECT Descripcion, CodigoCarrera FROM Carreras WHERE Descripcion LIKE ?"
         consulta_sql_materia = "SELECT Descripcion, CodigoCarrera FROM Carreras;"
         dialogo = DialogoConsulta("Consulta de Carrera", "Seleccione una carrera:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
         if dialogo.exec_() == QDialog.Accepted:
             codigo_materia = dialogo.item_seleccionado()
-            self.ln_carrera.setText(codigo_materia) 
+            self.ln_carrera.setText(codigo_materia)
+     
     def buscarCarreraSeccion(self):
         consulta_like = "SELECT Numero FROM SesionCarrera WHERE Numero LIKE ?"
         consulta_sql_materia = "SELECT Numero FROM SesionCarrera;"
@@ -225,6 +523,18 @@ class horarios_menu(QMainWindow):
                 fila = 7
             elif hora == "12:50 A 1:30":
                 fila = 8
+            elif hora == "1:30 A 2:10":
+                fila = 9
+            elif hora == "2:10 A 2:50":
+                fila = 10
+            elif hora == "2:50 A 3:30":
+                fila = 11
+            elif hora == "3:30 A 4:10":
+                fila = 12
+            elif hora == "4:10 A 4:50":
+                fila = 13
+            elif hora == "4:50 A 5:30":
+                fila = 14 
             else:
                 # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
                 continue
@@ -290,6 +600,18 @@ class horarios_menu(QMainWindow):
                 fila = 7
             elif hora == "12:50 A 1:30":
                 fila = 8
+            elif hora == "1:30 A 2:10":
+                fila = 9
+            elif hora == "2:10 A 2:50":
+                fila = 10
+            elif hora == "2:50 A 3:30":
+                fila = 11
+            elif hora == "3:30 A 4:10":
+                fila = 12
+            elif hora == "4:10 A 4:50":
+                fila = 13
+            elif hora == "4:50 A 5:30":
+                fila = 14
             else:
                 # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
                 continue
@@ -354,6 +676,18 @@ class horarios_menu(QMainWindow):
                 fila = 7
             elif hora == "12:50 A 1:30":
                 fila = 8
+            elif hora == "1:30 A 2:10":
+                fila = 9
+            elif hora == "2:10 A 2:50":
+                fila = 10
+            elif hora == "2:50 A 3:30":
+                fila = 11
+            elif hora == "3:30 A 4:10":
+                fila = 12
+            elif hora == "4:10 A 4:50":
+                fila = 13
+            elif hora == "4:50 A 5:30":
+                fila = 14
             else:
                 # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
                 continue
@@ -651,7 +985,7 @@ class HorarioMenu(QMainWindow):
         if dialogo.exec_() == QDialog.Accepted:
             codigo_materia = dialogo.item_seleccionado()
             self.ln_disponibilidad_seccion.setText(codigo_materia)
-    # METODO DE BUSCAR PROFES 
+    # METODO DE BUSCAR PROFESores
     def realizarbusquedaProfesor(self):
         #obtnern el valor de la seccion a buscar
         profesor = self.ln_disponibilidad_profesores.text()
@@ -848,282 +1182,6 @@ class DialogoConsulta(QDialog):
     def aceptar(self):
         self.accept()
 
-class FormularioDialog(QDialog):
-    def __init__(self , titulo , hora, dia ,fila,columna ,horario,carrera,sesion):
-        super().__init__()
-        loadUi("./ui/busqueda.ui",self)
-        self.titulo = titulo
-        self.hora = next(iter(hora)) if isinstance(hora, set) else hora  # Obtiene el primer elemento del conjunto
-        self.dia = next(iter(dia)) if isinstance(dia, set) else dia  # Obtiene el primer elemento del conjunto
-        self.fila = fila
-        self.columna = columna
-        self.horario = horario
-        self.carrera = carrera
-        self.sesion = sesion
-        
-        
-        
-        if self.dia == 1:
-            self.dia = "Lunes"
-        if self.dia == 2:
-            self.dia = "Martes"
-        if self.dia == 3:
-            self.dia = "Miercoles"
-        if self.dia == 4:
-            self.dia = "Jueves"
-        if self.dia == 5:
-            self.dia = "Viernes"
-        if self.dia == 6:
-            self.dia = "Sabado"
-        self.initUI()
-
-    def cancelar(self):
-        celda = self.horario.tableWidget.item(self.fila, self.columna)
-        if celda:
-            celda.setText("")  # O puedes establecer el texto como desees
-        self.hide()
-
-    
-    def initUI(self,):
-       
-        self.bt_codigoMat.clicked.connect(self.codigoMateria)
-        self.bt_codigoSalon.clicked.connect(self.codigoSalon)
-        self.bt_CedulaProf.clicked.connect(self.codigoProfesor)
-        
-        self.input_dia.setText(str(self.dia))
-        self.input_dia.setReadOnly(True)
-        self.rejected.connect(self.cancelar)
-
-      
-        self.input_hora.setText(str(self.hora))
-        self.input_hora.setReadOnly(True)
-        self.input_materia.setReadOnly(True)
-        self.input_salon.setReadOnly(True)
-        self.input_profesor.setReadOnly(True)
-        self.boton_guardar.clicked.connect(self.guardar)
-        self.boton_cancelar.clicked.connect(self.cancelar)
-        
-
-       
-        self.setWindowTitle(self.titulo)
-
-    def codigoMateria(self):
-        consulta_like = "SELECT Codigo, Nombre FROM Materia WHERE Codigo LIKE ?"
-        consulta_sql_materia = "SELECT Codigo, Nombre FROM Materia;"
-        dialogo = DialogoConsulta("Consulta de Materia", "Seleccione una materia:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
-        if dialogo.exec_() == QDialog.Accepted:
-            codigo_materia = dialogo.item_seleccionado()
-            self.input_materia.setText(codigo_materia) 
-            
-    def codigoSalon(self):
-        consulta_like = "SELECT Descripcion, CodigoAula FROM Aulas WHERE Descripcion LIKE ?"
-        
-        consulta_sql_salon = "SELECT  Descripcion,CodigoAula FROM Aulas;"
-
-        dialogo = DialogoConsulta("Consulta de Salon", "Seleccione un salon:", consulta_sql_salon,consulta_like)
-        if dialogo.exec_() == QDialog.Accepted:
-            codigoSalon = dialogo.item_seleccionado()
-            self.input_salon.setText(codigoSalon)
-            
-    def codigoProfesor(self):
-        consulta_like = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido, Cedula FROM Profesores WHERE Nombre_Y_Apellido LIKE ?"
-        
-        consulta_sql_profesor = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido ,Cedula FROM Profesores;"
-
-        dialogo = DialogoConsulta("Consulta de Profesor", "Seleccione el nombre y apellido del profesor:" ,consulta_sql_profesor,consulta_like)
-        if dialogo.exec_() == QDialog.Accepted:
-            codigo = dialogo.item_seleccionado()
-            self.input_profesor.setText(codigo)
-
-    def guardar(self):
-        codigoMateria = self.input_materia.text()
-        codigoSalon = self.input_salon.text()
-        cedulaProfesor = self.input_profesor.text()
-
-        if not (codigoMateria and codigoSalon and cedulaProfesor):
-            QMessageBox.information(self, "Error", "Todos los campos son obligatorios")
-            return None  # Devuelve None si hay campos faltantes
-
-        conexion = sqlite3.connect("./db/database.db")
-        cursor = conexion.cursor()
-
-        verificarHorario = cursor.execute("SELECT * FROM HorarioTest WHERE Dia=? AND Hora=? AND CodigoAula=?",
-                                          (self.dia, self.hora, codigoSalon))
-
-        if verificarHorario.fetchone():
-            QMessageBox.warning(self, "Error", "El salón ya está siendo utilizado en la misma hora")
-            self.input_salon.clear()
-            self.input_salon.setPlaceholderText("Ingrese un salón distinto...")
-            return None  # Devuelve None si el salón ya está siendo utilizado
-
-        else:
-            cursor.execute("INSERT INTO HorarioTest (Dia,Hora,CodigoMat,CodigoAula,CedulaProf,Carrera,Sesion) VALUES (?,?,?,?,?,?,?)",
-                           (self.dia,self.hora,codigoMateria,codigoSalon,cedulaProfesor,self.carrera,self.sesion))
-            QMessageBox.information(self,"Exito","Se ha almacenado los datos correctamente")
-            conexion.commit()
-            conexion.close()
-           
-
-            print(f"El código de materia es {codigoMateria}, salón {codigoSalon}, cédula profesor {cedulaProfesor}")
-            text_for_checkbox = (f"{codigoMateria}\n{codigoSalon}\n{cedulaProfesor}")
-            self.establecer_texto_en_celda(text_for_checkbox)
-            self.hide()
-            return  codigoMateria,codigoSalon,cedulaProfesor
-
-    def establecer_texto_en_celda(self, texto):
-        # Obtener la instancia de QTableWidget desde la instancia de Horario
-        table_widget = self.horario.tableWidget
-
-        # Establecer el texto en la celda específica
-        table_widget.setItem(self.fila, self.columna, QTableWidgetItem(texto))
-        
-class QuestionHorario(QDialog):
-    def __init__(self,horario_instance):
-        super(QuestionHorario,self).__init__()
-        loadUi("ui/eliminarhorarioquestion.ui",self)
-        self.setWindowTitle("Ya existe un horario")
-        self.bt_eliminar.clicked.connect(self.eliminar)
-        self.bt_view.clicked.connect(self.ver)
-        self.horario_instance = horario_instance
-        
-
-    def eliminar(self):
-        conexion = sqlite3.connect("db/database.db")
-        cursor = conexion.cursor()
-        cursor.execute(
-            "DELETE FROM HorarioTest WHERE Carrera=? AND Sesion=?",
-            (self.horario_instance.ln_carrera.text(), self.horario_instance.ln_sesion.text())
-        )
-        QMessageBox.information(self,"Eliminar","se ha eliminado correctamente")
-        conexion.commit()
-        conexion.close()
-        
-        self.accept()
-
-    def ver(self):
-        QMessageBox.information(self, "Ver", "Se ha añadido a la tabla actual")
-        conexion = sqlite3.connect("db/database.db")
-        cursor = conexion.cursor()
-        cursor.execute(
-            "SELECT Dia, Hora, CodigoMat, CodigoAula, CedulaProf FROM HorarioTest WHERE Carrera=? AND Sesion=?",
-            (self.horario_instance.ln_carrera.text(), self.horario_instance.ln_sesion.text())
-        )
-        datos = cursor.fetchall()
-        self.horario_instance.tableWidget.clearContents()
-
-        
-
-        for result in datos:
-            dia = result[0]
-            hora = result[1]
-            codigo_mat = result[2]
-            codigo_aula = result[3]
-            cedula_prof = result[4]
-
-            # Asignar la hora y el día a las posiciones correspondientes
-            if hora == "07:30 A 08:10":
-                fila = 0
-            elif hora == "08:10 A 08:50":
-                fila = 1
-            elif hora == "08:50 A 09:30":
-                fila = 2
-            elif hora == "09:30 A 10:10":
-                fila = 3
-            elif hora == "10:10 A 10:50":
-                fila = 4
-            elif hora == "10:50 A 11:30":
-                fila = 5
-            elif hora == "11:30 A 12:10":
-                fila = 6
-            elif hora == "12:10 A 12:50":
-                fila = 7
-            elif hora == "12:50 A 1:30":
-                fila = 8
-            else:
-                # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
-                continue
-
-            # Asignar el día a la columna correspondiente
-            if dia == "Lunes":
-                columna = 0
-            elif dia == "Martes":
-                columna = 1
-            elif dia == "Miercoles":
-                columna = 2
-            elif dia == "Jueves":
-                columna = 3
-            elif dia == "Viernes":
-                columna = 4
-            elif dia == "Sabado":
-                columna = 5
-            else:
-                # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
-                continue
-
-            # Colocar los datos en la tabla
-            item = QTableWidgetItem(f"{codigo_mat}\n{codigo_aula}\n{cedula_prof}")
-            self.horario_instance.tableWidget.setItem(fila, columna, item)
-
-
-        self.accept()
-   
-class PreviewPDF(QDialog):
-    def __init__(self,pdf_path):
-        super(PreviewPDF,self).__init__()
-        loadUi("ui/preview.ui",self)
-        self.pdf_path = pdf_path
-        self.current_page = 0  # Página actual
-        self.total_pages = 0  
-        self.initUI()
-        
-    def initUI(self):
-        self.setWindowTitle('Vista Previa de PDF')
-        self.btn_anterior.clicked.connect(self.showPreviousPage)
-        self.btn_siguiente.clicked.connect(self.showNextPage)
-        self.showPdfPreview()
-        self.total_pages = self.getTotalPages(self.pdf_path)
-        
-    def showPdfPreview(self):
-            # Cargar la imagen del PDF como vista previa en el QLabel
-        pixmap = self.convertPdfPageToPixmap(self.pdf_path, self.current_page)
-
-        # Mostrar la imagen en el QLabel
-        self.foto.setPixmap(pixmap)
-        self.foto.show()
-    def showPreviousPage(self):
-        # Mostrar la página anterior si no estamos en la primera página
-        if self.current_page > 0:
-            self.current_page -= 1
-            self.showPdfPreview()
-                
-    def showNextPage(self):
-        # Mostrar la página siguiente si no estamos en la última página
-        if self.current_page < self.total_pages - 1:
-            self.current_page += 1
-            self.showPdfPreview()
-    def getTotalPages(self, pdf_path):
-        # Obtener el total de páginas en el PDF
-        doc = fitz.open(pdf_path)
-        total_pages = doc.page_count
-        doc.close()
-        return total_pages       
-    def convertPdfPageToPixmap(self, pdf_path, page_number):
-            # Utilizar PyMuPDF para convertir la página específica del PDF a una imagen
-        doc = fitz.open(pdf_path)
-        page = doc[page_number]
-        pixmap = page.get_pixmap()
-
-            # Convertir la imagen a un formato utilizable por QPixmap
-        img = QImage(pixmap.samples, pixmap.width, pixmap.height, pixmap.stride, QImage.Format_RGB888)
-        img = img.rgbSwapped()
-
-            # Crear un QPixmap a partir de la imagen
-        pixmap = QPixmap.fromImage(img)
-
-        doc.close()
-
-        return pixmap
-    
     
 # CREAR HORARIOS DIURNOS   
 class Horario(QMainWindow):

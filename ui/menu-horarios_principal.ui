@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>693</width>
-    <height>627</height>
+    <width>1085</width>
+    <height>802</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -285,7 +285,37 @@ Facilitadores</string>
             </row>
             <row>
              <property name="text">
-              <string>12:50 A 1:30</string>
+              <string>12:50 A 01:30</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>01:30 A 02:10</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>02:10 A 02:50</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>02:50 A 03:30</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>03:30 A  04:10</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>04:10 A 04:50</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>04:50 A 05:30</string>
              </property>
             </row>
             <column>
@@ -960,7 +990,42 @@ Facilitadores</string>
             </row>
             <row>
              <property name="text">
-              <string>12:50 A 1:30</string>
+              <string>12:10 A 12:50</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>12:50 A 01:30</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>01:30 A 02:10</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>02:10 A 02:50</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>02:50 A 03:30</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>03:30 A 04:10</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>04:10 A 04:50</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>04:50 A 05:30</string>
              </property>
             </row>
             <column>
