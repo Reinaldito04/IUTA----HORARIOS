@@ -77,7 +77,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_Carrera"/>
+       <widget class="QLineEdit" name="ln_carrera"/>
       </item>
       <item>
        <widget class="QPushButton" name="btn_buscarCarr">
@@ -94,7 +94,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_Seccion"/>
+       <widget class="QLineEdit" name="ln_sesion"/>
       </item>
       <item>
        <widget class="QPushButton" name="btn_buscarSecc">
@@ -116,7 +116,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QTableWidget" name="tableWidget_HORARIO_sabado">
+     <widget class="QTableWidget" name="tableWidget">
       <attribute name="horizontalHeaderCascadingSectionResizes">
        <bool>false</bool>
       </attribute>

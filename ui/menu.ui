@@ -240,7 +240,7 @@ background-color: rgb(104, 126, 255);</string>
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="Loginboton_4">
+          <widget class="QPushButton" name="bt_sede">
            <property name="minimumSize">
             <size>
              <width>150</width>

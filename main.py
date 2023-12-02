@@ -353,6 +353,7 @@ class MenuPrincipal(QMainWindow):
         self.bt_carreras.clicked.connect(self.carrerasViews)
         self.admin = admin
         self.bt_horarios.clicked.connect(self.menuprincipalHorariosView)
+        self.bt_sede.clicked.connect(self.menuSedes)
         if self.admin == "True":
            self.text.setText("Bienvenido Administrador")
         else : 
@@ -365,6 +366,10 @@ class MenuPrincipal(QMainWindow):
         #widget.setCurrentIndex(widget.currentIndex()+1)
     
     # desplegar ventana de gestionar carreras   
+    def menuSedes(self):
+        sedes = SedesMenu(admin=self.admin)
+        widget.addWidget(sedes)
+        widget.setCurrentIndex(widget.currentIndex()+1)
     def carrerasViews(self):
         carreras = MenuCarreras(admin=self.admin)
         widget.addWidget(carreras)
@@ -410,6 +415,234 @@ class MenuPrincipal(QMainWindow):
         widget.addWidget(menuprincipalHorarios)
         widget.setCurrentIndex(widget.currentIndex()+1)
 
+class SedesMenu(QMainWindow):
+    def __init__(self,admin):
+        super(SedesMenu,self).__init__()
+        loadUi("./ui/sedes.ui",self)
+        self.admin = admin
+        
+        self.bt_aggView_2.clicked.connect( lambda:self.stackedWidget.setCurrentWidget(self.page_add) )
+        self.bt_deleteView.clicked.connect( lambda:self.stackedWidget.setCurrentWidget(self.page_delete) )
+        self.bt_database.clicked.connect( lambda:self.stackedWidget.setCurrentWidget(self.page) )
+        self.bt_aulas.clicked.connect(self.aulasmenu)
+        self.bt_register.clicked.connect(self.agregarsede)
+        self.bt_clear.clicked.connect(self.limpiarcampos)
+        self.bt_act.clicked.connect(self.reloaddata)
+        self.bt_delete.clicked.connect(self.eliminarsede)
+        self.bt_search.clicked.connect(self.buscarparaeliminar)
+        self.reloaddata()
+        self.bt_salir.clicked.connect(lambda : QApplication.quit())
+        self.bt_salir_2.clicked.connect(self.regresaralmenu)
+    def regresaralmenu(self):
+        menu = MenuPrincipal(self.admin)
+        widget.addWidget(menu)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+    def buscarparaeliminar(self):
+        busqueda  = self.ln_busqueda.text()
+        if not busqueda:
+            QMessageBox.information(self,"Introduzca el codigo","Por favor introduzca el codigo de la sede")
+            return
+        conexion =sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute("SELECT nombre,direccion FROM sedes WHERE codigo_sede =?",(busqueda,))
+        resultado = cursor.fetchone()
+        if not resultado:
+            QMessageBox.information(self,"Error","No hay ninguna sede con ese codigo")
+            return
+        if resultado:
+            self.txt_name_3.setText(resultado[0])
+            self.txt_ubicacion_2.setText(resultado[1])
+            
+    def eliminarsede(self):
+        busqueda  = self.ln_busqueda.text()
+        if not busqueda:
+            QMessageBox.information(self,"Introduzca el codigo","Por favor introduzca el codigo de la sede")
+            return
+        
+        conexion =sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute("DELETE FROM sedes WHERE codigo_sede =?",(busqueda,))
+        conexion.commit()
+        self.txt_name_3.clear()
+        self.txt_ubicacion_2.clear()
+        QMessageBox.information(self,"Eliminado","Ha sido eliminado correctamente")
+    def reloaddata(self):
+        try:
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("SELECT codigo_sede,nombre,direccion FROM sedes")
+            data = cursor.fetchall()
+            self.tableWidget.setRowCount(len(data))  
+
+            for row, row_data in enumerate(data):
+                for col, value in enumerate(row_data):
+                    item = QTableWidgetItem(str(value))
+                    self.tableWidget.setItem(row, col, item)
+
+            conexion.close()
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Error al recuperar datos: {str(e)}")
+    def limpiarcampos(self):
+        self.txt_codigo.clear()
+        self.txt_nombre.clear()
+        self.txt_ubicacion.clear()
+    def agregarsede(self):
+        codigo = self.txt_codigo.text()
+        nombre = self.txt_nombre.text()
+        ubicacion = self.txt_ubicacion.text()
+       
+        if not codigo or not nombre or not ubicacion:
+            QMessageBox.information(self,"Advertencia","Ingrese todos los campos por favor")
+            return
+        
+        conexion = sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute("SELECT codigo_sede FROM sedes WHERE codigo_sede=?", (codigo,)
+                       )
+        existing_teacher = cursor.fetchone()
+        
+
+        if existing_teacher:
+            QMessageBox.warning(self, "Advertencia", "Ya existe una sede con el mismo codigo.")
+            self.txt_codigo.clear()
+            self.txt_nombre.clear()
+            self.txt_ubicacion.clear()
+            return
+        else:
+            cursor.execute("INSERT INTO sedes (codigo_sede, nombre,direccion)  VALUES (?, ?, ?)", (codigo, nombre, ubicacion))
+            conexion.commit()
+            
+            QMessageBox.information(self, "Éxito", "Los datos se almacenaron correctamente")
+            self.txt_codigo.clear()
+            self.txt_nombre.clear()
+            self.txt_ubicacion.clear()
+       
+       
+        conexion.close()
+    def aulasmenu(self):
+        Aula = AulasMenu(admin=self.admin)
+        widget.addWidget(Aula)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        
+class AulasMenu(QMainWindow):
+    def __init__(self,admin):
+        super(AulasMenu,self).__init__()
+        loadUi("./ui/aulas.ui",self)
+        self.bt_sedes.clicked.connect(self.sedesmenu)
+        self.bt_salir.clicked.connect(lambda : QApplication.quit())
+        self.bt_salir_2.clicked.connect(self.regresaralmenu)
+        self.admin = admin
+        self.bt_buscarsede.clicked.connect(self.searchsede)
+        self.bt_register.clicked.connect(self.aggaula)
+        self.bt_clear.clicked.connect(self.limpiarcampos)
+        self.bt_search.clicked.connect(self.buscarparaeliminar)
+        self.bt_delete.clicked.connect(self.eliminarAula)
+        self.bt_act.clicked.connect(self.reloaddata)
+        self.bt_deleteView.clicked.connect( lambda:self.stackedWidget.setCurrentWidget(self.page_delete) )
+        self.bt_aggView_2.clicked.connect( lambda:self.stackedWidget.setCurrentWidget(self.page_add) )
+        self.bt_database.clicked.connect( lambda:self.stackedWidget.setCurrentWidget(self.page) )
+    
+        self.reloaddata()        
+        
+        
+    def regresaralmenu(self):
+        menu = MenuPrincipal(self.admin)
+        widget.addWidget(menu)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+    def reloaddata(self):
+        try:
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("SELECT CodigoAula,Descripcion,codigo_sede FROM Aulas")
+            data = cursor.fetchall()
+            self.tableWidget.setRowCount(len(data))  
+
+            for row, row_data in enumerate(data):
+                for col, value in enumerate(row_data):
+                    item = QTableWidgetItem(str(value))
+                    self.tableWidget.setItem(row, col, item)
+
+            conexion.close()
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Error al recuperar datos: {str(e)}")
+    def buscarparaeliminar(self):
+        busqueda  = self.ln_busqueda.text()
+        if not busqueda:
+            QMessageBox.information(self,"Introduzca el codigo","Por favor introduzca el codigo del aula")
+            return
+        conexion =sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute("SELECT Descripcion,codigo_sede FROM Aulas WHERE CodigoAula =?",(busqueda,))
+        resultado = cursor.fetchone()
+        if not resultado:
+            QMessageBox.information(self,"Error","No hay ninguna sede con ese codigo")
+            return
+        if resultado:
+            self.txt_name_3.setText(resultado[0])
+            self.txt_ubicacion.setText(resultado[1])
+    def eliminarAula(self):
+        busqueda = self.ln_busqueda.text()
+        if not busqueda:
+            QMessageBox.information(self,"Advertencia","No ha ingresado nada para buscar")
+            return
+        conexion =sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute("DELETE FROM Aulas WHERE CodigoAula =?",(busqueda,))
+        conexion.commit()
+        self.txt_name_3.clear()
+        self.txt_ubicacion.clear()
+        QMessageBox.information(self,"Eliminado","Ha sido eliminado correctamente")
+    def aggaula(self):
+        sede = self.txt_sedecodigo.text()
+        nombre = self.txt_nombre.text()
+        aula = self.txt_codigoaula.text()
+       
+        if not sede or not nombre or not aula:
+            QMessageBox.information(self,"Advertencia","Ingrese todos los campos por favor")
+            return
+        
+        conexion = sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute("SELECT CodigoAula FROM Aulas WHERE CodigoAula=?", (aula,)
+                       )
+        existing_teacher = cursor.fetchone()
+        
+
+        if existing_teacher:
+            QMessageBox.warning(self, "Advertencia", "Ya existe una aula con el mismo codigo.")
+            self.txt_sedecodigo.clear()
+            self.txt_nombre.clear()
+            self.txt_codigoaula.clear()
+            return
+        else:
+            cursor.execute("INSERT INTO Aulas (CodigoAula, Descripcion,codigo_sede)  VALUES (?, ?, ?)", (sede, nombre, aula))
+            conexion.commit()
+            
+            QMessageBox.information(self, "Éxito", "Los datos se almacenaron correctamente")
+            self.txt_sedecodigo.clear()
+            self.txt_nombre.clear()
+            self.txt_codigoaula.clear()
+       
+       
+        conexion.close()    
+    def limpiarcampos(self):
+            self.txt_sedecodigo.clear()
+            self.txt_nombre.clear()
+            self.txt_codigoaula.clear()
+    def searchsede(self):
+        consulta_like = "SELECT codigo_sede, nombre,direccion FROM sedes WHERE nombre LIKE ?"
+        consulta_sql_materia = "SELECT  codigo_sede,nombre,direccion FROM sedes;"
+        dialogo = DialogoConsulta("Consulta de Sedes", "Seleccione una sede:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_materia = dialogo.item_seleccionado()
+            self.txt_sedecodigo.setText(codigo_materia)
+            
+            
+    def sedesmenu(self):
+        Sede = SedesMenu(admin=self.admin)
+        widget.addWidget(Sede)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        
 # MEnu principal de horarios
 class horarios_menu(QMainWindow):
     def __init__(self, admin):
@@ -1340,14 +1573,14 @@ class horario_sabatino(QMainWindow):
     def __init__(self,admin):
         super(horario_sabatino,self).__init__()
         loadUi("./ui/horario_sabatinocrear.ui",self)
-        self.tableWidget_HORARIO_sabado.cellClicked.connect(self.celda_clickeada)
+        self.tableWidget.cellClicked.connect(self.celda_clickeada)
         self.btn_buscarCarr.clicked.connect(self.BuscarCarrera)
         self.btn_buscarSecc.clicked.connect(self.buscarsesion)
         self.btn_vistaPrevia.clicked.connect(self.previewpdf)
         self.admin = admin
         self.bt_volver.clicked.connect(self.backMenu)
-        self.lineEdit_Carrera.textChanged.connect(self.buscarDisponibilidad)
-        self.lineEdit_Seccion.textChanged.connect(self.buscarDisponibilidad)
+        self.ln_carrera.textChanged.connect(self.buscarDisponibilidad)
+        self.ln_sesion.textChanged.connect(self.buscarDisponibilidad)
         self.btn_guardar.clicked.connect(self.guardarPDF)
         
     def previewpdf(self):
@@ -1414,7 +1647,7 @@ class horario_sabatino(QMainWindow):
         dialogo = DialogoConsulta("Consulta de Carrera", "Seleccione una Carrera:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
         if dialogo.exec_() == QDialog.Accepted:
             codigo_carrera = dialogo.item_seleccionado()
-            self.lineEdit_Carrera.setText(codigo_carrera) 
+            self.ln_carrera.setText(codigo_carrera) 
             
     def buscarsesion(self):
         consulta_like = "SELECT Numero FROM SesionCarrera WHERE Numero LIKE ?"
@@ -1422,7 +1655,7 @@ class horario_sabatino(QMainWindow):
         dialogo = DialogoConsulta("Consulta de Sesion", "Seleccione una Sesion:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
         if dialogo.exec_() == QDialog.Accepted:
             codigo_sesion = dialogo.item_seleccionado()
-            self.lineEdit_Seccion.setText(codigo_sesion) 
+            self.ln_sesion.setText(codigo_sesion) 
             
     def celda_clickeada(self, fila, columna):
         # obtener fila
