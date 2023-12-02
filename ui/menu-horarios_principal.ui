@@ -117,7 +117,7 @@ Facilitadores</string>
       <item>
        <widget class="QStackedWidget" name="stackedWidget">
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="page_aula">
          <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -404,7 +404,7 @@ Facilitadores</string>
          </layout>
         </widget>
         <widget class="QWidget" name="page_controldeasistencia">
-         <layout class="QVBoxLayout" name="verticalLayout_12">
+         <layout class="QVBoxLayout" name="verticalLayout_6">
           <item>
            <widget class="Line" name="line_43">
             <property name="orientation">
@@ -457,7 +457,91 @@ Facilitadores</string>
            </widget>
           </item>
           <item>
-           <widget class="QTableWidget" name="tableWidget_asistenciadefacilitadores"/>
+           <layout class="QHBoxLayout" name="horizontalLayout_15">
+            <item>
+             <spacer name="horizontalSpacer_19">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBox">
+              <item>
+               <property name="text">
+                <string>Lunes</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Martes</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Miercoles</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Jueves</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Viernes</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Sabado</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="btn_print_AsFacil_2">
+              <property name="text">
+               <string>buscar</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="tableWidget_asistenciadefacilitadores">
+            <column>
+             <property name="text">
+              <string>Nombre y Apeliido</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Hora de entrada</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Hora de Salida</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Aula</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Materia</string>
+             </property>
+            </column>
+           </widget>
           </item>
           <item>
            <widget class="Line" name="line_27">
@@ -643,7 +727,7 @@ Facilitadores</string>
              <bool>true</bool>
             </property>
             <property name="rowCount">
-             <number>9</number>
+             <number>15</number>
             </property>
             <attribute name="horizontalHeaderCascadingSectionResizes">
              <bool>false</bool>
@@ -717,7 +801,37 @@ Facilitadores</string>
             </row>
             <row>
              <property name="text">
-              <string>12:50 A 1:30</string>
+              <string>12:50 A 01:30</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>01:30 A 02:10</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>02:10 A 02:50</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>02:50 A 03:30</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>03:30 A 04:10</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>04:10 A 04:50</string>
+             </property>
+            </row>
+            <row>
+             <property name="text">
+              <string>04:50 A 05:30</string>
              </property>
             </row>
             <column>

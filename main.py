@@ -1080,109 +1080,7 @@ class HorarioMenu(QMainWindow):
         menu = Horario(self.admin)
         widget.addWidget(menu)
         widget.setCurrentIndex(widget.currentIndex()+1)
-    
-class Horario_SabatinoMenu(QMainWindow):
-    def __init__(self , admin):
-        super(Horario_SabatinoMenu, self).__init__()
-        loadUi("./ui/menuprincipalsabantino.ui",self)
-        self.admin = admin
-        # self.bt_back.clicked.connect(self.backMenu)
-        #self.bt_salir.clicked.connect(lambda : QApplication.quit())
-        self.bt_crear.clicked.connect(self.crearView)
-        #self.bt_buscar.clicked.connect(self.buscarAula)
-        #self.bt_profesor.clicked.connect(self.buscarprofesor)
-        #self.bt_profesor.clicked.connect(self.realizarbusquedaProfesor)
-        #self.bt_carrerabuscar.clicked.connect(self.buscarCarrera)
-        #self.bt_seccionbuscar.clicked.connect(self.buscarSeccion)
-    
-    def crearView(self):
-        menu = horario_sabatino(self.admin)
-        widget.addWidget(menu)
-        widget.setCurrentIndex(widget.currentIndex()+1)
 
-class DialogoConsulta(QDialog):
-    def __init__(self, titulo, mensaje, consulta_sql,consulta_like):
-        super().__init__()
-        
-        self.setWindowTitle(titulo)
-        layout = QVBoxLayout()
-        layout.addWidget(QLabel(mensaje))
-
-
-        self.campo_busqueda = QLineEdit(self)
-        self.campo_busqueda.setPlaceholderText("Buscar...")
-        
-        self.campo_busqueda.textChanged.connect(lambda : self.cargar_datos(consulta_sql,consulta_like))
-       
-        layout.addWidget(self.campo_busqueda)
-    
-        # Crear la tabla de resultados
-        self.tabla_resultados = QTableWidget(self)
-        # Cargar datos desde la base de datos
-        self.cargar_datos(consulta_sql,consulta_like)
-       
-       
-        self.tabla_resultados.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-        self.tabla_resultados.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        layout.addWidget(self.tabla_resultados)
-       
-        
-        self.boton_aceptar = QPushButton("Aceptar")
-        self.boton_aceptar.clicked.connect(self.aceptar)
-       
-        layout.addWidget(self.boton_aceptar)
-        self.setLayout(layout)
-
-        # Cerrar la conexión a la base de datos al finalizar
-        
-
-    def cargar_datos(self,  consulta_sql,consulta_like):
-        conexion = sqlite3.connect("./db/database.db")
-        cursor = conexion.cursor()
-       
-        termino_busqueda = self.campo_busqueda.text()
-        if termino_busqueda:
-            termino_busqueda = f"%{termino_busqueda}%"
-            cursor.execute(consulta_like, (termino_busqueda,))
-        else :
-             cursor.execute(consulta_sql)
-        
-        datos = cursor.fetchall()
-        if len(datos) <=0:
-            QMessageBox.information(self,"Error ","No se encontraron registros.")
-            self.campo_busqueda.clear()
-            return
-
-        # Configurar el número de filas y columnas de la tabla
-        self.tabla_resultados.setRowCount(len(datos))
-        self.tabla_resultados.setColumnCount(len(datos[0]))
-        columnas = [desc[0] for desc in cursor.description]
-
-        self.tabla_resultados.setHorizontalHeaderLabels(columnas)
-
-        # Llenar la tabla con los datos de la consulta
-        for fila_num, fila in enumerate(datos):
-            for col_num, dato in enumerate(fila):
-                item = QTableWidgetItem(str(dato))
-                self.tabla_resultados.setItem(fila_num, col_num, item)
-        conexion.close()
-    
-    def item_seleccionado(self):
-       
-        # Obtener el índice de la fila seleccionada
-        fila_seleccionada = self.tabla_resultados.currentRow()
-
-        # Obtener el texto de la primera columna de la fila seleccionada
-        texto_seleccionado = self.tabla_resultados.item(fila_seleccionada, 0).text()
-
-        return texto_seleccionado
-
-
-
-    def aceptar(self):
-        self.accept()
-
-    
 # CREAR HORARIOS DIURNOS   
 class Horario(QMainWindow):
     def __init__(self,admin):
@@ -1333,6 +1231,110 @@ class Horario(QMainWindow):
                 if texto_a_insertar is not None:
                     dialog.establecer_texto_en_celda(texto_a_insertar)
 
+
+# Menu principal de horarios Sabatinos    
+class Horario_SabatinoMenu(QMainWindow):
+    def __init__(self , admin):
+        super(Horario_SabatinoMenu, self).__init__()
+        loadUi("./ui/menuprincipalsabantino.ui",self)
+        self.admin = admin
+        # self.bt_back.clicked.connect(self.backMenu)
+        #self.bt_salir.clicked.connect(lambda : QApplication.quit())
+        self.bt_crear.clicked.connect(self.crearView)
+        #self.bt_buscar.clicked.connect(self.buscarAula)
+        #self.bt_profesor.clicked.connect(self.buscarprofesor)
+        #self.bt_profesor.clicked.connect(self.realizarbusquedaProfesor)
+        #self.bt_carrerabuscar.clicked.connect(self.buscarCarrera)
+        #self.bt_seccionbuscar.clicked.connect(self.buscarSeccion)
+    
+    def crearView(self):
+        menu = horario_sabatino(self.admin)
+        widget.addWidget(menu)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+
+class DialogoConsulta(QDialog):
+    def __init__(self, titulo, mensaje, consulta_sql,consulta_like):
+        super().__init__()
+        
+        self.setWindowTitle(titulo)
+        layout = QVBoxLayout()
+        layout.addWidget(QLabel(mensaje))
+
+
+        self.campo_busqueda = QLineEdit(self)
+        self.campo_busqueda.setPlaceholderText("Buscar...")
+        
+        self.campo_busqueda.textChanged.connect(lambda : self.cargar_datos(consulta_sql,consulta_like))
+       
+        layout.addWidget(self.campo_busqueda)
+    
+        # Crear la tabla de resultados
+        self.tabla_resultados = QTableWidget(self)
+        # Cargar datos desde la base de datos
+        self.cargar_datos(consulta_sql,consulta_like)
+       
+       
+        self.tabla_resultados.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        self.tabla_resultados.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        layout.addWidget(self.tabla_resultados)
+       
+        
+        self.boton_aceptar = QPushButton("Aceptar")
+        self.boton_aceptar.clicked.connect(self.aceptar)
+       
+        layout.addWidget(self.boton_aceptar)
+        self.setLayout(layout)
+
+        # Cerrar la conexión a la base de datos al finalizar
+        
+
+    def cargar_datos(self,  consulta_sql,consulta_like):
+        conexion = sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+       
+        termino_busqueda = self.campo_busqueda.text()
+        if termino_busqueda:
+            termino_busqueda = f"%{termino_busqueda}%"
+            cursor.execute(consulta_like, (termino_busqueda,))
+        else :
+             cursor.execute(consulta_sql)
+        
+        datos = cursor.fetchall()
+        if len(datos) <=0:
+            QMessageBox.information(self,"Error ","No se encontraron registros.")
+            self.campo_busqueda.clear()
+            return
+
+        # Configurar el número de filas y columnas de la tabla
+        self.tabla_resultados.setRowCount(len(datos))
+        self.tabla_resultados.setColumnCount(len(datos[0]))
+        columnas = [desc[0] for desc in cursor.description]
+
+        self.tabla_resultados.setHorizontalHeaderLabels(columnas)
+
+        # Llenar la tabla con los datos de la consulta
+        for fila_num, fila in enumerate(datos):
+            for col_num, dato in enumerate(fila):
+                item = QTableWidgetItem(str(dato))
+                self.tabla_resultados.setItem(fila_num, col_num, item)
+        conexion.close()
+    
+    def item_seleccionado(self):
+       
+        # Obtener el índice de la fila seleccionada
+        fila_seleccionada = self.tabla_resultados.currentRow()
+
+        # Obtener el texto de la primera columna de la fila seleccionada
+        texto_seleccionado = self.tabla_resultados.item(fila_seleccionada, 0).text()
+
+        return texto_seleccionado
+
+
+
+    def aceptar(self):
+        self.accept()
+
+
 ### CREAR HORARIO SABATINO
 class horario_sabatino(QMainWindow):
     def __init__(self,admin):
@@ -1412,7 +1414,7 @@ class horario_sabatino(QMainWindow):
         dialogo = DialogoConsulta("Consulta de Carrera", "Seleccione una Carrera:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
         if dialogo.exec_() == QDialog.Accepted:
             codigo_carrera = dialogo.item_seleccionado()
-            self.ln_carrera.setText(codigo_carrera) 
+            self.lineEdit_Carrera.setText(codigo_carrera) 
             
     def buscarsesion(self):
         consulta_like = "SELECT Numero FROM SesionCarrera WHERE Numero LIKE ?"
@@ -1420,7 +1422,7 @@ class horario_sabatino(QMainWindow):
         dialogo = DialogoConsulta("Consulta de Sesion", "Seleccione una Sesion:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
         if dialogo.exec_() == QDialog.Accepted:
             codigo_sesion = dialogo.item_seleccionado()
-            self.ln_sesion.setText(codigo_sesion) 
+            self.lineEdit_Seccion.setText(codigo_sesion) 
             
     def celda_clickeada(self, fila, columna):
         # obtener fila
@@ -1460,9 +1462,7 @@ class horario_sabatino(QMainWindow):
             dia =("Sabado")
             
         print(f'Celda clickeada en el dia {dia} en la hora {hora}')
-        carrera = self.lineEdit_Carrera.text()
-        sesion = self.lineEdit_Seccion.text()
-       
+  
         self.mostrar_dialogo(titulo=f"Formulario del dia {dia} a las horas {hora}",
                                 hora=hora,
                                 dia=dia,
@@ -1485,6 +1485,8 @@ class horario_sabatino(QMainWindow):
                 if texto_a_insertar is not None:
                     dialog.establecer_texto_en_celda(texto_a_insertar)
         
+
+# CLASE DE VENTANA DE GESTIONAR USUARIOS
     
 class Users(QMainWindow):
     def __init__(self , admin):
@@ -1616,7 +1618,8 @@ class Users(QMainWindow):
         widget.setCurrentIndex(widget.currentIndex()+1)
         #widget.setFixedHeight(1000)
         #widget.setFixedWidth(1000)   
-        
+
+# CLASE DE LA VENTANA DE GESTION DE CARRERAS       
 class MenuCarreras(QMainWindow):
     def __init__(self, admin):
         super(MenuCarreras, self).__init__()
@@ -1687,6 +1690,7 @@ class MenuCarreras(QMainWindow):
         #widget.setFixedHeight(1000)
         #widget.setFixedWidth(1000)  
 
+# CLASES DE LA VENTANA DE GESTION DE MATERIAS
 class MenuMaterias(QMainWindow):
     def __init__(self, admin):
         super(MenuMaterias, self).__init__()
@@ -1805,6 +1809,7 @@ class MenuMaterias(QMainWindow):
         widget.addWidget(menu)
         widget.setCurrentIndex(widget.currentIndex()+1)
 
+# CLASES DE LA VENTAN DE GESTION DE PROFESORES
 class MenuTeachers(QMainWindow):
     def __init__(self , admin):
         super(MenuTeachers , self).__init__()
