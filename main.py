@@ -355,9 +355,9 @@ class MenuPrincipal(QMainWindow):
         self.bt_horarios.clicked.connect(self.menuprincipalHorariosView)
         self.bt_sede.clicked.connect(self.menuSedes)
         if self.admin == "True":
-           self.text.setText("Bienvenido Administrador")
-        else : 
-            self.text.setText("Bievenido ")
+            self.text.setText("Bienvenido Administrador")
+        else:
+            self.text.setText(f"Bienvenido, {self.user_name}")
     
     
     #def horariosView(self):
