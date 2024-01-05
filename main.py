@@ -411,10 +411,214 @@ class MenuPrincipal(QMainWindow):
     
     # desplegar menu principal de horarios
     def menuprincipalHorariosView(self):
-        menuprincipalHorarios = horarios_menu(admin=self.admin)
-        widget.addWidget(menuprincipalHorarios)
-        widget.setCurrentIndex(widget.currentIndex()+1)
+        modalidadDialogo = modalidadQuestion(admin=self.admin)
+        modalidadDialogo.exec_()
 
+class modalidadQuestion(QDialog):
+    def __init__(self,admin):
+        super(modalidadQuestion,self).__init__()
+        loadUi("./ui/modalidadBusqueda.ui",self)
+        self.bt_crear.clicked.connect(self.abrir_modalidad_registro)
+        self.admin = admin
+        self.cargarDatos()
+        self.bt_busqueda.clicked.connect(self.busquedaRealizar)
+    def cargarDatos(self):
+        conexion =sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute("SELECT modalidad FROM Modalidad")
+          # Obtener los resultados
+        modalidades = cursor.fetchall()
+
+            # Cerrar la conexión a la base de datos
+        conexion.close()
+
+            # Insertar las modalidades en el ComboBox
+        for modalidad in modalidades:
+            self.combo_box.addItem(modalidad[0])
+    def abrir_modalidad_registro(self):
+        self.close()
+        modalidad = modalidadRegistro(admin=self.admin)
+        widget.addWidget(modalidad)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        
+    def busquedaRealizar(self):
+        
+        valor_seleccionado = self.combo_box.currentText()
+        print("Valor seleccionado:", valor_seleccionado)
+        self.close()
+        plantilla = menuHorarioPlantilla(admin=self.admin,modalidad=valor_seleccionado)
+        widget.addWidget(plantilla)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+        
+class modalidadRegistro(QMainWindow):
+    def __init__(self,admin):
+        super(modalidadRegistro,self).__init__()
+        loadUi("./ui/modalidad.ui",self)
+        self.admin = admin
+        self.bt_register.clicked.connect(self.addModalidad)
+        self.bt_aggHora.setEnabled(False)
+        self.bt_aggHora.clicked.connect(self.agregarHora)
+        self.bt_deleteView.clicked.connect( lambda:self.stackedWidget.setCurrentWidget(self.page_delete) )
+        self.bt_database.clicked.connect( lambda:self.stackedWidget.setCurrentWidget(self.page) )
+        self.bt_aggView.clicked.connect( lambda:self.stackedWidget.setCurrentWidget(self.page_add) )
+        self.cargardatosPrincipal()
+        self.bt_search.clicked.connect(self.busquedaParaEliminar)
+        self.bt_delete.clicked.connect(self.eliminarDatos)
+        
+    def busquedaParaEliminar(self):
+        busqueda = self.ln_busqueda.text()
+        if not busqueda:
+            QMessageBox.warning(self,"Advertencia","Es necesario el codigo")
+            return
+        conexion =sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute("SELECT modalidad,descripcion FROM Modalidad WHERE codigo=?",(busqueda,))
+        datos = cursor.fetchone()
+        self.txt_name_3.setText(datos[0])
+        self.txt_name_4.setText(datos[1])
+        
+    def eliminarDatos(self):
+        busqueda = self.ln_busqueda.text()
+        if not busqueda:
+            QMessageBox.warning(self,"Advertencia","Es necesario el codigo")
+            return
+        
+        conexion =sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute("DELETE FROM Modalidad WHERE codigo=?",(busqueda,))
+        cursor.execute("DELETE FROM Modulo WHERE CodigoModulo=?",(busqueda,))
+        conexion.commit()
+        QMessageBox.information(self,"Exito","Se elimino correctamente")
+        self.txt_name_3.clear()
+        self.txt_name_4.clear()
+        self.ln_busqueda.clear()
+    def cargardatosPrincipal(self):
+        conexion =sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute("SELECT codigo,modalidad,descripcion FROM Modalidad")
+        datos = cursor.fetchall()
+        self.tableWidget.setRowCount(len(datos))  
+
+        for row, row_data in enumerate(datos):
+            for col, value in enumerate(row_data):
+                item = QTableWidgetItem(str(value))
+                self.tableWidget.setItem(row, col, item)
+        conexion.close()
+        
+    def addModalidad(self):
+        codigo =self.txt_Codigo.text()
+        turno =self.txt_turno.text()
+        descripcion = self.txt_descripcion.text()
+        if  not (codigo or not turno or not descripcion):
+            QMessageBox.warning(self,"Error","Todos los campos son obligatorios")
+            return
+        else:
+            conexion =sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("SELECT COUNT(*) FROM Modalidad WHERE codigo=? ",(codigo,))
+            existe = cursor.fetchone()[0]
+            if existe:
+                QMessageBox.warning(self,"Error","El código ya Existe")
+                return
+            cursor.execute("INSERT INTO Modalidad (modalidad,codigo,descripcion) VALUES (?,?,?)",(turno,codigo,descripcion))
+            conexion.commit()
+            QMessageBox.information(self,"Exito","Los datos han sido almacenados correctamente")
+            self.bt_aggHora.setEnabled(True)
+            conexion.close()
+            
+    def agregarHora(self):
+        codigo =self.txt_Codigo.text()
+        turno =self.txt_turno.text()
+     
+        if not (codigo and turno):
+            QMessageBox.warning(self,"Error","Todos los campos son obligatorios")
+            return
+        else:
+      # Obtener la hora del QDateTimeEdit
+            horaInicio = self.dateTimeEdit.dateTime().toString("h:mm AP").replace(".", "").upper()
+            HoraFinalizacion = self.dateTimeEdit_2.dateTime().toString("h:mm AP").replace(".", "").upper()
+            # Combinar las dos horas con la unión de "A"
+            horas_combinadas = f"{horaInicio} A {HoraFinalizacion}"
+            print (horas_combinadas)
+            conexion =sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("INSERT INTO Modulo (CodigoModulo,Turno,Descripcion) VALUES (?,?,?) ",(codigo,turno,horas_combinadas))
+            conexion.commit()
+            self.cargarTablaHoras()
+     
+    def cargarTablaHoras(self):
+        turno =self.txt_turno.text()
+        conexion =sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute("SELECT Descripcion FROM Modulo WHERE Turno=?",(turno,))
+        datos = cursor.fetchall()
+        self.tablaHoras.setRowCount(len(datos))  
+
+        for row, row_data in enumerate(datos):
+            for col, value in enumerate(row_data):
+                item = QTableWidgetItem(str(value))
+                self.tablaHoras.setItem(row, col, item)
+        conexion.close()
+
+
+class menuHorarioPlantilla(QMainWindow):
+    def __init__(self,admin,modalidad):
+        super(menuHorarioPlantilla,self).__init__()
+        loadUi("./ui/plantilla_menu_de_horarios.ui",self)
+        self.admin = admin
+        self.modalidad =modalidad
+        self.label.setText(self.modalidad)
+        self.bt_crear.clicked.connect(self.crearHorario)
+        
+    def crearHorario(self):
+        horario = crearHorarioPlantilla(admin=self.admin,modalidad=self.modalidad)
+        widget.addWidget(horario)
+        widget.setCurrentIndex(widget.currentIndex()+1)
+    
+class crearHorarioPlantilla(QMainWindow):
+    def __init__(self,admin,modalidad):
+        super(crearHorarioPlantilla,self).__init__()
+        loadUi("./ui/plantilla_crear_hprarios.ui",self)
+        self.admin = admin
+        self.modalidad = modalidad
+        self.datos_tabla = [] 
+        self.label.setText(self.modalidad)
+        self.cargarHoras()
+        self.tableHoras.cellClicked.connect(self.celda_clickeada)
+       
+    def cargarHoras(self):
+        conexion = sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        # Ejecutar la consulta para obtener los datos ordenados
+        cursor.execute("SELECT Descripcion FROM Modulo WHERE Turno = ?", (self.modalidad,))
+
+        datos = cursor.fetchall()
+
+        # Configurar el número de filas en la tabla
+        self.tableHoras.setRowCount(len(datos))
+
+        # Limpiar la lista antes de cargar nuevos datos
+        self.datos_tabla.clear()
+
+        # Llenar la tabla con los datos ordenados y almacenarlos en la lista
+        for row, row_data in enumerate(datos):
+            for col, value in enumerate(row_data):
+                item = QTableWidgetItem(str(value))
+                self.tableHoras.setItem(row, col, item)
+                # Almacenar los datos en la lista
+                self.datos_tabla.append((row, col, str(value)))
+
+
+        
+    def celda_clickeada(self, fila, columna):
+        # Obtener los datos de la celda clickeada desde la lista
+        hora = self.tableHoras.item(fila, 0).text()
+
+        # Obtener el día según la columna
+        dias = ["", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"]
+        dia = dias[columna]
+
+        print(f'Celda clickeada en el día {dia} en la hora {hora}')
 class SedesMenu(QMainWindow):
     def __init__(self,admin):
         super(SedesMenu,self).__init__()

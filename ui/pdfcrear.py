@@ -237,4 +237,4 @@ if __name__ == "__main__":
    
     # Llamada a la función con tus datos y ruta de salida
     ruta_salida = '/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/waos.pdf'
-    crear_pdf( ruta_salida=ruta_salida)
+    crear_pdf( carrera="hola",sesion="icomo", ruta_salida=ruta_salida)
