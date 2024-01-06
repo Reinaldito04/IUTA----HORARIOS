@@ -152,15 +152,17 @@ class FormularioDialog(QDialog):
         table_widget.setItem(self.fila, self.columna, QTableWidgetItem(texto))
         
 class QuestionHorario(QDialog):
-    def __init__(self,horario_instance,datos_carga_horas):
+    def __init__(self,horario_instance,datos_carga_horas,dias):
         super(QuestionHorario,self).__init__()
         loadUi("ui/eliminarhorarioquestion.ui",self)
         self.setWindowTitle("Ya existe un horario")
         self.bt_eliminar.clicked.connect(self.eliminar)
         self.bt_view.clicked.connect(self.ver)
         self.horario_instance = horario_instance
+        self.dias = dias
+        print (self.dias)
         self.datos_carga_horas = datos_carga_horas
-        print (self.datos_carga_horas)
+       
     def eliminar(self):
         conexion = sqlite3.connect("db/database.db")
         cursor = conexion.cursor()
@@ -448,7 +450,9 @@ class modalidadRegistro(QMainWindow):
         self.admin = admin
         self.bt_register.clicked.connect(self.addModalidad)
         self.bt_aggHora.setEnabled(False)
+        self.bt_aggDias.setEnabled(False)
         self.bt_aggHora.clicked.connect(self.agregarHora)
+        self.bt_aggDias.clicked.connect(self.aggDias)
         self.bt_deleteView.clicked.connect( lambda:self.stackedWidget.setCurrentWidget(self.page_delete) )
         self.bt_database.clicked.connect( lambda:self.stackedWidget.setCurrentWidget(self.page) )
         self.bt_aggView.clicked.connect( lambda:self.stackedWidget.setCurrentWidget(self.page_add) )
@@ -515,6 +519,8 @@ class modalidadRegistro(QMainWindow):
             conexion.commit()
             QMessageBox.information(self,"Exito","Los datos han sido almacenados correctamente")
             self.bt_aggHora.setEnabled(True)
+            self.bt_aggDias.setEnabled(True)
+
             conexion.close()
             
     def agregarHora(self):
@@ -536,7 +542,23 @@ class modalidadRegistro(QMainWindow):
             cursor.execute("INSERT INTO Modulo (CodigoModulo,Turno,Descripcion) VALUES (?,?,?) ",(codigo,turno,horas_combinadas))
             conexion.commit()
             self.cargarTablaHoras()
-     
+    def aggDias(self):
+        codigo=self.txt_Codigo.text()
+        turno =self.txt_turno.text()
+        
+        if not (codigo and turno):
+            QMessageBox.warning(self,"Error","Todos los campos son obligatorios")
+            return
+        else:
+            
+            dia= self.comboBox.currentText()
+            
+            conexion =sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("INSERT INTO Dias (Dia,modalidad,Codigo) VALUES (?,?,?) ",(dia,turno,codigo))
+            conexion.commit()
+            self.cargarTablaDias()
+            
     def cargarTablaHoras(self):
         turno =self.txt_turno.text()
         conexion =sqlite3.connect("./db/database.db")
@@ -551,7 +573,20 @@ class modalidadRegistro(QMainWindow):
                 self.tablaHoras.setItem(row, col, item)
         conexion.close()
 
+    def cargarTablaDias(self):
+        turno =self.txt_turno.text()
+        conexion =sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute("SELECT Dia FROM Dias WHERE modalidad=?",(turno,))
+        datos = cursor.fetchall()
+        self.tablaDias.setRowCount(len(datos))  
 
+        for row, row_data in enumerate(datos):
+            for col, value in enumerate(row_data):
+                item = QTableWidgetItem(str(value))
+                self.tablaDias.setItem(row, col, item)
+        conexion.close()
+        
 class menuHorarioPlantilla(QMainWindow):
     def __init__(self,admin,modalidad):
         super(menuHorarioPlantilla,self).__init__()
@@ -574,15 +609,16 @@ class crearHorarioPlantilla(QMainWindow):
         self.modalidad = modalidad
         self.datos_tabla = [] 
         self.label.setText(self.modalidad)
-        self.cargarHoras()
+        # self.cargarHoras()
         self.tableWidget.cellClicked.connect(self.celda_clickeada)
         self.btn_buscarCarr.clicked.connect(self.buscarCarrera)
         self.btn_buscarSecc.clicked.connect(self.buscarSeccion)
         self.ln_carrera.textChanged.connect(self.buscarDisponibilidad)
         self.ln_sesion.textChanged.connect(self.buscarDisponibilidad)
         self.datos_almacenados =[]
-       
-         
+        # self.cargarDias()
+        self.cargarHorasYDias()
+        self.obtener_dias()
     def buscarDisponibilidad(self):
         carrera = self.ln_carrera.text()
         sesion = self.ln_sesion.text()
@@ -613,11 +649,28 @@ class crearHorarioPlantilla(QMainWindow):
             # Asignar los datos al atributo de instancia
             self.datos_almacenados = datos
             horas = self.obtener_horas()
-            dialogo = QuestionHorario(self, datos_carga_horas=horas)
+            dias = self.obtener_dias()
+            dialogo = QuestionHorario(self, datos_carga_horas=horas, dias=dias)
             dialogo.exec_()
             return True
        
         return False
+
+    def obtener_dias(self):
+        try:
+            # Obtener el número total de columnas en la tabla
+            num_columnas = self.tableWidget.columnCount()
+
+            # Obtener los días de las columnas restantes
+            dias = [self.tableWidget.horizontalHeaderItem(col).text() for col in range(1, num_columnas)]
+
+            print("Días:", dias)
+
+            return dias, num_columnas
+
+        except Exception as e:
+            print(f"Error al obtener los días: {str(e)}")
+            return None, None
     def obtener_horas(self):
         # Obtener solo la primera columna (la hora) de los datos almacenados
         horas = [fila[0] for fila in self.datos_almacenados if fila and fila[0] is not None]
@@ -638,46 +691,103 @@ class crearHorarioPlantilla(QMainWindow):
         if dialogo.exec_() == QDialog.Accepted:
             codigo_materia = dialogo.item_seleccionado()
             self.ln_sesion.setText(codigo_materia)
-    def cargarHoras(self):
+            
+    def cargarHorasYDias(self):
         conexion = sqlite3.connect("./db/database.db")
         cursor = conexion.cursor()
+
         # Ejecutar la consulta para obtener los datos ordenados
         cursor.execute("SELECT Descripcion FROM Modulo WHERE Turno = ?", (self.modalidad,))
+        horas = [fila[0] for fila in cursor.fetchall()]
 
-        datos = cursor.fetchall()
+        # Ejecutar la consulta para obtener los días ordenados
+        cursor.execute("SELECT Dia FROM Dias WHERE modalidad = ?", (self.modalidad,))
+        dias = [fila[0] for fila in cursor.fetchall()]
 
-        # Configurar el número de filas en la tabla
-        self.tableWidget.setRowCount(len(datos))
+        # Configurar el número de filas y columnas en la tabla
+        self.tableWidget.setRowCount(len(horas) + 1)  # +1 para la fila de horas
+        self.tableWidget.setColumnCount(len(dias) + 1)  # +1 para la columna de días
+
+        # Configurar los encabezados de la tabla
+        self.tableWidget.setHorizontalHeaderLabels(["Hora"] + dias)
 
         # Limpiar la lista antes de cargar nuevos datos
         self.datos_tabla.clear()
 
-        # Llenar la tabla con los datos ordenados y almacenarlos en la lista
-        for row, row_data in enumerate(datos):
-            for col, value in enumerate(row_data):
-                item = QTableWidgetItem(str(value))
-                self.tableWidget.setItem(row, col, item)
-                # Almacenar los datos en la lista
-                self.datos_tabla.append((row, col, str(value)))
+        # Llenar la tabla con las horas y los días
+        for row, row_data in enumerate(horas):
+            item = QTableWidgetItem(str(row_data))
+            self.tableWidget.setItem(row, 0, item)
+            # Almacenar los datos en la lista
+            self.datos_tabla.append((row, 0, str(row_data)))
+
+       
+
+        conexion.close()  # Cerrar la conexión a la base de datos al finalizar
+#     def cargarHoras(self):
+#         conexion = sqlite3.connect("./db/database.db")
+#         cursor = conexion.cursor()
+#         # Ejecutar la consulta para obtener los datos ordenados
+#         cursor.execute("SELECT Descripcion FROM Modulo WHERE Turno = ?", (self.modalidad,))
+
+#         datos = cursor.fetchall()
+
+#         # Configurar el número de filas en la tabla
+#         self.tableWidget.setRowCount(len(datos))
+
+#         # Limpiar la lista antes de cargar nuevos datos
+#         self.datos_tabla.clear()
+
+#         # Llenar la tabla con los datos ordenados y almacenarlos en la lista
+#         for row, row_data in enumerate(datos):
+#             for col, value in enumerate(row_data):
+#                 item = QTableWidgetItem(str(value))
+#                 self.tableWidget.setItem(row, col, item)
+#                 # Almacenar los datos en la lista
+#                 self.datos_tabla.append((row, col, str(value)))
+
+#     def cargarDias(self):
+#         conexion = sqlite3.connect("./db/database.db")
+#         cursor = conexion.cursor()
+
+#         # Ejecutar la consulta para obtener los días ordenados
+#         cursor.execute("SELECT Dia FROM Dias WHERE modalidad = ?", (self.modalidad,))
+#         dias = [fila[0] for fila in cursor.fetchall()]
+
+#         # Agregar "hora" como primer elemento en la lista de días
+#         dias.insert(0, "hora")
+
+#         self.tableWidget.setRowCount(1)
+#         self.tableWidget.setColumnCount(len(dias))
+#  # Configurar los encabezados de la tabla
+#         self.tableWidget.setHorizontalHeaderLabels(dias)
+
+       
+
+
+
 
 
         
     def celda_clickeada(self, fila, columna):
-        # Obtener los datos de la celda clickeada desde la lista
-        hora = self.tableWidget.item(fila, 0).text()
+        try:
+            # Obtener los datos de la celda clickeada desde la lista
+            hora = self.tableWidget.item(fila, 0).text()
 
-        # Obtener el día según la columna
-        dias = ["", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"]
-        dia = dias[columna]
+            # Obtener el día según la columna
+            dia_item = self.tableWidget.horizontalHeaderItem(columna)
+            dia = dia_item.text()
 
-        print(f'Celda clickeada en el día {dia} en la hora {hora}')
-        
-        self.mostrar_dialogo(titulo=f"Formulario del dia {dia} a las horas {hora}",
-                                hora=hora,
-                                dia=dia,
-                                fila=fila,
-                                columna=columna
-                                )
+            print(f'Celda clickeada en el día {dia} en la hora {hora}')
+            
+            self.mostrar_dialogo(titulo=f"Formulario del dia {dia} a las horas {hora}",
+                                    hora=hora,
+                                    dia=dia,
+                                    fila=fila,
+                                    columna=columna
+                                    )
+        except:
+            QMessageBox.warning(self,"Error","No hay datos ")
     def mostrar_dialogo(self, titulo, hora, dia,fila,columna ):
         carrera = self.ln_carrera.text()
         sesion = self.ln_sesion.text()
