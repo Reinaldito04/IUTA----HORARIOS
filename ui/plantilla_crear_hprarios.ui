@@ -59,7 +59,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="ln_carrera"/>
+       <widget class="QLineEdit" name="ln_carrera">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btn_buscarCarr">
@@ -76,7 +80,11 @@
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="ln_sesion"/>
+       <widget class="QLineEdit" name="ln_sesion">
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btn_buscarSecc">
@@ -120,7 +128,7 @@
      </widget>
     </item>
     <item>
-     <widget class="QTableWidget" name="tableHoras">
+     <widget class="QTableWidget" name="tableWidget">
       <attribute name="horizontalHeaderCascadingSectionResizes">
        <bool>false</bool>
       </attribute>

@@ -152,15 +152,15 @@ class FormularioDialog(QDialog):
         table_widget.setItem(self.fila, self.columna, QTableWidgetItem(texto))
         
 class QuestionHorario(QDialog):
-    def __init__(self,horario_instance):
+    def __init__(self,horario_instance,datos_carga_horas):
         super(QuestionHorario,self).__init__()
         loadUi("ui/eliminarhorarioquestion.ui",self)
         self.setWindowTitle("Ya existe un horario")
         self.bt_eliminar.clicked.connect(self.eliminar)
         self.bt_view.clicked.connect(self.ver)
         self.horario_instance = horario_instance
-        
-
+        self.datos_carga_horas = datos_carga_horas
+        print (self.datos_carga_horas)
     def eliminar(self):
         conexion = sqlite3.connect("db/database.db")
         cursor = conexion.cursor()
@@ -185,7 +185,11 @@ class QuestionHorario(QDialog):
         datos = cursor.fetchall()
         self.horario_instance.tableWidget.clearContents()
 
-        
+        # Recorrer datos_Carga_horas para agregar las horas en la primera columna
+        for i, hora in enumerate(self.datos_carga_horas):
+            item_hora = QTableWidgetItem(hora)
+            item_hora.setFlags(item_hora.flags() & ~Qt.ItemIsEditable)  # Deshabilitar edición
+            self.horario_instance.tableWidget.setItem(i, 0, item_hora)
 
         for result in datos:
             dia = result[0]
@@ -194,52 +198,39 @@ class QuestionHorario(QDialog):
             codigo_aula = result[3]
             cedula_prof = result[4]
 
-            # Asignar la hora y el día a las posiciones correspondientes
-            if hora == "07:30 A 08:10":
-                fila = 0
-            elif hora == "08:10 A 08:50":
-                fila = 1
-            elif hora == "08:50 A 09:30":
-                fila = 2
-            elif hora == "09:30 A 10:10":
-                fila = 3
-            elif hora == "10:10 A 10:50":
-                fila = 4
-            elif hora == "10:50 A 11:30":
-                fila = 5
-            elif hora == "11:30 A 12:10":
-                fila = 6
-            elif hora == "12:10 A 12:50":
-                fila = 7
-            elif hora == "12:50 A 1:30":
-                fila = 8
-            else:
-                # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
-                continue
+            # Buscar la hora en datos_carga_horas
+            if hora in self.datos_carga_horas:
+                # Obtener la fila correspondiente a la hora en datos_carga_horas
+                fila = self.datos_carga_horas.index(hora)
 
-            # Asignar el día a la columna correspondiente
-            if dia == "Lunes":
-                columna = 0
-            elif dia == "Martes":
-                columna = 1
-            elif dia == "Miercoles":
-                columna = 2
-            elif dia == "Jueves":
-                columna = 3
-            elif dia == "Viernes":
-                columna = 4
-            elif dia == "Sabado":
-                columna = 5
-            else:
-                # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
-                continue
+                # Asignar el día a la columna correspondiente
+                if dia == "Lunes":
+                    columna = 1
+                elif dia == "Martes":
+                    columna = 2
+                elif dia == "Miercoles":
+                    columna = 3
+                elif dia == "Jueves":
+                    columna = 4
+                elif dia == "Viernes":
+                    columna = 5
+                elif dia == "Sabado":
+                    columna = 6
+                else:
+                    # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
+                    continue
 
-            # Colocar los datos en la tabla
-            item = QTableWidgetItem(f"{codigo_mat}\n{codigo_aula}\n{cedula_prof}")
-            self.horario_instance.tableWidget.setItem(fila, columna, item)
+                # Colocar los datos en la tabla
+                item = QTableWidgetItem(f"{codigo_mat}\n{codigo_aula}\n{cedula_prof}")
 
+                # Deshabilitar la edición de la primera columna (hora)
+                if columna == 1:
+                    item.setFlags(item.flags() & ~Qt.ItemIsEditable)  # Quitar la bandera de edición
+
+                self.horario_instance.tableWidget.setItem(fila, columna, item)
 
         self.accept()
+
    
 class PreviewPDF(QDialog):
     def __init__(self,pdf_path):
@@ -584,8 +575,69 @@ class crearHorarioPlantilla(QMainWindow):
         self.datos_tabla = [] 
         self.label.setText(self.modalidad)
         self.cargarHoras()
-        self.tableHoras.cellClicked.connect(self.celda_clickeada)
+        self.tableWidget.cellClicked.connect(self.celda_clickeada)
+        self.btn_buscarCarr.clicked.connect(self.buscarCarrera)
+        self.btn_buscarSecc.clicked.connect(self.buscarSeccion)
+        self.ln_carrera.textChanged.connect(self.buscarDisponibilidad)
+        self.ln_sesion.textChanged.connect(self.buscarDisponibilidad)
+        self.datos_almacenados =[]
        
+         
+    def buscarDisponibilidad(self):
+        carrera = self.ln_carrera.text()
+        sesion = self.ln_sesion.text()
+        if carrera or sesion:
+            self.searchHorario()
+    def searchHorario(self):
+        sesion =self.ln_sesion.text()
+        carrera= self.ln_carrera.text()
+        conexion = sqlite3.connect("db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute("SELECT COUNT(*) FROM HorarioTest WHERE Sesion = ? AND Carrera=? ",(sesion,carrera))
+        existeHorario = cursor.fetchone()[0]
+        if existeHorario:
+            QMessageBox.information(self, "Advertencia", f"Ya existe un horario creado para {carrera} {sesion}")
+            
+            datos = []
+
+            for row in range(self.tableWidget.rowCount()):
+                fila = []
+                for col in range(self.tableWidget.columnCount()):
+                    item = self.tableWidget.item(row, col)
+                    if item is not None:
+                        fila.append(item.text())
+                    else:
+                        fila.append(None)
+                datos.append(fila)
+
+            # Asignar los datos al atributo de instancia
+            self.datos_almacenados = datos
+            horas = self.obtener_horas()
+            dialogo = QuestionHorario(self, datos_carga_horas=horas)
+            dialogo.exec_()
+            return True
+       
+        return False
+    def obtener_horas(self):
+        # Obtener solo la primera columna (la hora) de los datos almacenados
+        horas = [fila[0] for fila in self.datos_almacenados if fila and fila[0] is not None]
+        print(horas)
+        return horas
+    def buscarCarrera(self):
+        consulta_like = "SELECT Descripcion, CodigoCarrera FROM Carreras WHERE Descripcion LIKE ?"
+        consulta_sql_materia = "SELECT Descripcion, CodigoCarrera FROM Carreras;"
+        dialogo = DialogoConsulta("Consulta de Carrera", "Seleccione una carrera:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_materia = dialogo.item_seleccionado()
+            self.ln_carrera.setText(codigo_materia) 
+    # METODOD DE BUSCAR SECCION
+    def buscarSeccion(self):
+        consulta_like = "SELECT Numero FROM SesionCarrera WHERE Numero LIKE ?"
+        consulta_sql_materia = "SELECT Numero FROM SesionCarrera;"
+        dialogo = DialogoConsulta("Consulta de Seccion", "Seleccione una seccion:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_materia = dialogo.item_seleccionado()
+            self.ln_sesion.setText(codigo_materia)
     def cargarHoras(self):
         conexion = sqlite3.connect("./db/database.db")
         cursor = conexion.cursor()
@@ -595,7 +647,7 @@ class crearHorarioPlantilla(QMainWindow):
         datos = cursor.fetchall()
 
         # Configurar el número de filas en la tabla
-        self.tableHoras.setRowCount(len(datos))
+        self.tableWidget.setRowCount(len(datos))
 
         # Limpiar la lista antes de cargar nuevos datos
         self.datos_tabla.clear()
@@ -604,7 +656,7 @@ class crearHorarioPlantilla(QMainWindow):
         for row, row_data in enumerate(datos):
             for col, value in enumerate(row_data):
                 item = QTableWidgetItem(str(value))
-                self.tableHoras.setItem(row, col, item)
+                self.tableWidget.setItem(row, col, item)
                 # Almacenar los datos en la lista
                 self.datos_tabla.append((row, col, str(value)))
 
@@ -612,13 +664,36 @@ class crearHorarioPlantilla(QMainWindow):
         
     def celda_clickeada(self, fila, columna):
         # Obtener los datos de la celda clickeada desde la lista
-        hora = self.tableHoras.item(fila, 0).text()
+        hora = self.tableWidget.item(fila, 0).text()
 
         # Obtener el día según la columna
         dias = ["", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"]
         dia = dias[columna]
 
         print(f'Celda clickeada en el día {dia} en la hora {hora}')
+        
+        self.mostrar_dialogo(titulo=f"Formulario del dia {dia} a las horas {hora}",
+                                hora=hora,
+                                dia=dia,
+                                fila=fila,
+                                columna=columna
+                                )
+    def mostrar_dialogo(self, titulo, hora, dia,fila,columna ):
+        carrera = self.ln_carrera.text()
+        sesion = self.ln_sesion.text()
+        if len(carrera) ==0 or len(sesion) ==0:
+            QMessageBox.critical(self,"Error","Es necesario ingresar la carrera y su sesion")
+            return
+        else:
+            dialog = FormularioDialog(titulo=titulo, hora=hora,
+                                      dia=dia, fila=fila,columna=columna,horario=self,
+                                      sesion=sesion,carrera=carrera)
+            resultado = dialog.exec_()
+            if resultado == QDialog.Accepted:
+                texto_a_insertar = dialog.guardar()  # Obtener el texto desde la función guardar
+                if texto_a_insertar is not None:
+                    dialog.establecer_texto_en_celda(texto_a_insertar)
+
 class SedesMenu(QMainWindow):
     def __init__(self,admin):
         super(SedesMenu,self).__init__()
@@ -1590,6 +1665,8 @@ class Horario(QMainWindow):
             return True
        
         return False
+    
+    #ver horita
            
     def BuscarCarrera(self):
         consulta_like = "SELECT Descripcion, CodigoCarrera FROM Carreras WHERE Descripcion LIKE ?"
