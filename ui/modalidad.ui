@@ -1224,96 +1224,9 @@ font-size:18px;
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_11">
               <item>
-               <widget class="QTableWidget" name="tablaDias">
-                <property name="maximumSize">
-                 <size>
-                  <width>16777215</width>
-                  <height>16777215</height>
-                 </size>
-                </property>
-                <column>
-                 <property name="text">
-                  <string>Dias</string>
-                 </property>
-                </column>
-               </widget>
-              </item>
-              <item>
-               <widget class="QLabel" name="label_9">
-                <property name="styleSheet">
-                 <string notr="true">color:red;</string>
-                </property>
-                <property name="text">
-                 <string>POR FAVOR,AGREGAR LOS 
- DÍAS  ORDEN</string>
-                </property>
-               </widget>
-              </item>
-              <item>
                <layout class="QVBoxLayout" name="verticalLayout_10">
                 <item>
-                 <widget class="QLabel" name="label_14">
-                  <property name="text">
-                   <string>Agregar Días</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <layout class="QHBoxLayout" name="horizontalLayout_15">
-                  <item>
-                   <widget class="QLabel" name="label_15">
-                    <property name="text">
-                     <string>Día: </string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item>
-                   <widget class="QComboBox" name="comboBox">
-                    <item>
-                     <property name="text">
-                      <string>Lunes</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Martes</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Miercoles</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Jueves</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Viernes</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Sabado</string>
-                     </property>
-                    </item>
-                    <item>
-                     <property name="text">
-                      <string>Domingo</string>
-                     </property>
-                    </item>
-                   </widget>
-                  </item>
-                 </layout>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="bt_aggDias">
-                  <property name="text">
-                   <string>Agregar</string>
-                  </property>
-                 </widget>
+                 <layout class="QHBoxLayout" name="horizontalLayout_15"/>
                 </item>
                </layout>
               </item>
