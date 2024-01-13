@@ -69,7 +69,7 @@
     <item>
      <widget class="QToolBox" name="toolBox">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="page">
        <property name="geometry">
@@ -77,7 +77,7 @@
          <x>0</x>
          <y>0</y>
          <width>731</width>
-         <height>386</height>
+         <height>387</height>
         </rect>
        </property>
        <attribute name="icon">
@@ -134,7 +134,43 @@
          </layout>
         </item>
         <item>
-         <widget class="QTableWidget" name="tableWidget"/>
+         <widget class="QTableWidget" name="tableWidget_aulas">
+          <column>
+           <property name="text">
+            <string>Hora</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Lunes</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Martes</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Miercoles</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Jueves</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Viernes</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Sabado</string>
+           </property>
+          </column>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_6">
@@ -168,7 +204,7 @@
          <x>0</x>
          <y>0</y>
          <width>731</width>
-         <height>386</height>
+         <height>387</height>
         </rect>
        </property>
        <attribute name="icon">
@@ -225,7 +261,43 @@
          </layout>
         </item>
         <item>
-         <widget class="QTableWidget" name="tableWidget_2"/>
+         <widget class="QTableWidget" name="tableWidget_profesores">
+          <column>
+           <property name="text">
+            <string>Hora</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Lunes</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Martes</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Miercoles</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Jueves</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Viernes</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Sabado</string>
+           </property>
+          </column>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_4">
@@ -259,7 +331,7 @@
          <x>0</x>
          <y>0</y>
          <width>731</width>
-         <height>386</height>
+         <height>387</height>
         </rect>
        </property>
        <attribute name="icon">
@@ -341,7 +413,43 @@
          </layout>
         </item>
         <item>
-         <widget class="QTableWidget" name="tableWidget_3"/>
+         <widget class="QTableWidget" name="tableWidget_seccion">
+          <column>
+           <property name="text">
+            <string>Hora</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Lunes</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Martes</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Miercoles</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Jueves</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Viernes</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Sabado</string>
+           </property>
+          </column>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_7">
