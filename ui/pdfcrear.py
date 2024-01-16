@@ -3,6 +3,7 @@ import os
 import base64
 import sqlite3
 from datetime import datetime
+
 def image_url_to_base64(image_url):
     try:
         import requests
@@ -24,8 +25,45 @@ def recuperar_datos_bd(carrera,sesion):
     cursor.close()
     return datos_base
     
+def recuperarordenHorasDB(turno):
+    conexion = sqlite3.connect("db/database.db")
+    cursor=conexion.cursor()
+    cursor.execute("SELECT Descripcion FROM Modulo WHERE Turno =?",(turno,))
+    horasDb= cursor.fetchall()
+    cursor.close()
+    return  horasDb
     
-def crear_pdf( ruta_salida,carrera,sesion):
+
+
+def obtener_hora_y_pm(hora):
+    partes = hora.split(" ")
+    hora_sin_am_pm = partes[0]
+    es_pm = "PM" in hora
+    return hora_sin_am_pm, es_pm
+
+# Función personalizada para la clave de ordenación
+def clave_ordenacion(fila):
+    es_pm = obtener_hora_y_pm(fila['hora'])[1]
+    if es_pm:
+        return (1, fila['hora'])
+    else:
+        return (0, fila['hora'])
+    
+def convertir_formato_hora(hora):
+    try:
+        # Separar la hora de la parte 'A' o 'P' (AM o PM)
+        hora_parts = hora.split('A') if 'A' in hora else hora.split('P')
+        if len(hora_parts) == 2:
+            # Unir la hora y la parte 'A' o 'P' sin espacios adicionales
+            hora_objeto = datetime.strptime(f"{hora_parts[0].strip()} {hora_parts[1].strip()}", "%I:%M %p").strftime("%I:%M %p")
+            return hora_objeto
+    except ValueError:
+        pass
+    # Si no se puede convertir, devolver la cadena original
+    return hora
+
+
+def crear_pdf( ruta_salida,carrera,sesion,Turno):
     imagen_url = 'https://www.eduopinions.com/wp-content/uploads/2018/02/Instituto-Universitario-de-Tecnolog%C3%ADa-de-Administraci%C3%B3n-Industrial-IUTA-logo-350x181.gif'
     
     imagen_base64 = image_url_to_base64(imagen_url)
@@ -40,6 +78,8 @@ def crear_pdf( ruta_salida,carrera,sesion):
     print("Fecha actual:", fecha_formateada)
     if imagen_base64:
         # Definir los datos de la tabla
+       
+
         datos_base = recuperar_datos_bd(carrera,sesion)        
         filas_datos = []
         for dato in datos_base:
@@ -57,7 +97,9 @@ def crear_pdf( ruta_salida,carrera,sesion):
 
             # Colocar los datos en la celda correspondiente al día
             fila_existente[dia.lower()] = f"{dato[2]} </br> {dato[3]} </br> {dato[4]}"
-        filas_datos = sorted(filas_datos, key=lambda x: x['hora'])
+        horas_db = [fila['hora'] for fila in filas_datos]
+        filas_datos = sorted(filas_datos, key=lambda x: horas_db.index(x['hora']) if x['hora'] in horas_db else float('inf'))
+
 
         filas_html = ""
         for fila in filas_datos:

@@ -601,22 +601,38 @@ class modalidadRegistro(QMainWindow):
             conexion.close()
             
     def agregarHora(self):
-        codigo =self.txt_Codigo.text()
-        turno =self.txt_turno.text()
-     
+        from datetime import datetime as dt
+        codigo = self.txt_Codigo.text()
+        turno = self.txt_turno.text()
+
         if not (codigo and turno):
-            QMessageBox.warning(self,"Error","Todos los campos son obligatorios")
+            QMessageBox.warning(self, "Error", "Todos los campos son obligatorios")
             return
         else:
-      # Obtener la hora del QDateTimeEdit
+            # Obtener la hora del QDateTimeEdit
             horaInicio = self.dateTimeEdit.dateTime().toString("h:mm AP").replace(".", "").upper()
             HoraFinalizacion = self.dateTimeEdit_2.dateTime().toString("h:mm AP").replace(".", "").upper()
-            # Combinar las dos horas con la unión de "A"
-            horas_combinadas = f"{horaInicio} A {HoraFinalizacion}"
-            print (horas_combinadas)
-            conexion =sqlite3.connect("./db/database.db")
+
+            # Remover el espacio entre 'A' y 'M' y cualquier espacio no imprimible
+            horaInicio = horaInicio.replace(' ', '').replace('\xa0', '')
+            HoraFinalizacion = HoraFinalizacion.replace(' ', '').replace('\xa0', '')
+
+            # Convertir al formato de 24 horas "%H:%M"
+            formato_24_horas_inicio = dt.strptime(horaInicio, "%I:%M%p").strftime("%H:%M")
+            formato_24_horas_fin = dt.strptime(HoraFinalizacion, "%I:%M%p").strftime("%H:%M")
+
+            # Formatear en el formato deseado "01:30 PM"
+            hora_formato_deseado_inicio = dt.strptime(formato_24_horas_inicio, "%H:%M").strftime("%I:%M %p")
+            hora_formato_deseado_fin = dt.strptime(formato_24_horas_fin, "%H:%M").strftime("%I:%M %p")
+
+            horas_combinadas_formato_deseado = f"{hora_formato_deseado_inicio} A {hora_formato_deseado_fin}"
+
+            print(horas_combinadas_formato_deseado)
+
+            conexion = sqlite3.connect("./db/database.db")
             cursor = conexion.cursor()
-            cursor.execute("INSERT INTO Modulo (CodigoModulo,Turno,Descripcion) VALUES (?,?,?) ",(codigo,turno,horas_combinadas))
+            cursor.execute("INSERT INTO Modulo (CodigoModulo, Turno, Descripcion) VALUES (?, ?, ?)",
+                           (codigo, turno, horas_combinadas_formato_deseado))
             conexion.commit()
             self.cargarTablaHoras()
     
@@ -756,9 +772,32 @@ class crearHorarioPlantilla(QMainWindow):
         
         self.hilo_espera.senal_imprimir.connect(self.mostrar_mensaje)
 
-
+        self.btn_guardar.clicked.connect(self.guardarPDF)
         self.bt_volver.clicked.connect(self.backMenu)
         
+        
+    def guardarPDF(self):
+        try:
+            from   ui.pdfcrear import crear_pdf
+            
+            sesion = self.ln_sesion.text()
+            carrera= self.ln_carrera.text()
+          
+            if not sesion or not carrera:
+                QMessageBox.information(self,"Error","Es necesario ingresar la sesion y la carrera anteriormente")
+                return
+            ruta_salida, _ = QFileDialog.getSaveFileName(self, 'Guardar PDF', '', 'Archivos PDF (*.pdf)')
+
+            # Verifica si el usuario canceló la selección
+            if not ruta_salida:
+                return
+            else:
+                crear_pdf(ruta_salida=ruta_salida,sesion=sesion,carrera=carrera,Turno=self.modalidad )
+                if crear_pdf:
+                    return ruta_salida   
+        except Exception as e:
+            print(f"Error en vistaPrevia: {e}")
+            
     def backMenu(self):
         menu = MenuPrincipal(self.admin)
         widget.addWidget(menu)
