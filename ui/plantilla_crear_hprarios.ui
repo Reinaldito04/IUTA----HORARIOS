@@ -27,8 +27,7 @@
       <item>
        <widget class="QPushButton" name="bt_seleccion">
         <property name="styleSheet">
-         <string notr="true">
-</string>
+         <string notr="true"/>
         </property>
         <property name="text">
          <string>Activar Seleccion Multiple</string>
@@ -86,26 +85,40 @@
       <item>
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Seccion</string>
+         <string>Nivel</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="ln_sesion">
+       <widget class="QLineEdit" name="ln_nivel">
         <property name="readOnly">
          <bool>true</bool>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btn_buscarSecc">
+       <widget class="QPushButton" name="btn_buscarnivel">
         <property name="text">
          <string>buscar</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLineEdit" name="lineEdit_Periodo"/>
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>Sesion</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="ln_sesion"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_buscarSecc_2">
+        <property name="text">
+         <string>buscar</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

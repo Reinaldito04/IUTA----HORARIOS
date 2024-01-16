@@ -195,9 +195,19 @@ class FormularioDialog(QDialog):
         conexion = sqlite3.connect("./db/database.db")
         cursor = conexion.cursor()
 
+        
+        
+        verificarProfesor= cursor.execute("SELECT * FROM HorarioTest WHERE Dia=? AND Hora=? AND CedulaProf=?",
+                                          (self.dia,self.hora,cedulaProfesor))
+        if verificarProfesor.fetchone():
+            QMessageBox.warning(self,"Error","Ya el profesor se encuentra dado clase en este momento")
+            self.input_profesor.clear()
+            self.input_profesor.setPlaceholderText("Ingrese un profesor distinto...")
+            return None
+
+
         verificarHorario = cursor.execute("SELECT * FROM HorarioTest WHERE Dia=? AND Hora=? AND CodigoAula=?",
                                           (self.dia, self.hora, codigoSalon))
-
         if verificarHorario.fetchone():
             QMessageBox.warning(self, "Error", "El salón ya está siendo utilizado en la misma hora")
             self.input_salon.clear()
@@ -756,7 +766,8 @@ class crearHorarioPlantilla(QMainWindow):
         # self.cargarHoras()
         self.tableWidget.cellClicked.connect(self.celda_clickeada)
         self.btn_buscarCarr.clicked.connect(self.buscarCarrera)
-        self.btn_buscarSecc.clicked.connect(self.buscarSeccion)
+        self.btn_buscarSecc_2.clicked.connect(self.buscarSeccion)
+        self.btn_buscarnivel.clicked.connect(self.buscarNivel)
         self.ln_carrera.textChanged.connect(self.buscarDisponibilidad)
         self.ln_sesion.textChanged.connect(self.buscarDisponibilidad)
         self.datos_almacenados =[]
@@ -782,9 +793,10 @@ class crearHorarioPlantilla(QMainWindow):
             
             sesion = self.ln_sesion.text()
             carrera= self.ln_carrera.text()
+            nivel=self.ln_nivel.text()
           
-            if not sesion or not carrera:
-                QMessageBox.information(self,"Error","Es necesario ingresar la sesion y la carrera anteriormente")
+            if not sesion or not carrera or not nivel:
+                QMessageBox.information(self,"Error","Es necesario ingresar la sesion ,la carrera y su nivel anteriormente")
                 return
             ruta_salida, _ = QFileDialog.getSaveFileName(self, 'Guardar PDF', '', 'Archivos PDF (*.pdf)')
 
@@ -792,7 +804,7 @@ class crearHorarioPlantilla(QMainWindow):
             if not ruta_salida:
                 return
             else:
-                crear_pdf(ruta_salida=ruta_salida,sesion=sesion,carrera=carrera,Turno=self.modalidad )
+                crear_pdf(ruta_salida=ruta_salida,sesion=sesion,carrera=carrera,Turno=self.modalidad,Nivel=nivel )
                 if crear_pdf:
                     return ruta_salida   
         except Exception as e:
@@ -864,6 +876,8 @@ class crearHorarioPlantilla(QMainWindow):
         if dialogo.exec_() == QDialog.Accepted:
             codigo_materia = dialogo.item_seleccionado()
             self.ln_carrera.setText(codigo_materia) 
+            
+         
     # METODOD DE BUSCAR SECCION
     def buscarSeccion(self):
         consulta_like = "SELECT Numero FROM SesionCarrera WHERE Numero LIKE ?"
@@ -873,6 +887,20 @@ class crearHorarioPlantilla(QMainWindow):
             codigo_materia = dialogo.item_seleccionado()
             self.ln_sesion.setText(codigo_materia)
             
+    def buscarNivel(self):
+        carrera = self.ln_carrera.text()
+    
+        if not carrera:
+            QMessageBox.warning(self, "Advertencia", "Debe ingresar una carrera")
+            return
+        else:
+            consulta_like = "SELECT Nivel,Carrera FROM Nivel WHERE Carrera LIKE ?"
+            consulta_sql_materia = "SELECT Nivel,Carrera FROM Nivel "
+            dialogo = DialogoConsulta("Consulta de Nivel", "Seleccione un nivel :", consulta_sql=consulta_sql_materia, consulta_like=consulta_like)
+            if dialogo.exec_() == QDialog.Accepted:
+                codigo_materia = dialogo.item_seleccionado()
+                self.ln_nivel.setText(codigo_materia)
+                
     def cargarHoras(self):
         conexion = sqlite3.connect("./db/database.db")
         cursor = conexion.cursor()
@@ -1392,10 +1420,35 @@ class MenuCarreras(QMainWindow):
         self.bt_view.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_view))
         self.bt_agg.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_agg))
         self.bt_edit.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_edit))
+        self.bt_level.clicked.connect(lambda :self.stackedWidget.setCurrentWidget(self.page_level))
+
         self.bt_back.clicked.connect(self.backMenu)
         self.bt_agg_2.clicked.connect(self.addData)
         self.bt_act.clicked.connect(self.ViewData)
-       
+        self.bt_searchCarrera.clicked.connect(self.CarreraParaLevel)
+        self.bt_agg_5.clicked.connect(self.addLevel)
+    def addLevel(self):
+        carrera  =self.txt_code_3.text()
+        nivel = self.txt_name_5.text()
+        if not carrera or not nivel:
+            QMessageBox.warning(self,"Error","Todos los campos son obligatorios")
+            return
+        else:
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("INSERT INTO Nivel (Carrera,Nivel) VALUES (?,?)",
+                           (carrera,nivel))
+            conexion.commit()
+            QMessageBox.information(self,"Exito","Los datos se almacenaron correctamente")
+            conexion.close()
+    def CarreraParaLevel(self):
+        
+        consulta_like = "SELECT Descripcion, CodigoCarrera FROM Carreras WHERE Descripcion LIKE ?"
+        consulta_sql_materia = "SELECT Descripcion, CodigoCarrera FROM Carreras;"
+        dialogo = DialogoConsulta("Consulta de Carrera", "Seleccione una carrera:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_materia = dialogo.item_seleccionado()
+            self.txt_code_3.setText(codigo_materia) 
     def ViewData(self):
         print("click")
         try:
