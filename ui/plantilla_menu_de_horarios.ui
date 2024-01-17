@@ -69,7 +69,7 @@
     <item>
      <widget class="QToolBox" name="toolBox">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="page">
        <property name="geometry">
@@ -315,7 +315,7 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton_2">
+           <widget class="QPushButton" name="bt_buscarProf">
             <property name="text">
              <string>PushButton</string>
             </property>
@@ -372,7 +372,7 @@
                <bool>true</bool>
               </property>
               <property name="placeholderText">
-               <string>Carrera</string>
+               <string>Nivel</string>
               </property>
              </widget>
             </item>

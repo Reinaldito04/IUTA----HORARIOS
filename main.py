@@ -13,6 +13,7 @@ from PyQt5.QtWidgets import QMessageBox,QLabel,QTableWidgetItem
 import os
 from PyQt5.QtWidgets import QDialog, QApplication, QPushButton, QVBoxLayout, QLabel, QLineEdit, QTableWidget, QTableWidgetItem
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QColor
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QCheckBox, QDialog, QLabel, QLineEdit
 import sqlite3
 import fitz
@@ -416,54 +417,6 @@ class IngresoUsuario(QMainWindow):
         conexion.close()
 
 # CLASE DE LA VENTANA DE MENU 
-
-class CambiarPeriodo(QDialog):
-    def __init__(self):
-        super(CambiarPeriodo, self).__init__()
-        self.setWindowTitle("¿Deseas cambiar el periodo?")
-
-        # Etiqueta informativa
-        label = QLabel("Ingrese el nuevo periodo:")
-       
-        label1 = QLabel("Solo numeros romanos (el año se coloca automaticamente)" )
-        # Cuadro de entrada
-        self.input_periodo = QLineEdit()
-
-        # Botón de guardar
-        btn_guardar = QPushButton("Guardar")
-        btn_guardar.clicked.connect(self.guardarPeriodo)
-
-        # Diseño del diseño del cuadro de diálogo
-        layout = QVBoxLayout()
-        layout.addWidget(label)
-        layout.addWidget(label1)
-        layout.addWidget(self.input_periodo)
-        layout.addWidget(btn_guardar)
-        self.setLayout(layout)
-
-    def guardarPeriodo(self):
-        # Obtener el nuevo periodo desde el cuadro de entrada
-        nuevo_periodo = self.input_periodo.text()
-        conexion=sqlite3.connect("./db/database.db")
-        cursor = conexion.cursor()
-        import datetime
-
-# Obtener la fecha y hora actual
-        fecha_actual = datetime.datetime.now()
-
-        # Obtener el año de la fecha actual
-        año_actual = fecha_actual.year
-        
-        periodoIngresar =f"{año_actual} - {nuevo_periodo}"
-        cursor.execute("UPDATE PeriodoAcademico SET Periodo=? WHERE ID=? ",(periodoIngresar,1))
-        conexion.commit()
-        
-        QMessageBox.information(self,"Exito",f"Se almaceno el nuevo periodo {periodoIngresar}")
-        conexion.close()
-        # Realizar las acciones necesarias con el nuevo periodo (guardar en la base de datos, etc.)
-
-        # Cerrar el cuadro de diálogo
-        self.accept()
 class MenuPrincipal(QMainWindow):
     def __init__(self , admin):
         super(MenuPrincipal, self).__init__()
@@ -544,6 +497,55 @@ class MenuPrincipal(QMainWindow):
     def menuprincipalHorariosView(self):
         modalidadDialogo = modalidadQuestion(admin=self.admin)
         modalidadDialogo.exec_()
+
+# DIALOGP PARA EDITAR PERIODOS
+class CambiarPeriodo(QDialog):
+    def __init__(self):
+        super(CambiarPeriodo, self).__init__()
+        self.setWindowTitle("¿Deseas cambiar el periodo?")
+
+        # Etiqueta informativa
+        label = QLabel("Ingrese el nuevo periodo:")
+       
+        label1 = QLabel("Solo numeros romanos (el año se coloca automaticamente)" )
+        # Cuadro de entrada
+        self.input_periodo = QLineEdit()
+
+        # Botón de guardar
+        btn_guardar = QPushButton("Guardar")
+        btn_guardar.clicked.connect(self.guardarPeriodo)
+
+        # Diseño del diseño del cuadro de diálogo
+        layout = QVBoxLayout()
+        layout.addWidget(label)
+        layout.addWidget(label1)
+        layout.addWidget(self.input_periodo)
+        layout.addWidget(btn_guardar)
+        self.setLayout(layout)
+
+    def guardarPeriodo(self):
+        # Obtener el nuevo periodo desde el cuadro de entrada
+        nuevo_periodo = self.input_periodo.text()
+        conexion=sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        import datetime
+
+# Obtener la fecha y hora actual
+        fecha_actual = datetime.datetime.now()
+
+        # Obtener el año de la fecha actual
+        año_actual = fecha_actual.year
+        
+        periodoIngresar =f"{año_actual} - {nuevo_periodo}"
+        cursor.execute("UPDATE PeriodoAcademico SET Periodo=? WHERE ID=? ",(periodoIngresar,1))
+        conexion.commit()
+        
+        QMessageBox.information(self,"Exito",f"Se almaceno el nuevo periodo {periodoIngresar}")
+        conexion.close()
+        # Realizar las acciones necesarias con el nuevo periodo (guardar en la base de datos, etc.)
+
+        # Cerrar el cuadro de diálogo
+        self.accept()
 
 # DIALOGO DE CONSULTA PARA LA SELECCION 
 # DE MODALIDAD O CREAR MODALIDAD
@@ -739,17 +741,31 @@ class menuHorarioPlantilla(QMainWindow):
         
         #Metodos para la busqueda
         
-        
+        self.bt_buscarAula.clicked.connect(self.verDisponibilidadAula)
+        self.bt_buscarProf.clicked.connect(self.verDisponibilidadProfesor)
+        self.bt_sesion.clicked.connect(self.verDisponibilidadSeccion)
         self.bt_buscar.clicked.connect(self.buscarAula)
-        self.bt_carrerabuscar.clicked.connect(self.buscarSesion)
-
+       
+        self.bt_profesor.clicked.connect(self.codigoProfesor)
+        self.bt_carrerabuscar.clicked.connect(self.buscarnivel)
+        self.bt_seccionbuscar.clicked.connect(self.buscarsesion)
         
         #metodos para la seleccion en la tabla
         
     
         self.horas =[]
+        self.datos_carga_horas = []  # Coloca los valores apropiados aquí
+
        
-    
+    def codigoProfesor(self):
+        consulta_like = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido, Cedula FROM Profesores WHERE Nombre_Y_Apellido LIKE ?"
+        
+        consulta_sql_profesor = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido ,Cedula FROM Profesores;"
+
+        dialogo = DialogoConsulta("Consulta de Profesor", "Seleccione el nombre y apellido del profesor:" ,consulta_sql_profesor,consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo = dialogo.item_seleccionado()
+            self.ln_disponibilidad_profesores.setText(codigo)
     def eliminarTodoHorario(self):
         respuesta = QMessageBox.question(self, "Confirmación", "¿Deseas eliminar todos los horarios?", QMessageBox.Yes | QMessageBox.No)
 
@@ -780,14 +796,25 @@ class menuHorarioPlantilla(QMainWindow):
         return horas
     
     
-    def buscarSesion(self):
+    def buscarnivel(self):
         consulta_like = "SELECT Nivel,Carrera FROM Nivel WHERE Carrera LIKE ?"
         consulta_sql_materia = "SELECT Nivel,Carrera FROM Nivel;"
-        dialogo = DialogoConsulta("Consulta de Sesion", "Seleccione una Sesion:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        dialogo = DialogoConsulta("Consulta de Nivel", "Seleccione un nivel:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
         if dialogo.exec_() == QDialog.Accepted:
             codigo_materia = dialogo.item_seleccionado()
             self.ln_disponibilidad_carrera.setText(codigo_materia)
-            
+    
+    
+    def buscarsesion(self):
+        consulta_like = "SELECT Numero FROM SesionCarrera WHERE Numero LIKE ?"
+        consulta_sql_materia = "SELECT Numero FROM SesionCarrera;"
+        dialogo = DialogoConsulta("Consulta de Sesion", "Seleccione una Sesion:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_materia = dialogo.item_seleccionado()
+            self.ln_disponibilidad_seccion.setText(codigo_materia)
+
+    
+    
     def buscarAula(self):
         consulta_like = "SELECT Descripcion,CodigoAula,codigo_sede FROM Aulas WHERE Descripcion LIKE ?"
         consulta_sql_materia = "SELECT Descripcion,CodigoAula,codigo_sede FROM Aulas;"
@@ -795,6 +822,195 @@ class menuHorarioPlantilla(QMainWindow):
         if dialogo.exec_() == QDialog.Accepted:
             codigo_materia = dialogo.item_seleccionado()
             self.ln_disponibilidad_aula.setText(codigo_materia)
+            
+            
+    # Función para establecer el color de la celda
+    def establecerColorCelda(self,tableWidget, fila, columna, contenido):
+        from PyQt5.QtGui import QColor, QBrush
+        item = QTableWidgetItem()
+        item.setBackground(QColor("green" if contenido is None or not contenido.strip() else "red"))
+        item.setForeground(QBrush(QColor("white")))  # Configurar el color del texto en blanco
+        item.setText(str(contenido))  # Establecer el contenido de la celda
+        tableWidget.setItem(fila, columna, item)
+
+   
+            
+    # LISTO
+    def verDisponibilidadProfesor(self):
+        # Obtener el código del aula desde el lineEdit
+        nombre = self.ln_disponibilidad_profesores.text()
+
+        # Crear conexión a la base de datos
+        conexion = sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+
+        # Ejecutar la consulta para obtener los registros de la tabla HorarioTest para el código de aula especificado
+        cursor.execute(
+            "SELECT Dia, Hora, CodigoMat, CodigoAula FROM HorarioTest WHERE CedulaProf=?", (nombre,)
+        )
+
+        # Obtener los datos de la consulta
+        datos = cursor.fetchall()
+
+        # Cerrar la conexión a la base de datos
+        conexion.close()
+
+        # Recorrer los datos y cargar la tabla
+        for result in datos:
+            dia = result[0]
+            hora = result[1]
+            codigo_mat = result[2]
+            cedula_prof = result[3]
+
+            # Buscar la hora en la primera columna de la tabla actual
+            for fila in range(self.tableWidget_profesores.rowCount()):
+                item_hora = self.tableWidget_profesores.item(fila, 0)
+                if item_hora is not None and item_hora.text() == hora:
+                    # Obtener la fila correspondiente a la hora en la tabla
+
+                    # Asignar el día a la columna correspondiente
+                    if dia == "Lunes":
+                        columna = 1
+                    elif dia == "Martes":
+                        columna = 2
+                    elif dia == "Miercoles":
+                        columna = 3
+                    elif dia == "Jueves":
+                        columna = 4
+                    elif dia == "Viernes":
+                        columna = 5
+                    elif dia == "Sabado":
+                        columna = 6
+                    else:
+                        # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
+                        continue
+
+                    # Verificar si se obtuvieron valores válidos para fila y columna
+                    # Colocar los datos en la tabla
+                    item = QTableWidgetItem(f"{codigo_mat}\n{cedula_prof}")
+                    self.tableWidget_profesores.setItem(fila, columna, item)
+                    
+                     # Establecer el color de la celda
+                    self.establecerColorCelda(self.tableWidget_profesores, fila, columna, codigo_mat)
+                    
+                    break
+    
+        # LISTO
+    def verDisponibilidadAula(self):
+        # Obtener el código del aula desde el lineEdit
+        codigo_aula = self.ln_disponibilidad_aula.text()
+
+        # Crear conexión a la base de datos
+        conexion = sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+
+        # Ejecutar la consulta para obtener los registros de la tabla HorarioTest para el código de aula especificado
+        cursor.execute(
+            "SELECT Dia, Hora, CodigoMat, CedulaProf FROM HorarioTest WHERE CodigoAula=?", (codigo_aula,)
+        )
+
+        # Obtener los datos de la consulta
+        datos = cursor.fetchall()
+
+        # Cerrar la conexión a la base de datos
+        conexion.close()
+
+        # Recorrer los datos y cargar la tabla
+        for result in datos:
+            dia = result[0]
+            hora = result[1]
+            codigo_mat = result[2]
+            cedula_prof = result[3]
+
+            # Buscar la hora en la primera columna de la tabla actual
+            for fila in range(self.tableWidget_aulas.rowCount()):
+                item_hora = self.tableWidget_aulas.item(fila, 0)
+                if item_hora is not None and item_hora.text() == hora:
+                    # Obtener la fila correspondiente a la hora en la tabla
+
+                    # Asignar el día a la columna correspondiente
+                    if dia == "Lunes":
+                        columna = 1
+                    elif dia == "Martes":
+                        columna = 2
+                    elif dia == "Miercoles":
+                        columna = 3
+                    elif dia == "Jueves":
+                        columna = 4
+                    elif dia == "Viernes":
+                        columna = 5
+                    elif dia == "Sabado":
+                        columna = 6
+                    else:
+                        # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
+                        continue
+
+                    # Verificar si se obtuvieron valores válidos para fila y columna
+                    # Colocar los datos en la tabla
+                    item = QTableWidgetItem(f"{codigo_mat}\n{cedula_prof}")
+                    self.tableWidget_aulas.setItem(fila, columna, item)
+                    self.establecerColorCelda(self.tableWidget_aulas, fila, columna, codigo_mat)
+                    break
+    
+    def verDisponibilidadSeccion(self):
+        # Obtener el código del aula desde el lineEdit
+        nivel = self.ln_disponibilidad_carrera.text()
+        seccion = self.ln_disponibilidad_seccion.text()
+        
+        
+        # Crear conexión a la base de datos
+        conexion = sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+
+        # Ejecutar la consulta para obtener los registros de la tabla HorarioTest para el código de aula especificado
+        cursor.execute(
+            "SELECT Dia, Hora, CodigoMat, CodigoAula, CedulaProf FROM HorarioTest WHERE Nivel=? AND Sesion=?", (nivel,seccion)
+        )
+
+        # Obtener los datos de la consulta
+        datos = cursor.fetchall()
+
+        # Cerrar la conexión a la base de datos
+        conexion.close()
+
+        # Recorrer los datos y cargar la tabla
+        for result in datos:
+            dia = result[0]
+            hora = result[1]
+            codigo_mat = result[2]
+            cedula_prof = result[3]
+
+            # Buscar la hora en la primera columna de la tabla actual
+            for fila in range(self.tableWidget_seccion.rowCount()):
+                item_hora = self.tableWidget_seccion.item(fila, 0)
+                if item_hora is not None and item_hora.text() == hora:
+                    # Obtener la fila correspondiente a la hora en la tabla
+
+                    # Asignar el día a la columna correspondiente
+                    if dia == "Lunes":
+                        columna = 1
+                    elif dia == "Martes":
+                        columna = 2
+                    elif dia == "Miercoles":
+                        columna = 3
+                    elif dia == "Jueves":
+                        columna = 4
+                    elif dia == "Viernes":
+                        columna = 5
+                    elif dia == "Sabado":
+                        columna = 6
+                    else:
+                        # En caso de que no haya coincidencia, puedes manejarlo según tu lógica
+                        continue
+
+                    # Verificar si se obtuvieron valores válidos para fila y columna
+                    # Colocar los datos en la tabla
+                    item = QTableWidgetItem(f"{codigo_mat}\n{cedula_prof}")
+                    
+                    self.tableWidget_seccion.setItem(fila, columna, item)
+                    self.establecerColorCelda(self.tableWidget_seccion, fila, columna, codigo_mat)
+                    break
+    
     def cargarHorasSeccion(self):
         conexion = sqlite3.connect("./db/database.db")
         cursor = conexion.cursor()
@@ -829,8 +1045,6 @@ class menuHorarioPlantilla(QMainWindow):
 
         # Configurar el número de filas en la tabla
         self.tableWidget_aulas.setRowCount(len(datos))
-        # Limpiar la lista antes de cargar nuevos datos
-        self.datos_tabla_aula.clear()
 
         # Llenar la tabla con los datos ordenados y almacenarlos en la lista
         for row, row_data in enumerate(datos):
@@ -840,34 +1054,37 @@ class menuHorarioPlantilla(QMainWindow):
                 # Almacenar los datos en la lista
                 self.datos_tabla_aula.append((row, col, str(value)))
         conexion.close()  # Cerrar la conexión a la base de datos al finalizar
-        
+    
+    
+
+            
     def cargarHorasProfesores(self):
-        conexion = sqlite3.connect("./db/database.db")
-        cursor = conexion.cursor()
-        # Ejecutar la consulta para obtener los datos ordenados
-        cursor.execute("SELECT Descripcion FROM Modulo WHERE Turno = ?", (self.modalidad,))
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            # Ejecutar la consulta para obtener los datos ordenados
+            cursor.execute("SELECT Descripcion FROM Modulo WHERE Turno = ?", (self.modalidad,))
 
-        datos = cursor.fetchall()
+            datos = cursor.fetchall()
 
-        # Configurar el número de filas en la tabla
-        self.tableWidget_profesores.setRowCount(len(datos))
-        # Limpiar la lista antes de cargar nuevos datos
-        self.datos_tabla_prefesores.clear()
+            # Configurar el número de filas en la tabla
+            self.tableWidget_profesores.setRowCount(len(datos))
+            # Limpiar la lista antes de cargar nuevos datos
+            self.datos_tabla_prefesores.clear()
 
-        # Llenar la tabla con los datos ordenados y almacenarlos en la lista
-        for row, row_data in enumerate(datos):
-            for col, value in enumerate(row_data):
-                item = QTableWidgetItem(str(value))
-                self.tableWidget_profesores.setItem(row, col, item)
+            # Llenar la tabla con los datos ordenados y almacenarlos en la lista
+            for row, row_data in enumerate(datos):
+                for col, value in enumerate(row_data):
+                    item = QTableWidgetItem(str(value))
+                    self.tableWidget_profesores.setItem(row, col, item)
 
-                # Almacenar los datos en la lista
-                self.datos_tabla_prefesores.append((row, col, str(value)))
-        conexion.close()  # Cerrar la conexión a la base de datos al finalizar
-        
+                    # Almacenar los datos en la lista
+                    self.datos_tabla_prefesores.append((row, col, str(value)))
+            conexion.close()  # Cerrar la conexión a la base de datos al finalizar
+            
     def crearHorario(self):
-        horario = crearHorarioPlantilla(admin=self.admin,modalidad=self.modalidad)
-        widget.addWidget(horario)
-        widget.setCurrentIndex(widget.currentIndex()+1)
+            horario = crearHorarioPlantilla(admin=self.admin,modalidad=self.modalidad)
+            widget.addWidget(horario)
+            widget.setCurrentIndex(widget.currentIndex()+1)
 
 # CLASE DE VENTANA PARA VER Y CREAR HORARIOS CARGANDO LA
 # INFORMACION DE LA MODALIDAD SELECCIONADA EN EL menuHorarioPlantilla
