@@ -16,6 +16,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QCheckBox, QDialog, QLabel, QLineEdit
 import sqlite3
 import fitz
+from PyQt5.QtGui import QColor
 
 
 
@@ -102,7 +103,7 @@ class DialogoConsulta(QDialog):
 
 # DIALOGO FORMULARIO AL SELECCIONAR SELECCIONAR LAS CELDAS
 class FormularioDialog(QDialog):
-    def __init__(self , titulo , hora, dia ,fila,columna ,horario,carrera,sesion):
+    def __init__(self , titulo , hora, dia ,fila,columna ,horario,carrera,sesion,nivel):
         super().__init__()
         loadUi("./ui/busqueda.ui",self)
         self.titulo = titulo
@@ -113,7 +114,7 @@ class FormularioDialog(QDialog):
         self.horario = horario
         self.carrera = carrera
         self.sesion = sesion
-        
+        self.nivel = nivel
         if self.dia == 1:
             self.dia = "Lunes"
         if self.dia == 2:
@@ -215,8 +216,8 @@ class FormularioDialog(QDialog):
             return None  # Devuelve None si el salón ya está siendo utilizado
 
         else:
-            cursor.execute("INSERT INTO HorarioTest (Dia,Hora,CodigoMat,CodigoAula,CedulaProf,Carrera,Sesion) VALUES (?,?,?,?,?,?,?)",
-                           (self.dia,self.hora,codigoMateria,codigoSalon,cedulaProfesor,self.carrera,self.sesion))
+            cursor.execute("INSERT INTO HorarioTest (Dia,Hora,CodigoMat,CodigoAula,CedulaProf,Carrera,Sesion,Nivel) VALUES (?,?,?,?,?,?,?,?)",
+                           (self.dia,self.hora,codigoMateria,codigoSalon,cedulaProfesor,self.carrera,self.sesion,self.nivel))
             QMessageBox.information(self,"Exito","Se ha almacenado los datos correctamente")
             conexion.commit()
             conexion.close()
@@ -267,8 +268,8 @@ class QuestionHorario(QDialog):
         conexion = sqlite3.connect("db/database.db")
         cursor = conexion.cursor()
         cursor.execute(
-            "SELECT Dia, Hora, CodigoMat, CodigoAula, CedulaProf FROM HorarioTest WHERE Carrera=? AND Sesion=?",
-            (self.horario_instance.ln_carrera.text(), self.horario_instance.ln_sesion.text())
+            "SELECT Dia, Hora, CodigoMat, CodigoAula, CedulaProf FROM HorarioTest WHERE Carrera=? AND Sesion=? AND Nivel=?",
+            (self.horario_instance.ln_carrera.text(), self.horario_instance.ln_sesion.text(),self.horario_instance.ln_nivel.text())
         )
         datos = cursor.fetchall()
         self.horario_instance.tableWidget.clearContents()
@@ -414,7 +415,55 @@ class IngresoUsuario(QMainWindow):
             QMessageBox.information(self,"Error","Usuario no encontrado en la base de datos")
         conexion.close()
 
-# CLASE DE LA VENTANA DE MENU PRINCIPAL
+# CLASE DE LA VENTANA DE MENU 
+
+class CambiarPeriodo(QDialog):
+    def __init__(self):
+        super(CambiarPeriodo, self).__init__()
+        self.setWindowTitle("¿Deseas cambiar el periodo?")
+
+        # Etiqueta informativa
+        label = QLabel("Ingrese el nuevo periodo:")
+       
+        label1 = QLabel("Solo numeros romanos (el año se coloca automaticamente)" )
+        # Cuadro de entrada
+        self.input_periodo = QLineEdit()
+
+        # Botón de guardar
+        btn_guardar = QPushButton("Guardar")
+        btn_guardar.clicked.connect(self.guardarPeriodo)
+
+        # Diseño del diseño del cuadro de diálogo
+        layout = QVBoxLayout()
+        layout.addWidget(label)
+        layout.addWidget(label1)
+        layout.addWidget(self.input_periodo)
+        layout.addWidget(btn_guardar)
+        self.setLayout(layout)
+
+    def guardarPeriodo(self):
+        # Obtener el nuevo periodo desde el cuadro de entrada
+        nuevo_periodo = self.input_periodo.text()
+        conexion=sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        import datetime
+
+# Obtener la fecha y hora actual
+        fecha_actual = datetime.datetime.now()
+
+        # Obtener el año de la fecha actual
+        año_actual = fecha_actual.year
+        
+        periodoIngresar =f"{año_actual} - {nuevo_periodo}"
+        cursor.execute("UPDATE PeriodoAcademico SET Periodo=? WHERE ID=? ",(periodoIngresar,1))
+        conexion.commit()
+        
+        QMessageBox.information(self,"Exito",f"Se almaceno el nuevo periodo {periodoIngresar}")
+        conexion.close()
+        # Realizar las acciones necesarias con el nuevo periodo (guardar en la base de datos, etc.)
+
+        # Cerrar el cuadro de diálogo
+        self.accept()
 class MenuPrincipal(QMainWindow):
     def __init__(self , admin):
         super(MenuPrincipal, self).__init__()
@@ -434,7 +483,7 @@ class MenuPrincipal(QMainWindow):
             self.text.setText("Bienvenido Administrador")
         else:
             self.text.setText(f"Bienvenido, {self.user_name}")
-    
+        self.bt_periodo.clicked.connect(self.periodoDialog)
     
     #def horariosView(self):
         #horarios = HorarioMenu(admin=self.admin)
@@ -442,6 +491,12 @@ class MenuPrincipal(QMainWindow):
         #widget.setCurrentIndex(widget.currentIndex()+1)
     
     # desplegar ventana de gestionar carreras   
+    def periodoDialog(self):
+        dialog = CambiarPeriodo()
+        dialog.exec_()
+    
+
+        
     def menuSedes(self):
         sedes = SedesMenu(admin=self.admin)
         widget.addWidget(sedes)
@@ -678,8 +733,68 @@ class menuHorarioPlantilla(QMainWindow):
         self.cargarHorasAulas()
         self.cargarHorasProfesores()
         self.cargarHorasSeccion()
+        self.bt_delete.clicked.connect(self.eliminarTodoHorario)
+
+        self.datos_almacenados =[]
+        
+        #Metodos para la busqueda
+        
+        
+        self.bt_buscar.clicked.connect(self.buscarAula)
+        self.bt_carrerabuscar.clicked.connect(self.buscarSesion)
 
         
+        #metodos para la seleccion en la tabla
+        
+    
+        self.horas =[]
+       
+    
+    def eliminarTodoHorario(self):
+        respuesta = QMessageBox.question(self, "Confirmación", "¿Deseas eliminar todos los horarios?", QMessageBox.Yes | QMessageBox.No)
+
+        # Verificar la respuesta del usuario
+        if respuesta == QMessageBox.Yes:
+            # Código a ejecutar si el usuario elige "Sí"
+            conexion = sqlite3.connect("./db/database.db")
+            cursor =conexion.cursor()
+            cursor.execute("DELETE FROM HorarioTest")
+            conexion.commit()
+            conexion.close()
+            QMessageBox.information(self,"Exito","Todos los horarios ha sido eliminados correctamente")
+        else:
+            # Código a ejecutar si el usuario elige "No" o cierra el cuadro de diálogo
+            print("Operación cancelada")
+
+    def obtenerColumnaPorDia(self, dia):
+        dias_disponibles = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"]
+
+        if dia in dias_disponibles:
+            return dias_disponibles.index(dia)
+        else:
+            return None
+    def obtener_horas(self):
+        # Obtener solo la primera columna (la hora) de los datos almacenados
+        horas = [fila[0] for fila in self.datos_almacenados if fila and fila[0] is not None]
+        print(horas)
+        return horas
+    
+    
+    def buscarSesion(self):
+        consulta_like = "SELECT Nivel,Carrera FROM Nivel WHERE Carrera LIKE ?"
+        consulta_sql_materia = "SELECT Nivel,Carrera FROM Nivel;"
+        dialogo = DialogoConsulta("Consulta de Sesion", "Seleccione una Sesion:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_materia = dialogo.item_seleccionado()
+            self.ln_disponibilidad_carrera.setText(codigo_materia)
+            
+    def buscarAula(self):
+        consulta_like = "SELECT Descripcion,CodigoAula,codigo_sede FROM Aulas WHERE Descripcion LIKE ?"
+        consulta_sql_materia = "SELECT Descripcion,CodigoAula,codigo_sede FROM Aulas;"
+        dialogo = DialogoConsulta("Consulta de Aula", "Seleccione una Aula:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo_materia = dialogo.item_seleccionado()
+            self.ln_disponibilidad_aula.setText(codigo_materia)
     def cargarHorasSeccion(self):
         conexion = sqlite3.connect("./db/database.db")
         cursor = conexion.cursor()
@@ -700,6 +815,8 @@ class menuHorarioPlantilla(QMainWindow):
                 self.tableWidget_seccion.setItem(row, col, item)
                 # Almacenar los datos en la lista
                 self.datos_tabla_seccion.append((row, col, str(value)))
+        self.horas_disponibles = [self.tableWidget_seccion.item(row, 0).text() for row in range(self.tableWidget_seccion.rowCount())]
+
         conexion.close()  # Cerrar la conexión a la base de datos al finalizar
     
     def cargarHorasAulas(self):
@@ -785,8 +902,26 @@ class crearHorarioPlantilla(QMainWindow):
 
         self.btn_guardar.clicked.connect(self.guardarPDF)
         self.bt_volver.clicked.connect(self.backMenu)
+        self.bt_reset.clicked.connect(self.reset)
         
         
+        self.btn_vistaPrevia.clicked.connect(self.previewpdf)
+    def reset(self):
+        self.ln_carrera.clear()
+        self.ln_nivel.clear()
+        self.ln_sesion.clear()  
+        self.tableWidget.clearContents()
+        self.cargarHoras()
+        
+    def previewpdf(self):
+        
+        pdf = self.guardarPDF()
+        if not pdf:
+            QMessageBox.information(self,"PDF","Necesitas la ruta para poder visualizar el PDF")
+            return
+        else:
+            dialogo=PreviewPDF(pdf_path=pdf)
+            dialogo.exec_()
     def guardarPDF(self):
         try:
             from   ui.pdfcrear import crear_pdf
@@ -795,6 +930,12 @@ class crearHorarioPlantilla(QMainWindow):
             carrera= self.ln_carrera.text()
             nivel=self.ln_nivel.text()
           
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("SELECT Periodo FROM PeriodoAcademico WHERE ID=?",(1,))
+            periodo = cursor.fetchone()
+            periodoAcademico =periodo[0]
+            conexion.close()
             if not sesion or not carrera or not nivel:
                 QMessageBox.information(self,"Error","Es necesario ingresar la sesion ,la carrera y su nivel anteriormente")
                 return
@@ -804,7 +945,7 @@ class crearHorarioPlantilla(QMainWindow):
             if not ruta_salida:
                 return
             else:
-                crear_pdf(ruta_salida=ruta_salida,sesion=sesion,carrera=carrera,Turno=self.modalidad,Nivel=nivel )
+                crear_pdf(ruta_salida=ruta_salida,sesion=sesion,carrera=carrera,Turno=self.modalidad,Nivel=nivel,periodo=periodoAcademico )
                 if crear_pdf:
                     return ruta_salida   
         except Exception as e:
@@ -984,7 +1125,10 @@ class crearHorarioPlantilla(QMainWindow):
                                             hora=hora,
                                             dia=dias,
                                             fila=fila,
-                                            columna=columna)
+                                            columna=columna,
+                                            nivel=self.ln_nivel.text()
+                                            
+                                            )
             else:
                 self.seleccionados = []
                 self.tableWidget.clearSelection()
@@ -1006,14 +1150,15 @@ class crearHorarioPlantilla(QMainWindow):
                                     hora=hora,
                                     dia=dia,
                                     fila=fila,
-                                    columna=columna)
+                                    columna=columna,
+                                    nivel=self.ln_nivel.text())
         else:
             print("No se puede seleccionar la primera columna.")
      
     def getDíaDesdeColumna(self, columna):
         dias = ["", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"]
         return dias[columna]
-    def mostrar_dialogo(self, titulo, hora, dia,fila,columna ):
+    def mostrar_dialogo(self, titulo, hora, dia,fila,columna,nivel ):
         carrera = self.ln_carrera.text()
         sesion = self.ln_sesion.text()
         if len(carrera) ==0 or len(sesion) ==0:
@@ -1022,7 +1167,8 @@ class crearHorarioPlantilla(QMainWindow):
         else:
             dialog = FormularioDialog(titulo=titulo, hora=hora,
                                       dia=dia, fila=fila,columna=columna,horario=self,
-                                      sesion=sesion,carrera=carrera)
+                                      sesion=sesion,carrera=carrera
+                                      ,nivel=nivel)
             resultado = dialog.exec_()
             if resultado == QDialog.Accepted:
                 texto_a_insertar = dialog.guardar()  # Obtener el texto desde la función guardar

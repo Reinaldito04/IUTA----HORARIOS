@@ -63,14 +63,14 @@ def convertir_formato_hora(hora):
     return hora
 
 
-def crear_pdf( ruta_salida,carrera,sesion,Turno,Nivel):
+def crear_pdf( ruta_salida,carrera,sesion,Turno,Nivel,periodo):
     imagen_url = 'https://www.eduopinions.com/wp-content/uploads/2018/02/Instituto-Universitario-de-Tecnolog%C3%ADa-de-Administraci%C3%B3n-Industrial-IUTA-logo-350x181.gif'
     
     imagen_base64 = image_url_to_base64(imagen_url)
     Especialidad = f'{carrera}'
     Semestre = f'{Nivel}'
     Turno = f'{Turno}'
-   
+    Periodo =f'{periodo}'
     sesion= f'{sesion}'
     fecha_actual = datetime.now()
     fecha_formateada = fecha_actual.strftime("%Y-%m-%d")
@@ -230,7 +230,7 @@ def crear_pdf( ruta_salida,carrera,sesion,Turno,Nivel):
         <p class="fecha">Fecha de Impresión {fecha_formateada}</p>
     </div>
     <div class="container-periodo">
-        <p>PERIODO:  <p class="date"> 2023-III</p> </p>
+        <p>PERIODO:  <p class="date"> {periodo}</p> </p>
     </div>
 <div class="contenedor">
     <div class="container-tabla">
