@@ -18,6 +18,8 @@ from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QPushButton, QCh
 import sqlite3
 import fitz
 from PyQt5.QtGui import QColor
+#importar expresiones regulares
+import re
 
 
 
@@ -2093,6 +2095,21 @@ class MenuTeachers(QMainWindow):
             telefono = self.txt_telefono_2.text()
             correo =self.txt_correo.text()
             titulos = self.txt_titulos.text()
+                # Validar la cédula (debe contener solo números y tener una longitud específica)
+            if not re.match(r'^\d{7,10}$', cedula):
+                QMessageBox.warning(self, "Error", "La cédula debe contener entre 7 y 10 digitos.")
+                return
+
+            # Validar el correo (debe contener @ y .com)
+            if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', correo):
+                QMessageBox.warning(self, "Error", "Formato de correo no válido.")
+                return
+
+            # Validar el teléfono (debe contener solo números y tener una longitud específica)
+            if not re.match(r'^\d{11}$', telefono):
+                QMessageBox.warning(self, "Error", "Formato de numero telefonico no valido \n intente no agregar espacios o simbolos, solo números.")
+                return
+
             conexion = sqlite3.connect("./db/database.db")
             cursor = conexion.cursor()
             cursor.execute("UPDATE Profesores SET Nombres=? ,Apellidos=? ,Telefono=?,Mail=?,TituloProfesion=? WHERE Cedula=?", (nombres, apellidos,telefono,correo,titulos, cedula))
@@ -2102,6 +2119,7 @@ class MenuTeachers(QMainWindow):
         except sqlite3.Error as error:
             QMessageBox.critical(self, "Error", f"Error al registrar el profesor: {str(error)}")
             
+    
     def aggTeacher(self):
         nombres = self.txt_name.text()
         apellido = self.txt_apell.text()
@@ -2109,42 +2127,59 @@ class MenuTeachers(QMainWindow):
         telefono = self.txt_telefono.text()
         correo = self.txt_mail.text()
         titulos = self.txt_profesion.text()
-        if not nombres or not apellido or not cedula or not telefono or not correo or not titulos:
-            QMessageBox.information(self,"Añadir","Por favor introduzca los campos para agregarlos")
+
+        # Validar la cédula (debe contener solo números y tener una longitud específica)
+        if not re.match(r'^\d{7,10}$', cedula):
+            QMessageBox.warning(self, "Error", "La cédula debe contener entre 7 y 10 digitos.")
             return
+
+        # Validar el correo (debe contener @ y .com)
+        if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', correo):
+            QMessageBox.warning(self, "Error", "Formato de correo no válido.")
+            return
+
+        # Validar el teléfono (debe contener solo números y tener una longitud específica)
+        if not re.match(r'^\d{11}$', telefono):
+            QMessageBox.warning(self, "Error", "Formato de numero telefonico no valido \n intente no agregar espacios o simbolos, solo números.")
+            return
+
         try:
             conexion = sqlite3.connect("./db/database.db")
             cursor = conexion.cursor()
 
+            # Comprobar si ya existe un profesor con el mismo nombre y apellido
+            cursor.execute("SELECT Cedula FROM Profesores WHERE Nombres=? AND Apellidos=?", (nombres, apellido))
+            existing_teacher_name = cursor.fetchone()
+
             # Comprobar si ya existe un profesor con la misma cédula
             cursor.execute("SELECT Cedula FROM Profesores WHERE Cedula=?", (cedula,))
-            existing_teacher = cursor.fetchone()
+            existing_teacher_cedula = cursor.fetchone()
 
-            if existing_teacher:
+            if existing_teacher_name:
+                QMessageBox.warning(self, "Advertencia", "Ya existe un profesor con el mismo nombre y apellido.")
+            elif existing_teacher_cedula:
                 QMessageBox.warning(self, "Advertencia", "Ya existe un profesor con la misma cédula.")
-                self.txt_name.clear()
-                self.txt_apell.clear()
-                self.txt_cedula.clear()
-                self.txt_telefono.clear()
-                self.txt_mail.clear()
-                self.txt_profesion.clear()
             else:
                 # Si no existe, agregar el nuevo profesor a la base de datos
-                cursor.execute("INSERT INTO Profesores (Nombres, Apellidos, Cedula,Telefono,Mail,TituloProfesion) VALUES (?, ?, ?, ?, ?,?)", (nombres, apellido, cedula, telefono, correo, titulos))
-                
+                cursor.execute("INSERT INTO Profesores (Nombres, Apellidos, Cedula, Telefono, Mail, TituloProfesion) VALUES (?, ?, ?, ?, ?, ?)",
+                            (nombres, apellido, cedula, telefono, correo, titulos))
+
                 conexion.commit()
                 QMessageBox.information(self, "Éxito", "Los datos se almacenaron correctamente")
-                self.txt_name.clear()
-                self.txt_apell.clear()
-                self.txt_cedula.clear()
-                self.txt_telefono.clear()
-                self.txt_mail.clear()
-                self.txt_profesion.clear()
-    
+
+            self.txt_name.clear()
+            self.txt_apell.clear()
+            self.txt_cedula.clear()
+            self.txt_telefono.clear()
+            self.txt_mail.clear()
+            self.txt_profesion.clear()
+
             conexion.close()
+
         except:
-            QMessageBox.warning(self,"Error","Error con la base de datos")
-            
+            QMessageBox.warning(self, "Error", "Error con la base de datos")
+
+
     def backMenu(self):
         menu = MenuPrincipal(self.admin)
         widget.addWidget(menu)
