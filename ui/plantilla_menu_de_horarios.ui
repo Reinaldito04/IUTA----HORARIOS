@@ -13,12 +13,43 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">
+QMainWindow{
+background-color:#D9D9D9;
+}
+QLineEdit{
+background-color: #7E94Bf;
+}
+QLabel{
+font-size:15px;
+color:#111626;}
+</string>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_5">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
        <widget class="QPushButton" name="bt_back">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton{
+background-color:#253b59;
+color:white;
+font-size:14px;
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color:#637aa6;
+}
+font-size:15px;</string>
+        </property>
         <property name="text">
          <string>Volver </string>
         </property>
@@ -59,8 +90,27 @@
       </item>
       <item>
        <widget class="QPushButton" name="bt_salir">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>40</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QPushButton{
+background-color:#253b59;
+color:white;
+font-size:14px;
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color:#637aa6;
+}
+font-size:15px;</string>
+        </property>
         <property name="text">
-         <string>Volver al menu Principal</string>
+         <string>Volver al  
+ menu Principal</string>
         </property>
        </widget>
       </item>
@@ -68,16 +118,35 @@
     </item>
     <item>
      <widget class="QToolBox" name="toolBox">
+      <property name="styleSheet">
+       <string notr="true">QToolBox {
+    background-color: lightgray;
+    border: 1px solid darkgray;
+    font: 75 12pt &quot;Arial&quot;;
+}
+
+QToolBox::tab {
+    background-color: #00007f;
+    color: white;
+}
+
+QToolBox::tab:selected {
+    background-color: #55aaff;
+	background-color: rgb(85, 170, 255);
+    color: black;
+}
+</string>
+      </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>731</width>
-         <height>386</height>
+         <width>725</width>
+         <height>338</height>
         </rect>
        </property>
        <attribute name="icon">
@@ -112,6 +181,15 @@
           </item>
           <item>
            <widget class="QLineEdit" name="ln_disponibilidad_aula">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -122,6 +200,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="bt_buscar">
+            <property name="styleSheet">
+             <string notr="true">border:none;</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -189,6 +270,24 @@
           </item>
           <item>
            <widget class="QPushButton" name="bt_buscarAula">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color:#253b59;
+color:white;
+font-size:14px;
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color:#637aa6;
+}
+font-size:15px;</string>
+            </property>
             <property name="text">
              <string>Buscar</string>
             </property>
@@ -203,8 +302,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>731</width>
-         <height>386</height>
+         <width>725</width>
+         <height>338</height>
         </rect>
        </property>
        <attribute name="icon">
@@ -239,6 +338,21 @@
           </item>
           <item>
            <widget class="QLineEdit" name="ln_disponibilidad_profesores">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777211</height>
+             </size>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
             <property name="readOnly">
              <bool>true</bool>
             </property>
@@ -316,8 +430,32 @@
           </item>
           <item>
            <widget class="QPushButton" name="bt_buscarProf">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color:#253b59;
+color:white;
+font-size:14px;
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color:#637aa6;
+}
+font-size:15px;</string>
+            </property>
             <property name="text">
-             <string>PushButton</string>
+             <string>Buscar</string>
             </property>
            </widget>
           </item>
@@ -330,8 +468,8 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>731</width>
-         <height>386</height>
+         <width>725</width>
+         <height>338</height>
         </rect>
        </property>
        <attribute name="icon">
@@ -368,6 +506,15 @@
             </item>
             <item>
              <widget class="QLineEdit" name="ln_disponibilidad_carrera">
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
               <property name="readOnly">
                <bool>true</bool>
               </property>
@@ -378,6 +525,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="bt_carrerabuscar">
+              <property name="styleSheet">
+               <string notr="true">border:none;</string>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -389,6 +539,15 @@
             </item>
             <item>
              <widget class="QLineEdit" name="ln_disponibilidad_seccion">
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
               <property name="readOnly">
                <bool>true</bool>
               </property>
@@ -399,6 +558,9 @@
             </item>
             <item>
              <widget class="QPushButton" name="bt_seccionbuscar">
+              <property name="styleSheet">
+               <string notr="true">border:none;</string>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -468,6 +630,24 @@
           </item>
           <item>
            <widget class="QPushButton" name="bt_sesion">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color:#253b59;
+color:white;
+font-size:14px;
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color:#637aa6;
+}
+font-size:15px;</string>
+            </property>
             <property name="text">
              <string>Buscar</string>
             </property>
@@ -516,10 +696,17 @@
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">border-radius:15px;
+         <string notr="true">QPushButton{
+background-color:#253b59;
 color:white;
+font-size:14px;
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color:#637aa6;
+}
 font-size:15px;
-background-color: rgb(104, 126, 255);</string>
+font-size:15px;</string>
         </property>
         <property name="text">
          <string>Eliminar Horarios</string>
@@ -551,10 +738,18 @@ background-color: rgb(104, 126, 255);</string>
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">border-radius:15px;
+         <string notr="true">QPushButton{
+background-color:#253b59;
 color:white;
+font-size:14px;
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color:#637aa6;
+}
 font-size:15px;
-background-color: rgb(104, 126, 255);</string>
+font-size:15px;
+</string>
         </property>
         <property name="text">
          <string>Ver y Crear Horario</string>

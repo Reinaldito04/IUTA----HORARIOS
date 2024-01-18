@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>880</width>
-    <height>669</height>
+    <width>464</width>
+    <height>602</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,6 +17,9 @@
    <string notr="true">background-color:rgb(152, 228, 255);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true">background-color:#d9d9d9;</string>
+   </property>
    <layout class="QVBoxLayout" name="verticalLayout">
     <property name="leftMargin">
      <number>0</number>
@@ -32,6 +35,23 @@
     </property>
     <item>
      <widget class="QFrame" name="frame">
+      <property name="styleSheet">
+       <string notr="true">QFrame{
+background-color:#233559;
+border-radius:4px;
+}
+QPushButton{
+background-color:#233559;
+color:#FFF;
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color: #637aa6 ;
+}
+QLabel{
+color:#d9d9d9;
+}</string>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -42,20 +62,20 @@
        <item>
         <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
-          <spacer name="verticalSpacer_5">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
           <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <spacer name="verticalSpacer_5">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
            <item>
             <spacer name="horizontalSpacer_9">
              <property name="orientation">
@@ -226,7 +246,7 @@
                <property name="minimumSize">
                 <size>
                  <width>250</width>
-                 <height>0</height>
+                 <height>35</height>
                 </size>
                </property>
                <property name="maximumSize">
@@ -239,7 +259,8 @@
                 <string notr="true">font-size:18px;
 border:none;
 border-bottom:2px solid white;
-border-radius:10px;</string>
+border-radius:10px;
+background-color:#7e94bf;</string>
                </property>
                <property name="echoMode">
                 <enum>QLineEdit::PasswordEchoOnEdit</enum>
@@ -327,7 +348,7 @@ border-radius:10px;</string>
                <property name="minimumSize">
                 <size>
                  <width>250</width>
-                 <height>0</height>
+                 <height>35</height>
                 </size>
                </property>
                <property name="maximumSize">
@@ -340,7 +361,8 @@ border-radius:10px;</string>
                 <string notr="true">border:none;
 border-bottom:2px solid white;
 font-size:18px;
-border-radius:10px;</string>
+border-radius:10px;
+background-color:#7e94bf;</string>
                </property>
                <property name="echoMode">
                 <enum>QLineEdit::Password</enum>
@@ -397,7 +419,7 @@ border-radius:10px;</string>
              <property name="minimumSize">
               <size>
                <width>200</width>
-               <height>30</height>
+               <height>40</height>
               </size>
              </property>
              <property name="maximumSize">
@@ -407,10 +429,15 @@ border-radius:10px;</string>
               </size>
              </property>
              <property name="styleSheet">
-              <string notr="true">border-radius:15px;
+              <string notr="true">QPushButton{
+background-color:#253b59;
 color:white;
-font-size:15px;
-background-color: rgb(104, 126, 255);</string>
+font-size:14px;
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color:#637aa6;
+}</string>
              </property>
              <property name="text">
               <string>Ingresar</string>

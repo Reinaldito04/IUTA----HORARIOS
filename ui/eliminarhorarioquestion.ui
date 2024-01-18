@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>115</height>
+    <height>134</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -52,10 +52,16 @@ actual o visualizarlo?</string>
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">border-radius:15px;
+      <string notr="true">QPushButton{
+background-color:#253b59;
 color:white;
-font-size:15px;
-background-color: rgb(104, 126, 255);</string>
+font-size:14px;
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color:#637aa6;
+}
+font-size:15px;</string>
      </property>
      <property name="text">
       <string>Eliminar</string>
@@ -71,10 +77,16 @@ background-color: rgb(104, 126, 255);</string>
       </size>
      </property>
      <property name="styleSheet">
-      <string notr="true">border-radius:15px;
+      <string notr="true">QPushButton{
+background-color:#253b59;
 color:white;
-font-size:15px;
-background-color: rgb(104, 126, 255);</string>
+font-size:14px;
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color:#637aa6;
+}
+font-size:15px;</string>
      </property>
      <property name="text">
       <string>Visualizar U Agregar</string>

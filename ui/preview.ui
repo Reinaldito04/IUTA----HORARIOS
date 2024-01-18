@@ -14,7 +14,30 @@
    <string>Dialog</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color:rgb(152, 228, 255);</string>
+   <string notr="true">QPushButton{
+background-color:#253b59;
+color:white;
+font-size:14px;
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color:#637aa6;
+}
+QFrame{
+background-color:#D9D9D9;
+}
+QLineEdit{
+background-color: #7E94Bf;
+}
+QLabel{
+font-size:15px;
+color:#111626;}
+border:none;
+border-bottom: 2px solid rgb(128, 179, 255);
+border-right:2px solid rgb(128, 179, 255);
+border-radius:10px;
+font-size:14px;
+</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -60,6 +83,12 @@
    </item>
    <item>
     <widget class="QPushButton" name="btn_siguiente">
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>40</height>
+      </size>
+     </property>
      <property name="text">
       <string>Siguiente</string>
      </property>
@@ -67,6 +96,12 @@
    </item>
    <item>
     <widget class="QPushButton" name="btn_anterior">
+     <property name="minimumSize">
+      <size>
+       <width>100</width>
+       <height>40</height>
+      </size>
+     </property>
      <property name="text">
       <string>Anterior</string>
      </property>

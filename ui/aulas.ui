@@ -7,22 +7,44 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>661</height>
+    <height>700</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color:rgb(152, 228, 255);</string>
+   <string notr="true">QMainWindow{
+background-color:#D9D9D9;
+
+}
+QLineEdit{
+background-color: #7E94Bf;
+}
+QLabel{
+font-size:15px;
+color:#111626;}</string>
   </property>
   <widget class="QWidget" name="centralwidget">
+   <property name="styleSheet">
+    <string notr="true"/>
+   </property>
    <layout class="QGridLayout" name="gridLayout">
     <item row="1" column="0">
      <widget class="QFrame" name="frame_2">
       <property name="styleSheet">
-       <string notr="true">background-color:rgb(128, 179, 255);
-border-radius:25px;</string>
+       <string notr="true">QFrame{
+background-color:#233559;
+border-radius:40px;
+}
+QPushButton{
+background-color:#233559;
+color:#FFF;
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color: #637aa6 ;
+}</string>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -47,6 +69,16 @@ border-radius:25px;</string>
           </spacer>
          </item>
          <item>
+          <widget class="Line" name="line_2">
+           <property name="styleSheet">
+            <string notr="true">background-color:#d9d9d9;</string>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QPushButton" name="bt_aggView_2">
            <property name="minimumSize">
             <size>
@@ -62,8 +94,7 @@ border-radius:25px;</string>
            </property>
            <property name="styleSheet">
             <string notr="true">font-size:15px;
-border:2px solid rgb(182, 255, 250);
-border-radius:15px;</string>
+</string>
            </property>
            <property name="text">
             <string>Agregar</string>
@@ -109,8 +140,7 @@ border-radius:15px;</string>
            </property>
            <property name="styleSheet">
             <string notr="true">font-size:15px;
-border:2px solid rgb(182, 255, 250);
-border-radius:15px;</string>
+</string>
            </property>
            <property name="text">
             <string>Sedes</string>
@@ -155,9 +185,7 @@ border-radius:15px;</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font-size:15px;
-border:2px solid rgb(182, 255, 250);
-border-radius:15px;</string>
+            <string notr="true">font-size:15px;</string>
            </property>
            <property name="text">
             <string>Eliminar</string>
@@ -202,9 +230,7 @@ border-radius:15px;</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font-size:15px;
-border:2px solid rgb(182, 255, 250);
-border-radius:15px;</string>
+            <string notr="true">font-size:15px;</string>
            </property>
            <property name="text">
             <string>Registrados</string>
@@ -218,6 +244,16 @@ border-radius:15px;</string>
              <width>20</width>
              <height>20</height>
             </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="line">
+           <property name="styleSheet">
+            <string notr="true">background-color:#d9d9d9;</string>
+           </property>
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
            </property>
           </widget>
          </item>
@@ -253,7 +289,7 @@ border-radius:15px;</string>
             <property name="font">
              <font>
               <family>Hack Nerd Font Mono</family>
-              <pointsize>12</pointsize>
+              <pointsize>-1</pointsize>
               <weight>75</weight>
               <italic>true</italic>
               <bold>true</bold>
@@ -313,8 +349,10 @@ border-radius:15px;</string>
                </size>
               </property>
               <property name="styleSheet">
-               <string notr="true">border:none;
-border-bottom:2px solid rgb(128, 179, 255);</string>
+               <string notr="true">font-size:18px;
+border:none;
+border-bottom:2px solid white;
+border-radius:10px;</string>
               </property>
              </widget>
             </item>
@@ -399,7 +437,7 @@ border-bottom:2px solid rgb(128, 179, 255);</string>
               <property name="font">
                <font>
                 <family>Hack Nerd Font Mono</family>
-                <pointsize>12</pointsize>
+                <pointsize>-1</pointsize>
                 <weight>75</weight>
                 <italic>true</italic>
                 <bold>true</bold>
@@ -499,7 +537,7 @@ border-radius:10px;</string>
               <property name="font">
                <font>
                 <family>Hack Nerd Font Mono</family>
-                <pointsize>12</pointsize>
+                <pointsize>-1</pointsize>
                 <weight>75</weight>
                 <italic>true</italic>
                 <bold>true</bold>
@@ -612,14 +650,14 @@ border-radius:10px;</string>
                </size>
               </property>
               <property name="styleSheet">
-               <string notr="true">QPushButton{border-radius:15px;
+               <string notr="true">QPushButton{
+background-color:#253b59;
 color:white;
-font-size:15px;
-background-color: rgb(104, 126, 255);
+font-size:14px;
+border-radius:15px;
 }
-QPushButton:hover{
-background-color:rgba(0,0,0,0.5);
-font-size:18px;
+QPushButton::Hover{
+background-color:#637aa6;
 }</string>
               </property>
               <property name="text">
@@ -670,7 +708,7 @@ font-size:18px;
               <property name="font">
                <font>
                 <family>Hack Nerd Font Mono</family>
-                <pointsize>12</pointsize>
+                <pointsize>-1</pointsize>
                 <weight>75</weight>
                 <italic>true</italic>
                 <bold>true</bold>
@@ -711,7 +749,42 @@ font-size:18px;
              </size>
             </property>
             <property name="styleSheet">
-             <string notr="true">background-color:rgb(152, 228, 255);
+             <string notr="true">QTableWidget {
+                background-color: transparent;
+                border: 1px solid black;
+                border-radius: 10px;
+            }
+
+            QTableWidget QHeaderView::section {
+                background-color: #253b59;
+                color: #fff;
+                border-bottom: 2px solid white;
+            }
+
+            QTableWidget QHeaderView::section:first {
+                border-top-left-radius: 10px;
+            }
+
+            QTableWidget QHeaderView::section:last {
+                border-top-right-radius: 10px;
+            }
+
+            QTableWidget QTableCornerButton::section {
+                background-color: #63b6bf;
+                border-top-left-radius: 10px;
+            }
+
+            QTableWidget::item {
+                background-color: #63b6bf;
+                color: #111626;
+                border-bottom: 1px solid black;
+                padding: 5px;
+            }
+
+            QTableWidget::item:selected {
+                background-color: #b6ecf2;
+                color: #111626;
+            }
 font-size:15px;</string>
             </property>
             <property name="rowCount">
@@ -798,7 +871,7 @@ background-color: rgb(104, 126, 255);</string>
             <property name="font">
              <font>
               <family>Hack Nerd Font Mono</family>
-              <pointsize>12</pointsize>
+              <pointsize>-1</pointsize>
               <weight>75</weight>
               <italic>true</italic>
               <bold>true</bold>
@@ -850,7 +923,7 @@ background-color: rgb(104, 126, 255);</string>
                 <property name="font">
                  <font>
                   <family>Hack Nerd Font Mono</family>
-                  <pointsize>12</pointsize>
+                  <pointsize>-1</pointsize>
                   <weight>75</weight>
                   <italic>true</italic>
                   <bold>true</bold>
@@ -909,6 +982,9 @@ border-radius:10px;</string>
             </item>
             <item>
              <widget class="QPushButton" name="bt_buscarsede">
+              <property name="styleSheet">
+               <string notr="true">background-color:none;border:none;</string>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -968,7 +1044,7 @@ border-radius:10px;</string>
                 <property name="font">
                  <font>
                   <family>Hack Nerd Font Mono</family>
-                  <pointsize>12</pointsize>
+                  <pointsize>-1</pointsize>
                   <weight>75</weight>
                   <italic>true</italic>
                   <bold>true</bold>
@@ -1075,7 +1151,7 @@ border-radius:10px;</string>
                 <property name="font">
                  <font>
                   <family>Hack Nerd Font Mono</family>
-                  <pointsize>12</pointsize>
+                  <pointsize>-1</pointsize>
                   <weight>75</weight>
                   <italic>true</italic>
                   <bold>true</bold>
@@ -1176,14 +1252,14 @@ border-radius:10px;</string>
                  </size>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">QPushButton{border-radius:15px;
+                 <string notr="true">QPushButton{
+background-color:#253b59;
 color:white;
-font-size:15px;
-background-color: rgb(104, 126, 255);
+font-size:14px;
+border-radius:15px;
 }
-QPushButton:hover{
-background-color:rgba(0,0,0,0.5);
-font-size:18px;
+QPushButton::Hover{
+background-color:#637aa6;
 }</string>
                 </property>
                 <property name="text">
@@ -1219,14 +1295,14 @@ font-size:18px;
                  </size>
                 </property>
                 <property name="styleSheet">
-                 <string notr="true">QPushButton{border-radius:15px;
+                 <string notr="true">QPushButton{
+background-color:#253b59;
 color:white;
-font-size:15px;
-background-color: rgb(104, 126, 255);
+font-size:14px;
+border-radius:15px;
 }
-QPushButton:hover{
-background-color:rgba(0,0,0,0.5);
-font-size:18px;
+QPushButton::Hover{
+background-color:#637aa6;
 }</string>
                 </property>
                 <property name="text">
@@ -1263,8 +1339,8 @@ font-size:18px;
        <widget class="QPushButton" name="bt_salir_2">
         <property name="minimumSize">
          <size>
-          <width>75</width>
-          <height>31</height>
+          <width>100</width>
+          <height>40</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -1274,10 +1350,15 @@ font-size:18px;
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color:red;
+         <string notr="true">QPushButton{
+background-color:#253b59;
 color:white;
 font-size:14px;
-border-radius:15px;</string>
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color:#637aa6;
+}</string>
         </property>
         <property name="text">
          <string>VOLVER</string>
@@ -1314,7 +1395,7 @@ border-radius:15px;</string>
         <property name="font">
          <font>
           <family>Hack Nerd Font Mono</family>
-          <pointsize>12</pointsize>
+          <pointsize>-1</pointsize>
           <weight>75</weight>
           <italic>true</italic>
           <bold>true</bold>
@@ -1351,8 +1432,8 @@ border-radius:15px;</string>
        <widget class="QPushButton" name="bt_salir">
         <property name="minimumSize">
          <size>
-          <width>75</width>
-          <height>31</height>
+          <width>100</width>
+          <height>40</height>
          </size>
         </property>
         <property name="maximumSize">
@@ -1362,10 +1443,15 @@ border-radius:15px;</string>
          </size>
         </property>
         <property name="styleSheet">
-         <string notr="true">background-color:red;
+         <string notr="true">QPushButton{
+background-color:#253b59;
 color:white;
 font-size:14px;
-border-radius:15px;</string>
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color:#637aa6;
+}</string>
         </property>
         <property name="text">
          <string>SALIR</string>
