@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>749</width>
-    <height>630</height>
+    <width>1083</width>
+    <height>837</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -28,6 +28,18 @@ color:#111626;}
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout_5">
+    <property name="spacing">
+     <number>10</number>
+    </property>
+    <property name="leftMargin">
+     <number>12</number>
+    </property>
+    <property name="rightMargin">
+     <number>12</number>
+    </property>
+    <property name="bottomMargin">
+     <number>12</number>
+    </property>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -121,7 +133,7 @@ font-size:15px;</string>
        <string notr="true">QToolBox {
     background-color: lightgray;
     border: 1px solid darkgray;
-    font: 75 12pt &quot;Arial&quot;;
+    font: 75 15pt &quot;Arial&quot;;
 }
 
 QToolBox::tab {
@@ -137,15 +149,15 @@ QToolBox::tab:selected {
 </string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="page">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>729</width>
-         <height>372</height>
+         <width>1057</width>
+         <height>515</height>
         </rect>
        </property>
        <attribute name="icon">
@@ -301,8 +313,8 @@ font-size:15px;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>729</width>
-         <height>372</height>
+         <width>1057</width>
+         <height>515</height>
         </rect>
        </property>
        <attribute name="icon">
@@ -498,8 +510,8 @@ font-size:15px;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>729</width>
-         <height>372</height>
+         <width>1057</width>
+         <height>515</height>
         </rect>
        </property>
        <attribute name="icon">
@@ -687,10 +699,195 @@ font-size:15px;</string>
         </item>
        </layout>
       </widget>
+      <widget class="QWidget" name="page_4">
+       <attribute name="label">
+        <string>Asistencia de docentes</string>
+       </attribute>
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout_3">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <spacer name="horizontalSpacer_10">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QComboBox" name="comboBox_dia">
+              <property name="minimumSize">
+               <size>
+                <width>150</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>150</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="layoutDirection">
+               <enum>Qt::LeftToRight</enum>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">background-color: #7E94Bf;
+color: #ffffff;
+font: 75 15pt &quot;MS Sans Serif&quot;;
+border-radius:15px;</string>
+              </property>
+              <item>
+               <property name="text">
+                <string>Lunes</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Martes</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Miercoles</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Jueves</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Viernes</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Sabado</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="bt_asistencia">
+              <property name="minimumSize">
+               <size>
+                <width>100</width>
+                <height>40</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QPushButton{
+background-color:#253b59;
+color:white;
+font-size:14px;
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color:#637aa6;
+}
+font-size:15px;</string>
+              </property>
+              <property name="text">
+               <string>Buscar</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="styleSheet">
+             <string notr="true">font: 75 16pt &quot;MS Shell Dlg 2&quot;;</string>
+            </property>
+            <property name="text">
+             <string>Control de asistencia de facilitadores</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QTableWidget" name="tableWidget">
+            <column>
+             <property name="text">
+              <string>Nombres y Apellidos</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Asignatura</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Aula</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Hora</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Entrada</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Firma</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>N°OBJ</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Contenido</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Salida</string>
+             </property>
+            </column>
+            <column>
+             <property name="text">
+              <string>Firma</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
     <item>
      <widget class="Line" name="line">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+     </widget>
+    </item>
+    <item>
+     <widget class="Line" name="line_2">
+      <property name="styleSheet">
+       <string notr="true">background-color:#00007f;</string>
+      </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
@@ -813,7 +1010,6 @@ font-size:15px;
     </item>
    </layout>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

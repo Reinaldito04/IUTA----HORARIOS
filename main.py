@@ -754,6 +754,8 @@ class menuHorarioPlantilla(QMainWindow):
         self.bt_carrerabuscar.clicked.connect(self.buscarnivel)
         self.bt_seccionbuscar.clicked.connect(self.buscarsesion)
         
+        self.bt_asistencia.clicked.connect(self.buscarAsistencia)
+        
         #metodos para la seleccion en la tabla
         self.bt_imprimirProfesor.clicked.connect(self.guardarPDFProfesor)
         
@@ -1089,8 +1091,29 @@ class menuHorarioPlantilla(QMainWindow):
                 self.datos_tabla_aula.append((row, col, str(value)))
         conexion.close()  # Cerrar la conexión a la base de datos al finalizar
     
-    
+    def buscarAsistencia(self):
+        print("hola")
+        dia=self.comboBox_dia.currentText()
+        # Crear conexión a la base de datos
+        try:
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
 
+            # Ejecutar la consulta para obtener los registros de la tabla HorarioTest para el dia especificado
+            cursor.execute(
+                "SELECT  CedulaProf, CodigoMat, CodigoAula, Hora FROM HorarioTest WHERE Dia=?", (dia,)
+            )
+            data = cursor.fetchall()
+            self.tableWidget.setRowCount(len(data))  
+
+            for row, row_data in enumerate(data):
+                for col, value in enumerate(row_data):
+                    item = QTableWidgetItem(str(value))
+                    self.tableWidget.setItem(row, col, item)
+
+            conexion.close()
+        except Exception as e:
+            QMessageBox.warning(self, "Error", f"Error al recuperar datos: {str(e)}")
             
     def cargarHorasProfesores(self):
             conexion = sqlite3.connect("./db/database.db")
