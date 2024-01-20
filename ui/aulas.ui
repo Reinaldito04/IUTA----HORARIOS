@@ -278,7 +278,7 @@ background-color: #637aa6 ;
     <item row="1" column="1">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page_delete">
        <layout class="QVBoxLayout" name="verticalLayout_5">
@@ -795,7 +795,7 @@ font-size:15px;</string>
             </attribute>
             <column>
              <property name="text">
-              <string>Codigo</string>
+              <string>Sede</string>
              </property>
             </column>
             <column>
@@ -805,7 +805,7 @@ font-size:15px;</string>
             </column>
             <column>
              <property name="text">
-              <string>Ubicacion</string>
+              <string>Codigo Aula</string>
              </property>
             </column>
            </widget>

@@ -137,6 +137,20 @@ class Ui_MainWindow(object):
         self.horizontalLayout_6.setObjectName("horizontalLayout_6")
         spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_6.addItem(spacerItem3)
+        self.bt_imprimirAula = QtWidgets.QPushButton(self.page)
+        self.bt_imprimirAula.setMinimumSize(QtCore.QSize(100, 40))
+        self.bt_imprimirAula.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
+"color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
+        self.bt_imprimirAula.setObjectName("bt_imprimirAula")
+        self.horizontalLayout_6.addWidget(self.bt_imprimirAula)
         self.bt_buscarAula = QtWidgets.QPushButton(self.page)
         self.bt_buscarAula.setMinimumSize(QtCore.QSize(100, 40))
         self.bt_buscarAula.setStyleSheet("QPushButton{\n"
@@ -238,7 +252,7 @@ class Ui_MainWindow(object):
         icon2.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/adduser.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.toolBox.addItem(self.page_2, icon2, "")
         self.page_3 = QtWidgets.QWidget()
-        self.page_3.setGeometry(QtCore.QRect(0, 0, 729, 372))
+        self.page_3.setGeometry(QtCore.QRect(0, 0, 449, 191))
         self.page_3.setObjectName("page_3")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.page_3)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -378,7 +392,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.toolBox.setCurrentIndex(1)
+        self.toolBox.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -403,6 +417,7 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Viernes"))
         item = self.tableWidget_aulas.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "Sabado"))
+        self.bt_imprimirAula.setText(_translate("MainWindow", "Imprimir"))
         self.bt_buscarAula.setText(_translate("MainWindow", "Buscar"))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page), _translate("MainWindow", "Disponibilidad Aulas"))
         self.label_57.setText(_translate("MainWindow", "Verificar disponibilidad"))

@@ -593,7 +593,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.stackedWidget.setCurrentIndex(0)
+        self.stackedWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -609,11 +609,11 @@ class Ui_MainWindow(object):
         self.bt_delete.setText(_translate("MainWindow", "Eliminar"))
         self.label_13.setText(_translate("MainWindow", "Aulas"))
         item = self.tableWidget.horizontalHeaderItem(0)
-        item.setText(_translate("MainWindow", "Codigo"))
+        item.setText(_translate("MainWindow", "Sede"))
         item = self.tableWidget.horizontalHeaderItem(1)
         item.setText(_translate("MainWindow", "Nombre"))
         item = self.tableWidget.horizontalHeaderItem(2)
-        item.setText(_translate("MainWindow", "Ubicacion"))
+        item.setText(_translate("MainWindow", "Codigo Aula"))
         self.bt_act.setText(_translate("MainWindow", "Actualizar"))
         self.label.setText(_translate("MainWindow", "Registro de Aulas"))
         self.label_2.setText(_translate("MainWindow", "Sede"))

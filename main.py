@@ -756,9 +756,37 @@ class menuHorarioPlantilla(QMainWindow):
         
         #metodos para la seleccion en la tabla
         self.bt_imprimirProfesor.clicked.connect(self.guardarPDFProfesor)
+        self.bt_imprimirAula.clicked.connect(self.guardarPDFAula)
         
         self.horas =[]
         self.datos_carga_horas = []  # Coloca los valores apropiados aquí
+        
+    def guardarPDFAula(self):
+        try:
+            from   ui.pdfcrearAula import crear_pdf
+            
+            aula = self.ln_disponibilidad_aula.text()
+          
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("SELECT Periodo FROM PeriodoAcademico WHERE ID=?",(1,))
+            periodo = cursor.fetchone()
+            periodoAcademico =periodo[0]
+            conexion.close()
+            if not aula :
+                QMessageBox.information(self,"Error","Es necesario ingresar el aula")
+                return
+            ruta_salida, _ = QFileDialog.getSaveFileName(self, 'Guardar PDF', '', 'Archivos PDF (*.pdf)')
+
+            # Verifica si el usuario canceló la selección
+            if not ruta_salida:
+                return
+            else:
+                crear_pdf(ruta_salida=ruta_salida,aula=aula,periodo=periodoAcademico,Turno=self.modalidad )
+                if crear_pdf:
+                    return ruta_salida   
+        except Exception as e:
+            print(f"Error en vistaPrevia: {e}")
 
     def guardarPDFProfesor(self):
         try:
