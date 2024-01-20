@@ -20,7 +20,7 @@ def image_url_to_base64(image_url):
 def recuperar_datos_bd(aula):
     conexion = sqlite3.connect("db/database.db")
     cursor = conexion.cursor()
-    cursor.execute("SELECT Dia, Hora, CodigoMat, CodigoAula, CedulaProf FROM HorarioTest WHERE CodigoAula=?", (aula,))
+    cursor.execute("SELECT Dia, Hora, CodigoMat, CodigoAula, CedulaProf,Nivel FROM HorarioTest WHERE CodigoAula=?", (aula,))
     datos_base = cursor.fetchall()
     cursor.close()
     return datos_base
@@ -73,6 +73,12 @@ def crear_pdf( ruta_salida,aula,periodo,Turno):
     aulatexto =f'{aula}'
     fecha_actual = datetime.now()
     fecha_formateada = fecha_actual.strftime("%Y-%m-%d")
+    conexion = sqlite3.connect("db/database.db")
+    cursor = conexion.cursor()
+    cursor.execute("SELECT CodigoAula FROM Aulas WHERE Descripcion=?",(aula,))
+    ubicacion = cursor.fetchone()
+    ubicacion = ubicacion[0]
+    conexion.close()
 
     print("Fecha actual:", fecha_formateada)
     if imagen_base64:
@@ -95,7 +101,7 @@ def crear_pdf( ruta_salida,aula,periodo,Turno):
                 fila_existente = nueva_fila
 
             # Colocar los datos en la celda correspondiente al día
-            fila_existente[dia.lower()] = f"{dato[2]} </br> {dato[3]} </br> {dato[4]}"
+            fila_existente[dia.lower()] = f"{dato[2]} </br> {dato[3]} </br> {dato[4]} </br> {dato[5]}"
         horas_db = [fila['hora'] for fila in filas_datos]
         filas_datos = sorted(filas_datos, key=lambda x: horas_db.index(x['hora']) if x['hora'] in horas_db else float('inf'))
 
@@ -139,7 +145,7 @@ def crear_pdf( ruta_salida,aula,periodo,Turno):
       .container {{
         width: 90%;
         margin-left: 20px;
-        display: flex;
+       
         font-weight: bolder;
         justify-content: space-between;
       }}
@@ -157,12 +163,14 @@ def crear_pdf( ruta_salida,aula,periodo,Turno):
         border: 1px solid #ddd; /* Borde para las celdas del encabezado */
         padding: 8px;
         text-align: center;
+        font-size:16px;
     }}
     
     /* Estilos para celdas normales */
     td {{
         border: 1px solid #ddd; /* Borde para las celdas normales */
         padding: 8px;
+        font-size:12px;
         text-align: center;
     }}
  
@@ -182,12 +190,16 @@ def crear_pdf( ruta_salida,aula,periodo,Turno):
       <div class="container-fecha">
         <p>Fecha de Impresion : {fecha_formateada}</p>
       </div>
+      
       <div class="container">
         <div class="container-docente">
           <p>UBICACION: {ubicacion} </p>
-        </div>  <div class="container-docente">
-          <p>AULA: {AULA} </p>
+        </div>  
+      
+        <div class="container-docente">
+          <p>AULA: {aulatexto} </p>
         </div>
+        
         <div class="container-periodo">
           <p>PERIODO : {periodo}</p>
         </div>
@@ -210,18 +222,7 @@ def crear_pdf( ruta_salida,aula,periodo,Turno):
             {filas_html}
         </table>
         </div>
-   <br>
-    <div class="container-fecha">
-        <p>Total de Horas :</p>
-    </div>
-    <br>
-
-    <div class="container-fecha">
-        <P>Nota: ESTE HORARIO ESTA SUJETO A LA MATRICULA.</P>
-    </div>
-    <div class="container-fecha">
-        <P>RECIBIDO Y CONFORME _________________________</P>
-    </div>
+  
        
         <!-- ... (contenido HTML posterior) ... -->
     </body>
@@ -236,4 +237,4 @@ if __name__ == "__main__":
    
     # Llamada a la función con tus datos y ruta de salida
     ruta_salida = '/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/waos.pdf'
-    crear_pdf( carrera="hola",sesion="icomo", ruta_salida=ruta_salida)
+    crear_pdf( aula=1,periodo=102,Turno="diurno", ruta_salida=ruta_salida)

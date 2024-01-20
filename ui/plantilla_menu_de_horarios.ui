@@ -280,6 +280,31 @@ QToolBox::tab:selected {
            </spacer>
           </item>
           <item>
+           <widget class="QPushButton" name="bt_imprimirAula">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color:#253b59;
+color:white;
+font-size:14px;
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color:#637aa6;
+}
+font-size:15px;</string>
+            </property>
+            <property name="text">
+             <string>Imprimir</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="bt_buscarAula">
             <property name="minimumSize">
              <size>
@@ -510,8 +535,8 @@ font-size:15px;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1057</width>
-         <height>515</height>
+         <width>729</width>
+         <height>372</height>
         </rect>
        </property>
        <attribute name="icon">
