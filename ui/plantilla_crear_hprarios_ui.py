@@ -15,6 +15,28 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
+        MainWindow.setStyleSheet("\n"
+"QFrame{\n"
+"background-color:#D9D9D9;\n"
+"}\n"
+"QLineEdit{\n"
+"background-color: #7E94Bf;\n"
+"}\n"
+"QLabel{\n"
+"font-size:15px;\n"
+"color:#111626;}\n"
+"\n"
+"QPushButton{\n"
+"background-color:#253b59;\n"
+"color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;\n"
+"background-color:#d9d9d9;")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -22,21 +44,35 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.btn_guardar = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_guardar.setMinimumSize(QtCore.QSize(100, 40))
         self.btn_guardar.setObjectName("btn_guardar")
         self.horizontalLayout_2.addWidget(self.btn_guardar)
         self.bt_seleccion = QtWidgets.QPushButton(self.centralwidget)
+        self.bt_seleccion.setMinimumSize(QtCore.QSize(180, 40))
         self.bt_seleccion.setStyleSheet("")
         self.bt_seleccion.setObjectName("bt_seleccion")
         self.horizontalLayout_2.addWidget(self.bt_seleccion)
         self.bt_reset = QtWidgets.QPushButton(self.centralwidget)
+        self.bt_reset.setMinimumSize(QtCore.QSize(100, 40))
         self.bt_reset.setObjectName("bt_reset")
         self.horizontalLayout_2.addWidget(self.bt_reset)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem)
         self.bt_volver = QtWidgets.QPushButton(self.centralwidget)
+        self.bt_volver.setMinimumSize(QtCore.QSize(100, 40))
         self.bt_volver.setObjectName("bt_volver")
         self.horizontalLayout_2.addWidget(self.bt_volver)
         self.verticalLayout.addLayout(self.horizontalLayout_2)
+        self.label = QtWidgets.QLabel(self.centralwidget)
+        font = QtGui.QFont()
+        font.setFamily("3270 Nerd Font Mono")
+        font.setPointSize(-1)
+        self.label.setFont(font)
+        self.label.setStyleSheet("")
+        self.label.setTextFormat(QtCore.Qt.AutoText)
+        self.label.setAlignment(QtCore.Qt.AlignCenter)
+        self.label.setObjectName("label")
+        self.verticalLayout.addWidget(self.label)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.label_2 = QtWidgets.QLabel(self.centralwidget)
@@ -44,48 +80,80 @@ class Ui_MainWindow(object):
         self.label_2.setObjectName("label_2")
         self.horizontalLayout.addWidget(self.label_2)
         self.ln_carrera = QtWidgets.QLineEdit(self.centralwidget)
+        self.ln_carrera.setMinimumSize(QtCore.QSize(100, 40))
         self.ln_carrera.setReadOnly(True)
         self.ln_carrera.setObjectName("ln_carrera")
         self.horizontalLayout.addWidget(self.ln_carrera)
         self.btn_buscarCarr = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_buscarCarr.setMinimumSize(QtCore.QSize(80, 40))
         self.btn_buscarCarr.setObjectName("btn_buscarCarr")
         self.horizontalLayout.addWidget(self.btn_buscarCarr)
         self.label_3 = QtWidgets.QLabel(self.centralwidget)
         self.label_3.setObjectName("label_3")
         self.horizontalLayout.addWidget(self.label_3)
         self.ln_nivel = QtWidgets.QLineEdit(self.centralwidget)
+        self.ln_nivel.setMinimumSize(QtCore.QSize(100, 40))
         self.ln_nivel.setReadOnly(True)
         self.ln_nivel.setObjectName("ln_nivel")
         self.horizontalLayout.addWidget(self.ln_nivel)
         self.btn_buscarnivel = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_buscarnivel.setMinimumSize(QtCore.QSize(80, 40))
         self.btn_buscarnivel.setObjectName("btn_buscarnivel")
         self.horizontalLayout.addWidget(self.btn_buscarnivel)
         self.label_4 = QtWidgets.QLabel(self.centralwidget)
         self.label_4.setObjectName("label_4")
         self.horizontalLayout.addWidget(self.label_4)
         self.ln_sesion = QtWidgets.QLineEdit(self.centralwidget)
+        self.ln_sesion.setMinimumSize(QtCore.QSize(100, 40))
         self.ln_sesion.setObjectName("ln_sesion")
         self.horizontalLayout.addWidget(self.ln_sesion)
         self.btn_buscarSecc_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_buscarSecc_2.setMinimumSize(QtCore.QSize(80, 40))
         self.btn_buscarSecc_2.setObjectName("btn_buscarSecc_2")
         self.horizontalLayout.addWidget(self.btn_buscarSecc_2)
         self.verticalLayout.addLayout(self.horizontalLayout)
-        self.label = QtWidgets.QLabel(self.centralwidget)
-        font = QtGui.QFont()
-        font.setFamily("3270 Nerd Font Mono")
-        font.setPointSize(16)
-        self.label.setFont(font)
-        self.label.setStyleSheet("background-color:rgb(152, 228, 255);")
-        self.label.setTextFormat(QtCore.Qt.AutoText)
-        self.label.setAlignment(QtCore.Qt.AlignCenter)
-        self.label.setObjectName("label")
-        self.verticalLayout.addWidget(self.label)
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
         self.verticalLayout.addWidget(self.line)
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
+        self.tableWidget.setStyleSheet("QTableWidget {\n"
+"                background-color: transparent;\n"
+"                border: 1px solid black;\n"
+"                border-radius: 10px;\n"
+"            }\n"
+"\n"
+"            QTableWidget QHeaderView::section {\n"
+"                background-color: #253b59;\n"
+"                color: #fff;\n"
+"                border-bottom: 2px solid white;\n"
+"            }\n"
+"\n"
+"            QTableWidget QHeaderView::section:first {\n"
+"                border-top-left-radius: 10px;\n"
+"            }\n"
+"\n"
+"            QTableWidget QHeaderView::section:last {\n"
+"                border-top-right-radius: 10px;\n"
+"            }\n"
+"\n"
+"            QTableWidget QTableCornerButton::section {\n"
+"                background-color: #63b6bf;\n"
+"                border-top-left-radius: 10px;\n"
+"            }\n"
+"\n"
+"            QTableWidget::item {\n"
+"                background-color: #63b6bf;\n"
+"                color: #111626;\n"
+"                border-bottom: 1px solid black;\n"
+"                padding: 5px;\n"
+"            }\n"
+"\n"
+"            QTableWidget::item:selected {\n"
+"                background-color: #b6ecf2;\n"
+"                color: #111626;\n"
+"            }")
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(7)
         self.tableWidget.setRowCount(0)
@@ -113,6 +181,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.btn_vistaPrevia = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_vistaPrevia.setMinimumSize(QtCore.QSize(100, 40))
         self.btn_vistaPrevia.setObjectName("btn_vistaPrevia")
         self.horizontalLayout_3.addWidget(self.btn_vistaPrevia)
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -131,15 +200,16 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.btn_guardar.setText(_translate("MainWindow", "Guardar"))
         self.bt_seleccion.setText(_translate("MainWindow", "Activar Seleccion Multiple"))
-        self.bt_reset.setText(_translate("MainWindow", "Reset"))
+        self.bt_reset.setText(_translate("MainWindow", "Limpiar \n"
+" Tabla"))
         self.bt_volver.setText(_translate("MainWindow", "Volver"))
+        self.label.setText(_translate("MainWindow", "Nombre de la modalidad"))
         self.label_2.setText(_translate("MainWindow", "Carrera"))
         self.btn_buscarCarr.setText(_translate("MainWindow", "buscar"))
         self.label_3.setText(_translate("MainWindow", "Nivel"))
         self.btn_buscarnivel.setText(_translate("MainWindow", "buscar"))
         self.label_4.setText(_translate("MainWindow", "Sesion"))
         self.btn_buscarSecc_2.setText(_translate("MainWindow", "buscar"))
-        self.label.setText(_translate("MainWindow", "Nombre de la modalidad"))
         item = self.tableWidget.horizontalHeaderItem(0)
         item.setText(_translate("MainWindow", "Horas"))
         item = self.tableWidget.horizontalHeaderItem(1)

@@ -21,7 +21,16 @@ class Ui_MainWindow(object):
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setStyleSheet("background-color:rgb(152, 228, 255);")
+        self.frame.setStyleSheet("QFrame{\n"
+"background-color:#D9D9D9;\n"
+"\n"
+"}\n"
+"QLineEdit{\n"
+"background-color: #7E94Bf;\n"
+"}\n"
+"QLabel{\n"
+"font-size:15px;\n"
+"color:#111626;}")
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
@@ -30,12 +39,18 @@ class Ui_MainWindow(object):
         self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
         self.bt_back = QtWidgets.QPushButton(self.frame)
-        self.bt_back.setMinimumSize(QtCore.QSize(75, 31))
+        self.bt_back.setMinimumSize(QtCore.QSize(100, 40))
         self.bt_back.setMaximumSize(QtCore.QSize(75, 31))
-        self.bt_back.setStyleSheet("background-color:red;\n"
+        self.bt_back.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
 "color:white;\n"
 "font-size:14px;\n"
-"border-radius:15px;")
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
         self.bt_back.setObjectName("bt_back")
         self.horizontalLayout_8.addWidget(self.bt_back)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -43,7 +58,7 @@ class Ui_MainWindow(object):
         self.label = QtWidgets.QLabel(self.frame)
         font = QtGui.QFont()
         font.setFamily("Hack Nerd Font Mono")
-        font.setPointSize(12)
+        font.setPointSize(-1)
         font.setBold(True)
         font.setItalic(True)
         font.setWeight(75)
@@ -54,18 +69,36 @@ class Ui_MainWindow(object):
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_8.addItem(spacerItem1)
         self.bt_salir = QtWidgets.QPushButton(self.frame)
-        self.bt_salir.setMinimumSize(QtCore.QSize(75, 31))
+        self.bt_salir.setMinimumSize(QtCore.QSize(100, 40))
         self.bt_salir.setMaximumSize(QtCore.QSize(75, 31))
-        self.bt_salir.setStyleSheet("background-color:red;\n"
+        self.bt_salir.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
 "color:white;\n"
 "font-size:14px;\n"
-"border-radius:15px;")
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
         self.bt_salir.setObjectName("bt_salir")
         self.horizontalLayout_8.addWidget(self.bt_salir)
         self.verticalLayout_10.addLayout(self.horizontalLayout_8)
         self.horizontalLayout_14 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_14.setObjectName("horizontalLayout_14")
         self.frame_2 = QtWidgets.QFrame(self.frame)
+        self.frame_2.setStyleSheet("QFrame{\n"
+"background-color:#233559;\n"
+"border-radius:40px;\n"
+"}\n"
+"QPushButton{\n"
+"background-color:#233559;\n"
+"color:#FFF;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color: #637aa6 ;\n"
+"}")
         self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame_2.setObjectName("frame_2")
@@ -73,37 +106,37 @@ class Ui_MainWindow(object):
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout()
         self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.bt_level = QtWidgets.QPushButton(self.frame_2)
+        self.bt_level.setMinimumSize(QtCore.QSize(141, 51))
+        self.bt_level.setMaximumSize(QtCore.QSize(141, 51))
+        self.bt_level.setStyleSheet("font-size:15px;\n"
+"")
+        self.bt_level.setIconSize(QtCore.QSize(20, 20))
+        self.bt_level.setObjectName("bt_level")
+        self.verticalLayout_4.addWidget(self.bt_level)
+        self.line_2 = QtWidgets.QFrame(self.frame_2)
+        self.line_2.setStyleSheet("background-color:#d9d9d9;")
+        self.line_2.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_2.setObjectName("line_2")
+        self.verticalLayout_4.addWidget(self.line_2)
         spacerItem2 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem2)
         self.bt_agg = QtWidgets.QPushButton(self.frame_2)
         self.bt_agg.setMinimumSize(QtCore.QSize(141, 51))
         self.bt_agg.setMaximumSize(QtCore.QSize(141, 51))
-        self.bt_agg.setStyleSheet("border-radius:15px;\n"
-"color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
+        self.bt_agg.setStyleSheet("font-size:15px;\n"
+"")
         self.bt_agg.setIconSize(QtCore.QSize(20, 20))
         self.bt_agg.setObjectName("bt_agg")
         self.verticalLayout_4.addWidget(self.bt_agg)
-        self.bt_level = QtWidgets.QPushButton(self.frame_2)
-        self.bt_level.setMinimumSize(QtCore.QSize(141, 51))
-        self.bt_level.setMaximumSize(QtCore.QSize(141, 51))
-        self.bt_level.setStyleSheet("border-radius:15px;\n"
-"color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
-        self.bt_level.setIconSize(QtCore.QSize(20, 20))
-        self.bt_level.setObjectName("bt_level")
-        self.verticalLayout_4.addWidget(self.bt_level)
         spacerItem3 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem3)
         self.bt_view = QtWidgets.QPushButton(self.frame_2)
         self.bt_view.setMinimumSize(QtCore.QSize(141, 51))
         self.bt_view.setMaximumSize(QtCore.QSize(141, 51))
-        self.bt_view.setStyleSheet("border-radius:15px;\n"
-"color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
+        self.bt_view.setStyleSheet("font-size:15px;\n"
+"")
         self.bt_view.setIconSize(QtCore.QSize(20, 20))
         self.bt_view.setObjectName("bt_view")
         self.verticalLayout_4.addWidget(self.bt_view)
@@ -112,13 +145,17 @@ class Ui_MainWindow(object):
         self.bt_edit = QtWidgets.QPushButton(self.frame_2)
         self.bt_edit.setMinimumSize(QtCore.QSize(141, 51))
         self.bt_edit.setMaximumSize(QtCore.QSize(141, 51))
-        self.bt_edit.setStyleSheet("border-radius:15px;\n"
-"color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
+        self.bt_edit.setStyleSheet("font-size:15px;\n"
+"")
         self.bt_edit.setIconSize(QtCore.QSize(20, 20))
         self.bt_edit.setObjectName("bt_edit")
         self.verticalLayout_4.addWidget(self.bt_edit)
+        self.line_3 = QtWidgets.QFrame(self.frame_2)
+        self.line_3.setStyleSheet("background-color:#d9d9d9;")
+        self.line_3.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line_3.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_3.setObjectName("line_3")
+        self.verticalLayout_4.addWidget(self.line_3)
         spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_4.addItem(spacerItem5)
         self.verticalLayout_5.addLayout(self.verticalLayout_4)
@@ -138,7 +175,7 @@ class Ui_MainWindow(object):
         self.label_2 = QtWidgets.QLabel(self.page_agg)
         font = QtGui.QFont()
         font.setFamily("Hack Nerd Font Mono")
-        font.setPointSize(12)
+        font.setPointSize(-1)
         font.setBold(True)
         font.setItalic(True)
         font.setWeight(75)
@@ -245,7 +282,7 @@ class Ui_MainWindow(object):
         self.label_16 = QtWidgets.QLabel(self.page_level)
         font = QtGui.QFont()
         font.setFamily("Hack Nerd Font Mono")
-        font.setPointSize(12)
+        font.setPointSize(-1)
         font.setBold(True)
         font.setItalic(True)
         font.setWeight(75)
@@ -336,10 +373,16 @@ class Ui_MainWindow(object):
         self.bt_agg_5 = QtWidgets.QPushButton(self.page_level)
         self.bt_agg_5.setMinimumSize(QtCore.QSize(141, 51))
         self.bt_agg_5.setMaximumSize(QtCore.QSize(141, 51))
-        self.bt_agg_5.setStyleSheet("border-radius:15px;\n"
+        self.bt_agg_5.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
 "color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
         self.bt_agg_5.setIconSize(QtCore.QSize(20, 20))
         self.bt_agg_5.setObjectName("bt_agg_5")
         self.horizontalLayout_26.addWidget(self.bt_agg_5)
@@ -357,7 +400,7 @@ class Ui_MainWindow(object):
         self.label_3 = QtWidgets.QLabel(self.page_edit)
         font = QtGui.QFont()
         font.setFamily("Hack Nerd Font Mono")
-        font.setPointSize(12)
+        font.setPointSize(-1)
         font.setBold(True)
         font.setItalic(True)
         font.setWeight(75)
@@ -457,10 +500,16 @@ class Ui_MainWindow(object):
         self.bt_edit_2 = QtWidgets.QPushButton(self.page_edit)
         self.bt_edit_2.setMinimumSize(QtCore.QSize(91, 41))
         self.bt_edit_2.setMaximumSize(QtCore.QSize(91, 41))
-        self.bt_edit_2.setStyleSheet("border-radius:15px;\n"
+        self.bt_edit_2.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
 "color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
         self.bt_edit_2.setIconSize(QtCore.QSize(20, 20))
         self.bt_edit_2.setObjectName("bt_edit_2")
         self.horizontalLayout_10.addWidget(self.bt_edit_2)
@@ -469,10 +518,16 @@ class Ui_MainWindow(object):
         self.bt_delete = QtWidgets.QPushButton(self.page_edit)
         self.bt_delete.setMinimumSize(QtCore.QSize(91, 41))
         self.bt_delete.setMaximumSize(QtCore.QSize(91, 41))
-        self.bt_delete.setStyleSheet("border-radius:15px;\n"
+        self.bt_delete.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
 "color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
         self.bt_delete.setIconSize(QtCore.QSize(20, 20))
         self.bt_delete.setObjectName("bt_delete")
         self.horizontalLayout_10.addWidget(self.bt_delete)
@@ -481,10 +536,16 @@ class Ui_MainWindow(object):
         self.bt_clear = QtWidgets.QPushButton(self.page_edit)
         self.bt_clear.setMinimumSize(QtCore.QSize(91, 41))
         self.bt_clear.setMaximumSize(QtCore.QSize(91, 41))
-        self.bt_clear.setStyleSheet("border-radius:15px;\n"
+        self.bt_clear.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
 "color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
         self.bt_clear.setIconSize(QtCore.QSize(20, 20))
         self.bt_clear.setObjectName("bt_clear")
         self.horizontalLayout_10.addWidget(self.bt_clear)
@@ -506,7 +567,7 @@ class Ui_MainWindow(object):
         self.label_4 = QtWidgets.QLabel(self.page_view)
         font = QtGui.QFont()
         font.setFamily("Hack Nerd Font Mono")
-        font.setPointSize(12)
+        font.setPointSize(-1)
         font.setBold(True)
         font.setItalic(True)
         font.setWeight(75)
@@ -518,8 +579,42 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addItem(spacerItem43)
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
         self.tableWidget = QtWidgets.QTableWidget(self.page_view)
-        self.tableWidget.setStyleSheet("background-color:rgb(152, 228, 255);\n"
-"font-size:14px;")
+        self.tableWidget.setStyleSheet("QTableWidget {\n"
+"                background-color: transparent;\n"
+"                border: 1px solid black;\n"
+"                border-radius: 10px;\n"
+"            }\n"
+"\n"
+"            QTableWidget QHeaderView::section {\n"
+"                background-color: #253b59;\n"
+"                color: #fff;\n"
+"                border-bottom: 2px solid white;\n"
+"            }\n"
+"\n"
+"            QTableWidget QHeaderView::section:first {\n"
+"                border-top-left-radius: 10px;\n"
+"            }\n"
+"\n"
+"            QTableWidget QHeaderView::section:last {\n"
+"                border-top-right-radius: 10px;\n"
+"            }\n"
+"\n"
+"            QTableWidget QTableCornerButton::section {\n"
+"                background-color: #63b6bf;\n"
+"                border-top-left-radius: 10px;\n"
+"            }\n"
+"\n"
+"            QTableWidget::item {\n"
+"                background-color: #63b6bf;\n"
+"                color: #111626;\n"
+"                border-bottom: 1px solid black;\n"
+"                padding: 5px;\n"
+"            }\n"
+"\n"
+"            QTableWidget::item:selected {\n"
+"                background-color: #b6ecf2;\n"
+"                color: #111626;\n"
+"            }")
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(2)
         self.tableWidget.setRowCount(0)
@@ -536,10 +631,16 @@ class Ui_MainWindow(object):
         self.bt_act = QtWidgets.QPushButton(self.page_view)
         self.bt_act.setMinimumSize(QtCore.QSize(141, 51))
         self.bt_act.setMaximumSize(QtCore.QSize(141, 51))
-        self.bt_act.setStyleSheet("border-radius:15px;\n"
+        self.bt_act.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
 "color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
         self.bt_act.setIconSize(QtCore.QSize(20, 20))
         self.bt_act.setObjectName("bt_act")
         self.horizontalLayout.addWidget(self.bt_act)
@@ -561,8 +662,8 @@ class Ui_MainWindow(object):
         self.bt_back.setText(_translate("MainWindow", "Volver"))
         self.label.setText(_translate("MainWindow", "CARRERAS"))
         self.bt_salir.setText(_translate("MainWindow", "SALIR"))
-        self.bt_agg.setText(_translate("MainWindow", "Agregar "))
         self.bt_level.setText(_translate("MainWindow", "Agregar Nivel"))
+        self.bt_agg.setText(_translate("MainWindow", "Agregar "))
         self.bt_view.setText(_translate("MainWindow", "Visualizar"))
         self.bt_edit.setText(_translate("MainWindow", "Editar"))
         self.label_2.setText(_translate("MainWindow", "AGREGAR   "))

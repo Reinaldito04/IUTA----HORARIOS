@@ -109,8 +109,7 @@ background-color:#637aa6;
 font-size:15px;</string>
         </property>
         <property name="text">
-         <string>Volver al  
- menu Principal</string>
+         <string>Salir</string>
         </property>
        </widget>
       </item>
@@ -138,15 +137,15 @@ QToolBox::tab:selected {
 </string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>725</width>
-         <height>338</height>
+         <width>729</width>
+         <height>372</height>
         </rect>
        </property>
        <attribute name="icon">
@@ -302,8 +301,8 @@ font-size:15px;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>725</width>
-         <height>338</height>
+         <width>729</width>
+         <height>372</height>
         </rect>
        </property>
        <attribute name="icon">
@@ -429,6 +428,37 @@ font-size:15px;</string>
            </spacer>
           </item>
           <item>
+           <widget class="QPushButton" name="bt_imprimirProfesor">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>100</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color:#253b59;
+color:white;
+font-size:14px;
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color:#637aa6;
+}
+font-size:15px;</string>
+            </property>
+            <property name="text">
+             <string>Imprimir</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QPushButton" name="bt_buscarProf">
             <property name="minimumSize">
              <size>
@@ -468,8 +498,8 @@ font-size:15px;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>725</width>
-         <height>338</height>
+         <width>729</width>
+         <height>372</height>
         </rect>
        </property>
        <attribute name="icon">

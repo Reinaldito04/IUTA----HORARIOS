@@ -735,6 +735,8 @@ class menuHorarioPlantilla(QMainWindow):
         self.label.setText(self.modalidad)
         self.bt_crear.clicked.connect(self.crearHorario)
         self.cargarHorasAulas()
+        self.bt_salir.clicked.connect(lambda:QApplication.quit())
+        self.bt_back.clicked.connect(self.backMenu)
         self.cargarHorasProfesores()
         self.cargarHorasSeccion()
         self.bt_delete.clicked.connect(self.eliminarTodoHorario)
@@ -753,11 +755,41 @@ class menuHorarioPlantilla(QMainWindow):
         self.bt_seccionbuscar.clicked.connect(self.buscarsesion)
         
         #metodos para la seleccion en la tabla
+        self.bt_imprimirProfesor.clicked.connect(self.guardarPDFProfesor)
         
-    
         self.horas =[]
         self.datos_carga_horas = []  # Coloca los valores apropiados aquí
 
+    def guardarPDFProfesor(self):
+        try:
+            from   ui.pdfcrearProfesor import crear_pdf
+            
+            profesor = self.ln_disponibilidad_profesores.text()
+          
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("SELECT Periodo FROM PeriodoAcademico WHERE ID=?",(1,))
+            periodo = cursor.fetchone()
+            periodoAcademico =periodo[0]
+            conexion.close()
+            if not profesor :
+                QMessageBox.information(self,"Error","Es necesario ingresar el profesor")
+                return
+            ruta_salida, _ = QFileDialog.getSaveFileName(self, 'Guardar PDF', '', 'Archivos PDF (*.pdf)')
+
+            # Verifica si el usuario canceló la selección
+            if not ruta_salida:
+                return
+            else:
+                crear_pdf(ruta_salida=ruta_salida,profesor=profesor,periodo=periodoAcademico,Turno=self.modalidad )
+                if crear_pdf:
+                    return ruta_salida   
+        except Exception as e:
+            print(f"Error en vistaPrevia: {e}")
+    def backMenu(self):
+        menu = MenuPrincipal(self.admin)
+        widget.addWidget(menu)
+        widget.setCurrentIndex(widget.currentIndex()+1)
        
     def codigoProfesor(self):
         consulta_like = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido, Cedula FROM Profesores WHERE Nombre_Y_Apellido LIKE ?"

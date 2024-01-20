@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1118, 697)
+        MainWindow.resize(1118, 835)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -22,141 +22,181 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.setSpacing(0)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
         self.frame = QtWidgets.QFrame(self.centralwidget)
-        self.frame.setStyleSheet("background-color:rgb(152, 228, 255);")
+        self.frame.setStyleSheet("QFrame{\n"
+"background-color:#D9D9D9;\n"
+"\n"
+"}\n"
+"QLineEdit{\n"
+"background-color: #7E94Bf;\n"
+"}\n"
+"QLabel{\n"
+"font-size:15px;\n"
+"color:#111626;}")
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.frame.setFrameShadow(QtWidgets.QFrame.Raised)
         self.frame.setObjectName("frame")
-        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.frame)
+        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.frame)
+        self.verticalLayout_5.setObjectName("verticalLayout_5")
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
-        self.verticalLayout = QtWidgets.QVBoxLayout()
-        self.verticalLayout.setObjectName("verticalLayout")
-        spacerItem = QtWidgets.QSpacerItem(14, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem)
         self.bt_close = QtWidgets.QPushButton(self.frame)
-        self.bt_close.setMinimumSize(QtCore.QSize(150, 50))
-        self.bt_close.setMaximumSize(QtCore.QSize(150, 50))
-        self.bt_close.setStyleSheet("background-color:red;\n"
+        self.bt_close.setMinimumSize(QtCore.QSize(100, 40))
+        self.bt_close.setMaximumSize(QtCore.QSize(100, 40))
+        self.bt_close.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
 "color:white;\n"
 "font-size:14px;\n"
-"border-radius:15px;")
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:14px;\n"
+"")
         self.bt_close.setObjectName("bt_close")
-        self.verticalLayout.addWidget(self.bt_close)
+        self.horizontalLayout_5.addWidget(self.bt_close)
+        spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_5.addItem(spacerItem)
+        self.bt_salir = QtWidgets.QPushButton(self.frame)
+        self.bt_salir.setMinimumSize(QtCore.QSize(100, 40))
+        self.bt_salir.setMaximumSize(QtCore.QSize(100, 40))
+        self.bt_salir.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
+"color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}")
+        self.bt_salir.setObjectName("bt_salir")
+        self.horizontalLayout_5.addWidget(self.bt_salir)
+        self.verticalLayout_5.addLayout(self.horizontalLayout_5)
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
+        self.frame_2 = QtWidgets.QFrame(self.frame)
+        self.frame_2.setStyleSheet("QFrame{\n"
+"background-color:#233559;\n"
+"border-radius:40px;\n"
+"}\n"
+"QPushButton{\n"
+"background-color:#233559;\n"
+"color:#FFF;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color: #637aa6 ;\n"
+"}")
+        self.frame_2.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.frame_2.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.frame_2.setObjectName("frame_2")
+        self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.frame_2)
+        self.verticalLayout_4.setObjectName("verticalLayout_4")
+        self.verticalLayout = QtWidgets.QVBoxLayout()
+        self.verticalLayout.setObjectName("verticalLayout")
         spacerItem1 = QtWidgets.QSpacerItem(14, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem1)
-        self.bt_horarios = QtWidgets.QPushButton(self.frame)
+        spacerItem2 = QtWidgets.QSpacerItem(14, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem2)
+        self.bt_horarios = QtWidgets.QPushButton(self.frame_2)
         self.bt_horarios.setMinimumSize(QtCore.QSize(150, 50))
         self.bt_horarios.setMaximumSize(QtCore.QSize(150, 50))
-        self.bt_horarios.setStyleSheet("border-radius:15px;\n"
-"color:white;\n"
+        self.bt_horarios.setStyleSheet("\n"
 "font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
+"")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/calendar3 (2).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.bt_horarios.setIcon(icon)
         self.bt_horarios.setIconSize(QtCore.QSize(20, 20))
         self.bt_horarios.setObjectName("bt_horarios")
         self.verticalLayout.addWidget(self.bt_horarios)
-        spacerItem2 = QtWidgets.QSpacerItem(14, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem2)
-        self.bt_teachers = QtWidgets.QPushButton(self.frame)
+        spacerItem3 = QtWidgets.QSpacerItem(14, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem3)
+        self.bt_teachers = QtWidgets.QPushButton(self.frame_2)
         self.bt_teachers.setMinimumSize(QtCore.QSize(150, 50))
         self.bt_teachers.setMaximumSize(QtCore.QSize(150, 50))
-        self.bt_teachers.setStyleSheet("border-radius:15px;\n"
-"color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
+        self.bt_teachers.setStyleSheet("\n"
+"font-size:15px;")
         icon1 = QtGui.QIcon()
         icon1.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/chalkboard-teacher.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.bt_teachers.setIcon(icon1)
         self.bt_teachers.setIconSize(QtCore.QSize(20, 20))
         self.bt_teachers.setObjectName("bt_teachers")
         self.verticalLayout.addWidget(self.bt_teachers)
-        spacerItem3 = QtWidgets.QSpacerItem(14, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem3)
-        self.bt_materias = QtWidgets.QPushButton(self.frame)
+        spacerItem4 = QtWidgets.QSpacerItem(14, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem4)
+        self.bt_materias = QtWidgets.QPushButton(self.frame_2)
         self.bt_materias.setMinimumSize(QtCore.QSize(150, 50))
         self.bt_materias.setMaximumSize(QtCore.QSize(150, 50))
-        self.bt_materias.setStyleSheet("border-radius:15px;\n"
-"color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
+        self.bt_materias.setStyleSheet("\n"
+"font-size:15px;")
         icon2 = QtGui.QIcon()
         icon2.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/round-class.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.bt_materias.setIcon(icon2)
         self.bt_materias.setIconSize(QtCore.QSize(20, 20))
         self.bt_materias.setObjectName("bt_materias")
         self.verticalLayout.addWidget(self.bt_materias)
-        spacerItem4 = QtWidgets.QSpacerItem(14, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem4)
-        self.bt_sede = QtWidgets.QPushButton(self.frame)
+        spacerItem5 = QtWidgets.QSpacerItem(14, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem5)
+        self.bt_sede = QtWidgets.QPushButton(self.frame_2)
         self.bt_sede.setMinimumSize(QtCore.QSize(150, 50))
         self.bt_sede.setMaximumSize(QtCore.QSize(150, 50))
-        self.bt_sede.setStyleSheet("border-radius:15px;\n"
-"color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
+        self.bt_sede.setStyleSheet("\n"
+"font-size:15px;")
         icon3 = QtGui.QIcon()
         icon3.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/university.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.bt_sede.setIcon(icon3)
         self.bt_sede.setIconSize(QtCore.QSize(20, 20))
         self.bt_sede.setObjectName("bt_sede")
         self.verticalLayout.addWidget(self.bt_sede)
-        spacerItem5 = QtWidgets.QSpacerItem(14, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem5)
-        self.bt_carreras = QtWidgets.QPushButton(self.frame)
+        spacerItem6 = QtWidgets.QSpacerItem(14, 13, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem6)
+        self.bt_carreras = QtWidgets.QPushButton(self.frame_2)
         self.bt_carreras.setMinimumSize(QtCore.QSize(150, 50))
         self.bt_carreras.setMaximumSize(QtCore.QSize(150, 50))
-        self.bt_carreras.setStyleSheet("border-radius:15px;\n"
-"color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
+        self.bt_carreras.setStyleSheet("\n"
+"font-size:15px;")
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/system-sum.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.bt_carreras.setIcon(icon4)
         self.bt_carreras.setIconSize(QtCore.QSize(20, 20))
         self.bt_carreras.setObjectName("bt_carreras")
         self.verticalLayout.addWidget(self.bt_carreras)
-        spacerItem6 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.verticalLayout.addItem(spacerItem6)
-        self.horizontalLayout_5.addLayout(self.verticalLayout)
+        spacerItem7 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.verticalLayout.addItem(spacerItem7)
+        self.verticalLayout_4.addLayout(self.verticalLayout)
+        self.horizontalLayout_6.addWidget(self.frame_2)
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem7)
-        self.label = QtWidgets.QLabel(self.frame)
-        font = QtGui.QFont()
-        font.setFamily("Hack Nerd Font Mono")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setItalic(True)
-        font.setWeight(75)
-        self.label.setFont(font)
-        self.label.setObjectName("label")
-        self.horizontalLayout_2.addWidget(self.label)
         spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_2.addItem(spacerItem8)
-        self.bt_salir = QtWidgets.QPushButton(self.frame)
-        self.bt_salir.setMinimumSize(QtCore.QSize(75, 31))
-        self.bt_salir.setMaximumSize(QtCore.QSize(75, 31))
-        self.bt_salir.setStyleSheet("background-color:red;\n"
-"color:white;\n"
-"font-size:14px;\n"
-"border-radius:15px;")
-        self.bt_salir.setObjectName("bt_salir")
-        self.horizontalLayout_2.addWidget(self.bt_salir)
+        self.label_2 = QtWidgets.QLabel(self.frame)
+        font = QtGui.QFont()
+        font.setFamily("Playbill")
+        font.setPointSize(36)
+        font.setBold(False)
+        font.setItalic(False)
+        font.setWeight(50)
+        self.label_2.setFont(font)
+        self.label_2.setStyleSheet("font: 36pt \"Playbill\";\n"
+"")
+        self.label_2.setObjectName("label_2")
+        self.horizontalLayout_2.addWidget(self.label_2)
+        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem9)
         self.verticalLayout_3.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem9)
+        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem10)
         self.text = QtWidgets.QLabel(self.frame)
         self.text.setMinimumSize(QtCore.QSize(401, 71))
         self.text.setMaximumSize(QtCore.QSize(401, 71))
         font = QtGui.QFont()
         font.setFamily("Hack Nerd Font Mono")
-        font.setPointSize(12)
+        font.setPointSize(-1)
         font.setBold(True)
         font.setItalic(True)
         font.setWeight(75)
@@ -165,19 +205,19 @@ class Ui_MainWindow(object):
         self.text.setAlignment(QtCore.Qt.AlignCenter)
         self.text.setObjectName("text")
         self.horizontalLayout_4.addWidget(self.text)
-        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_4.addItem(spacerItem10)
+        spacerItem11 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_4.addItem(spacerItem11)
         self.verticalLayout_3.addLayout(self.horizontalLayout_4)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
-        spacerItem11 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem11)
+        spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem12)
         self.label_4 = QtWidgets.QLabel(self.frame)
         self.label_4.setMinimumSize(QtCore.QSize(381, 231))
         self.label_4.setMaximumSize(QtCore.QSize(381, 231))
         font = QtGui.QFont()
         font.setFamily("Hack Nerd Font Mono")
-        font.setPointSize(12)
+        font.setPointSize(-1)
         font.setBold(True)
         font.setItalic(True)
         font.setWeight(75)
@@ -188,39 +228,50 @@ class Ui_MainWindow(object):
         self.label_4.setScaledContents(True)
         self.label_4.setObjectName("label_4")
         self.horizontalLayout_3.addWidget(self.label_4)
-        spacerItem12 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_3.addItem(spacerItem12)
+        spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_3.addItem(spacerItem13)
         self.verticalLayout_3.addLayout(self.horizontalLayout_3)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        spacerItem13 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout.addItem(spacerItem13)
-        self.bt_periodo = QtWidgets.QPushButton(self.frame)
-        self.bt_periodo.setMinimumSize(QtCore.QSize(150, 50))
-        self.bt_periodo.setMaximumSize(QtCore.QSize(150, 50))
-        self.bt_periodo.setStyleSheet("border-radius:15px;\n"
-"color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/user-fill.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.bt_periodo.setIcon(icon5)
-        self.bt_periodo.setIconSize(QtCore.QSize(20, 20))
-        self.bt_periodo.setObjectName("bt_periodo")
-        self.horizontalLayout.addWidget(self.bt_periodo)
         self.bt_users = QtWidgets.QPushButton(self.frame)
         self.bt_users.setMinimumSize(QtCore.QSize(150, 50))
         self.bt_users.setMaximumSize(QtCore.QSize(150, 50))
-        self.bt_users.setStyleSheet("border-radius:15px;\n"
+        self.bt_users.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
 "color:white;\n"
-"font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}")
+        icon5 = QtGui.QIcon()
+        icon5.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/user-fill.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.bt_users.setIcon(icon5)
         self.bt_users.setIconSize(QtCore.QSize(20, 20))
         self.bt_users.setObjectName("bt_users")
         self.horizontalLayout.addWidget(self.bt_users)
+        spacerItem14 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout.addItem(spacerItem14)
+        self.bt_periodo = QtWidgets.QPushButton(self.frame)
+        self.bt_periodo.setMinimumSize(QtCore.QSize(150, 50))
+        self.bt_periodo.setMaximumSize(QtCore.QSize(150, 50))
+        self.bt_periodo.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
+"color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}")
+        self.bt_periodo.setIcon(icon5)
+        self.bt_periodo.setIconSize(QtCore.QSize(20, 20))
+        self.bt_periodo.setObjectName("bt_periodo")
+        self.horizontalLayout.addWidget(self.bt_periodo)
         self.verticalLayout_3.addLayout(self.horizontalLayout)
-        self.horizontalLayout_5.addLayout(self.verticalLayout_3)
+        self.horizontalLayout_6.addLayout(self.verticalLayout_3)
+        self.verticalLayout_5.addLayout(self.horizontalLayout_6)
         self.verticalLayout_2.addWidget(self.frame)
         MainWindow.setCentralWidget(self.centralwidget)
 
@@ -231,12 +282,12 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.bt_close.setText(_translate("MainWindow", "Cerrar Sesion"))
+        self.bt_salir.setText(_translate("MainWindow", "SALIR"))
         self.bt_horarios.setText(_translate("MainWindow", "Horarios"))
         self.bt_teachers.setText(_translate("MainWindow", "Profesores"))
         self.bt_materias.setText(_translate("MainWindow", "Materias"))
         self.bt_sede.setText(_translate("MainWindow", "Sedes"))
         self.bt_carreras.setText(_translate("MainWindow", "Carreras"))
-        self.label.setText(_translate("MainWindow", "MENU PRINCIPAL"))
-        self.bt_salir.setText(_translate("MainWindow", "SALIR"))
-        self.bt_periodo.setText(_translate("MainWindow", "Periodo Academico"))
+        self.label_2.setText(_translate("MainWindow", "MENU PRINCIPAL"))
         self.bt_users.setText(_translate("MainWindow", "Usuarios"))
+        self.bt_periodo.setText(_translate("MainWindow", "Periodo Academico"))

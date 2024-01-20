@@ -15,6 +15,17 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(749, 630)
+        MainWindow.setStyleSheet("\n"
+"QMainWindow{\n"
+"background-color:#D9D9D9;\n"
+"}\n"
+"QLineEdit{\n"
+"background-color: #7E94Bf;\n"
+"}\n"
+"QLabel{\n"
+"font-size:15px;\n"
+"color:#111626;}\n"
+"")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.centralwidget)
@@ -22,6 +33,17 @@ class Ui_MainWindow(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.bt_back = QtWidgets.QPushButton(self.centralwidget)
+        self.bt_back.setMinimumSize(QtCore.QSize(100, 40))
+        self.bt_back.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
+"color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
         self.bt_back.setObjectName("bt_back")
         self.horizontalLayout.addWidget(self.bt_back)
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
@@ -32,13 +54,41 @@ class Ui_MainWindow(object):
         spacerItem1 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout.addItem(spacerItem1)
         self.bt_salir = QtWidgets.QPushButton(self.centralwidget)
+        self.bt_salir.setMinimumSize(QtCore.QSize(100, 40))
+        self.bt_salir.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
+"color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
         self.bt_salir.setObjectName("bt_salir")
         self.horizontalLayout.addWidget(self.bt_salir)
         self.verticalLayout_5.addLayout(self.horizontalLayout)
         self.toolBox = QtWidgets.QToolBox(self.centralwidget)
+        self.toolBox.setStyleSheet("QToolBox {\n"
+"    background-color: lightgray;\n"
+"    border: 1px solid darkgray;\n"
+"    font: 75 12pt \"Arial\";\n"
+"}\n"
+"\n"
+"QToolBox::tab {\n"
+"    background-color: #00007f;\n"
+"    color: white;\n"
+"}\n"
+"\n"
+"QToolBox::tab:selected {\n"
+"    background-color: #55aaff;\n"
+"    background-color: rgb(85, 170, 255);\n"
+"    color: black;\n"
+"}\n"
+"")
         self.toolBox.setObjectName("toolBox")
         self.page = QtWidgets.QWidget()
-        self.page.setGeometry(QtCore.QRect(0, 0, 731, 386))
+        self.page.setGeometry(QtCore.QRect(0, 0, 729, 372))
         self.page.setObjectName("page")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.page)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
@@ -50,10 +100,13 @@ class Ui_MainWindow(object):
         self.label_55.setObjectName("label_55")
         self.horizontalLayout_5.addWidget(self.label_55)
         self.ln_disponibilidad_aula = QtWidgets.QLineEdit(self.page)
+        self.ln_disponibilidad_aula.setMinimumSize(QtCore.QSize(0, 40))
+        self.ln_disponibilidad_aula.setAlignment(QtCore.Qt.AlignCenter)
         self.ln_disponibilidad_aula.setReadOnly(True)
         self.ln_disponibilidad_aula.setObjectName("ln_disponibilidad_aula")
         self.horizontalLayout_5.addWidget(self.ln_disponibilidad_aula)
         self.bt_buscar = QtWidgets.QPushButton(self.page)
+        self.bt_buscar.setStyleSheet("border:none;")
         self.bt_buscar.setText("")
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/baseline-search.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -85,6 +138,17 @@ class Ui_MainWindow(object):
         spacerItem3 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_6.addItem(spacerItem3)
         self.bt_buscarAula = QtWidgets.QPushButton(self.page)
+        self.bt_buscarAula.setMinimumSize(QtCore.QSize(100, 40))
+        self.bt_buscarAula.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
+"color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
         self.bt_buscarAula.setObjectName("bt_buscarAula")
         self.horizontalLayout_6.addWidget(self.bt_buscarAula)
         self.verticalLayout_4.addLayout(self.horizontalLayout_6)
@@ -92,7 +156,7 @@ class Ui_MainWindow(object):
         icon1.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/university.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.toolBox.addItem(self.page, icon1, "")
         self.page_2 = QtWidgets.QWidget()
-        self.page_2.setGeometry(QtCore.QRect(0, 0, 731, 386))
+        self.page_2.setGeometry(QtCore.QRect(0, 0, 729, 372))
         self.page_2.setObjectName("page_2")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.page_2)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -104,6 +168,9 @@ class Ui_MainWindow(object):
         self.label_57.setObjectName("label_57")
         self.horizontalLayout_11.addWidget(self.label_57)
         self.ln_disponibilidad_profesores = QtWidgets.QLineEdit(self.page_2)
+        self.ln_disponibilidad_profesores.setMinimumSize(QtCore.QSize(0, 40))
+        self.ln_disponibilidad_profesores.setMaximumSize(QtCore.QSize(16777215, 16777211))
+        self.ln_disponibilidad_profesores.setAlignment(QtCore.Qt.AlignCenter)
         self.ln_disponibilidad_profesores.setReadOnly(True)
         self.ln_disponibilidad_profesores.setObjectName("ln_disponibilidad_profesores")
         self.horizontalLayout_11.addWidget(self.ln_disponibilidad_profesores)
@@ -136,7 +203,34 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem5)
+        self.bt_imprimirProfesor = QtWidgets.QPushButton(self.page_2)
+        self.bt_imprimirProfesor.setMinimumSize(QtCore.QSize(100, 40))
+        self.bt_imprimirProfesor.setMaximumSize(QtCore.QSize(100, 40))
+        self.bt_imprimirProfesor.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
+"color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
+        self.bt_imprimirProfesor.setObjectName("bt_imprimirProfesor")
+        self.horizontalLayout_4.addWidget(self.bt_imprimirProfesor)
         self.bt_buscarProf = QtWidgets.QPushButton(self.page_2)
+        self.bt_buscarProf.setMinimumSize(QtCore.QSize(100, 40))
+        self.bt_buscarProf.setMaximumSize(QtCore.QSize(100, 40))
+        self.bt_buscarProf.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
+"color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
         self.bt_buscarProf.setObjectName("bt_buscarProf")
         self.horizontalLayout_4.addWidget(self.bt_buscarProf)
         self.verticalLayout_2.addLayout(self.horizontalLayout_4)
@@ -144,7 +238,7 @@ class Ui_MainWindow(object):
         icon2.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/adduser.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.toolBox.addItem(self.page_2, icon2, "")
         self.page_3 = QtWidgets.QWidget()
-        self.page_3.setGeometry(QtCore.QRect(0, 0, 731, 386))
+        self.page_3.setGeometry(QtCore.QRect(0, 0, 729, 372))
         self.page_3.setObjectName("page_3")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.page_3)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -158,19 +252,25 @@ class Ui_MainWindow(object):
         self.label_73.setObjectName("label_73")
         self.horizontalLayout_20.addWidget(self.label_73)
         self.ln_disponibilidad_carrera = QtWidgets.QLineEdit(self.page_3)
+        self.ln_disponibilidad_carrera.setMinimumSize(QtCore.QSize(100, 40))
+        self.ln_disponibilidad_carrera.setAlignment(QtCore.Qt.AlignCenter)
         self.ln_disponibilidad_carrera.setReadOnly(True)
         self.ln_disponibilidad_carrera.setObjectName("ln_disponibilidad_carrera")
         self.horizontalLayout_20.addWidget(self.ln_disponibilidad_carrera)
         self.bt_carrerabuscar = QtWidgets.QPushButton(self.page_3)
+        self.bt_carrerabuscar.setStyleSheet("border:none;")
         self.bt_carrerabuscar.setText("")
         self.bt_carrerabuscar.setIcon(icon)
         self.bt_carrerabuscar.setObjectName("bt_carrerabuscar")
         self.horizontalLayout_20.addWidget(self.bt_carrerabuscar)
         self.ln_disponibilidad_seccion = QtWidgets.QLineEdit(self.page_3)
+        self.ln_disponibilidad_seccion.setMinimumSize(QtCore.QSize(100, 40))
+        self.ln_disponibilidad_seccion.setAlignment(QtCore.Qt.AlignCenter)
         self.ln_disponibilidad_seccion.setReadOnly(True)
         self.ln_disponibilidad_seccion.setObjectName("ln_disponibilidad_seccion")
         self.horizontalLayout_20.addWidget(self.ln_disponibilidad_seccion)
         self.bt_seccionbuscar = QtWidgets.QPushButton(self.page_3)
+        self.bt_seccionbuscar.setStyleSheet("border:none;")
         self.bt_seccionbuscar.setText("")
         self.bt_seccionbuscar.setIcon(icon)
         self.bt_seccionbuscar.setObjectName("bt_seccionbuscar")
@@ -201,6 +301,17 @@ class Ui_MainWindow(object):
         spacerItem7 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_7.addItem(spacerItem7)
         self.bt_sesion = QtWidgets.QPushButton(self.page_3)
+        self.bt_sesion.setMinimumSize(QtCore.QSize(100, 40))
+        self.bt_sesion.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
+"color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
         self.bt_sesion.setObjectName("bt_sesion")
         self.horizontalLayout_7.addWidget(self.bt_sesion)
         self.verticalLayout.addLayout(self.horizontalLayout_7)
@@ -220,10 +331,17 @@ class Ui_MainWindow(object):
         self.bt_delete = QtWidgets.QPushButton(self.centralwidget)
         self.bt_delete.setMinimumSize(QtCore.QSize(160, 61))
         self.bt_delete.setMaximumSize(QtCore.QSize(160, 61))
-        self.bt_delete.setStyleSheet("border-radius:15px;\n"
+        self.bt_delete.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
 "color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
 "font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
+"font-size:15px;")
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/delete.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.bt_delete.setIcon(icon4)
@@ -233,10 +351,18 @@ class Ui_MainWindow(object):
         self.bt_crear = QtWidgets.QPushButton(self.centralwidget)
         self.bt_crear.setMinimumSize(QtCore.QSize(160, 61))
         self.bt_crear.setMaximumSize(QtCore.QSize(160, 61))
-        self.bt_crear.setStyleSheet("border-radius:15px;\n"
+        self.bt_crear.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
 "color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
 "font-size:15px;\n"
-"background-color: rgb(104, 126, 255);")
+"font-size:15px;\n"
+"")
         icon5 = QtGui.QIcon()
         icon5.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/calendar3 (2).png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.bt_crear.setIcon(icon5)
@@ -252,7 +378,7 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.toolBox.setCurrentIndex(2)
+        self.toolBox.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -260,7 +386,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.bt_back.setText(_translate("MainWindow", "Volver "))
         self.label.setText(_translate("MainWindow", "nombre de la modalidad"))
-        self.bt_salir.setText(_translate("MainWindow", "Volver al menu Principal"))
+        self.bt_salir.setText(_translate("MainWindow", "Salir"))
         self.label_55.setText(_translate("MainWindow", "Verificar disponibilidad"))
         self.ln_disponibilidad_aula.setPlaceholderText(_translate("MainWindow", "Aula"))
         item = self.tableWidget_aulas.horizontalHeaderItem(0)
@@ -295,7 +421,8 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Viernes"))
         item = self.tableWidget_profesores.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "Sabado"))
-        self.bt_buscarProf.setText(_translate("MainWindow", "PushButton"))
+        self.bt_imprimirProfesor.setText(_translate("MainWindow", "Imprimir"))
+        self.bt_buscarProf.setText(_translate("MainWindow", "Buscar"))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page_2), _translate("MainWindow", "Disponibilidad Profesores"))
         self.label_73.setText(_translate("MainWindow", "Verificar disponibilidad"))
         self.ln_disponibilidad_carrera.setPlaceholderText(_translate("MainWindow", "Nivel"))
