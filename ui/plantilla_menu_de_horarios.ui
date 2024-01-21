@@ -149,7 +149,7 @@ QToolBox::tab:selected {
 </string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="page">
        <property name="geometry">
@@ -157,7 +157,7 @@ QToolBox::tab:selected {
          <x>0</x>
          <y>0</y>
          <width>1057</width>
-         <height>515</height>
+         <height>543</height>
         </rect>
        </property>
        <attribute name="icon">
@@ -338,8 +338,8 @@ font-size:15px;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>1057</width>
-         <height>515</height>
+         <width>297</width>
+         <height>189</height>
         </rect>
        </property>
        <attribute name="icon">
@@ -535,8 +535,8 @@ font-size:15px;</string>
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>729</width>
-         <height>372</height>
+         <width>1057</width>
+         <height>543</height>
         </rect>
        </property>
        <attribute name="icon">
@@ -725,6 +725,14 @@ font-size:15px;</string>
        </layout>
       </widget>
       <widget class="QWidget" name="page_4">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>1057</width>
+         <height>543</height>
+        </rect>
+       </property>
        <attribute name="label">
         <string>Asistencia de docentes</string>
        </attribute>
@@ -893,6 +901,31 @@ font-size:15px;</string>
               <string>Firma</string>
              </property>
             </column>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="bt_asistencia_2">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">QPushButton{
+background-color:#253b59;
+color:white;
+font-size:14px;
+border-radius:15px;
+}
+QPushButton::Hover{
+background-color:#637aa6;
+}
+font-size:15px;</string>
+            </property>
+            <property name="text">
+             <string>Imprimir</string>
+            </property>
            </widget>
           </item>
          </layout>

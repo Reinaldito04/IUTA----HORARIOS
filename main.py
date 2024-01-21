@@ -106,7 +106,7 @@ class DialogoConsulta(QDialog):
 
 # DIALOGO FORMULARIO AL SELECCIONAR SELECCIONAR LAS CELDAS
 class FormularioDialog(QDialog):
-    def __init__(self , titulo , hora, dia ,fila,columna ,horario,carrera,sesion,nivel):
+    def __init__(self , titulo , hora, dia ,fila,columna ,horario,carrera,sesion,nivel,modalidad):
         super().__init__()
         loadUi("./ui/busqueda.ui",self)
         self.titulo = titulo
@@ -118,6 +118,7 @@ class FormularioDialog(QDialog):
         self.carrera = carrera
         self.sesion = sesion
         self.nivel = nivel
+        self.modalidad = modalidad
         if self.dia == 1:
             self.dia = "Lunes"
         if self.dia == 2:
@@ -219,8 +220,8 @@ class FormularioDialog(QDialog):
             return None  # Devuelve None si el salón ya está siendo utilizado
 
         else:
-            cursor.execute("INSERT INTO HorarioTest (Dia,Hora,CodigoMat,CodigoAula,CedulaProf,Carrera,Sesion,Nivel) VALUES (?,?,?,?,?,?,?,?)",
-                           (self.dia,self.hora,codigoMateria,codigoSalon,cedulaProfesor,self.carrera,self.sesion,self.nivel))
+            cursor.execute("INSERT INTO HorarioTest (Dia,Hora,CodigoMat,CodigoAula,CedulaProf,Carrera,Sesion,Nivel,Modalidad) VALUES (?,?,?,?,?,?,?,?,?)",
+                           (self.dia,self.hora,codigoMateria,codigoSalon,cedulaProfesor,self.carrera,self.sesion,self.nivel,self.modalidad))
             QMessageBox.information(self,"Exito","Se ha almacenado los datos correctamente")
             conexion.commit()
             conexion.close()
@@ -762,7 +763,34 @@ class menuHorarioPlantilla(QMainWindow):
         
         self.horas =[]
         self.datos_carga_horas = []  # Coloca los valores apropiados aquí
+        self.bt_asistencia_2.clicked.connect(self.guardarPDFAsistencia)
         
+    def guardarPDFAsistencia(self):
+        try:
+            from   ui.pdfcrearAsistencia import crear_pdf
+            
+            dia=self.comboBox_dia.currentText()
+          
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("SELECT Periodo FROM PeriodoAcademico WHERE ID=?",(1,))
+            periodo = cursor.fetchone()
+            periodoAcademico =periodo[0]
+            conexion.close()
+            if not dia :
+                QMessageBox.information(self,"Error","Es necesario ingresar el dia")
+                return
+            ruta_salida, _ = QFileDialog.getSaveFileName(self, 'Guardar PDF', '', 'Archivos PDF (*.pdf)')
+
+            # Verifica si el usuario canceló la selección
+            if not ruta_salida:
+                return
+            else:
+                crear_pdf(ruta_salida=ruta_salida,dia=dia,periodo=periodoAcademico,Turno=self.modalidad )
+                if crear_pdf:
+                    return ruta_salida   
+        except Exception as e:
+            print(f"Error en vistaPrevia: {e}")
     def guardarPDFAula(self):
         try:
             from   ui.pdfcrearAula import crear_pdf
@@ -1129,7 +1157,7 @@ class menuHorarioPlantilla(QMainWindow):
 
             # Ejecutar la consulta para obtener los registros de la tabla HorarioTest para el dia especificado
             cursor.execute(
-                "SELECT  CedulaProf, CodigoMat, CodigoAula, Hora FROM HorarioTest WHERE Dia=?", (dia,)
+                "SELECT  CedulaProf, CodigoMat, CodigoAula, Hora FROM HorarioTest WHERE Dia=? AND Modalidad=?", (dia,self.modalidad)
             )
             data = cursor.fetchall()
             self.tableWidget.setRowCount(len(data))  
@@ -1470,7 +1498,7 @@ class crearHorarioPlantilla(QMainWindow):
             dialog = FormularioDialog(titulo=titulo, hora=hora,
                                       dia=dia, fila=fila,columna=columna,horario=self,
                                       sesion=sesion,carrera=carrera
-                                      ,nivel=nivel)
+                                      ,nivel=nivel,modalidad=self.modalidad)
             resultado = dialog.exec_()
             if resultado == QDialog.Accepted:
                 texto_a_insertar = dialog.guardar()  # Obtener el texto desde la función guardar

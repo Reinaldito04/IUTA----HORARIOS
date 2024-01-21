@@ -127,6 +127,9 @@ def crear_pdf( ruta_salida,profesor,periodo,Turno):
         width: 80px;
         height: 80px;
       }}
+       @page {{
+            size: landscape;  /* Cambiar la orientación a horizontal */
+        }}
       .container-fecha {{
         margin-top: -10px;
         margin-left: 20px;

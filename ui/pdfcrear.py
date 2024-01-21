@@ -130,6 +130,7 @@ def crear_pdf( ruta_salida,carrera,sesion,Turno,Nivel,periodo):
         text-align: center;
     }}
     
+    
     .container-tabla {{
         margin-top: 50px;
         display: table;

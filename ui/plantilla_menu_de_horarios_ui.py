@@ -14,7 +14,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(749, 630)
+        MainWindow.resize(1083, 837)
         MainWindow.setStyleSheet("\n"
 "QMainWindow{\n"
 "background-color:#D9D9D9;\n"
@@ -29,6 +29,8 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.centralwidget)
+        self.verticalLayout_5.setContentsMargins(12, -1, 12, 12)
+        self.verticalLayout_5.setSpacing(10)
         self.verticalLayout_5.setObjectName("verticalLayout_5")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -72,7 +74,7 @@ class Ui_MainWindow(object):
         self.toolBox.setStyleSheet("QToolBox {\n"
 "    background-color: lightgray;\n"
 "    border: 1px solid darkgray;\n"
-"    font: 75 12pt \"Arial\";\n"
+"    font: 75 15pt \"Arial\";\n"
 "}\n"
 "\n"
 "QToolBox::tab {\n"
@@ -88,7 +90,7 @@ class Ui_MainWindow(object):
 "")
         self.toolBox.setObjectName("toolBox")
         self.page = QtWidgets.QWidget()
-        self.page.setGeometry(QtCore.QRect(0, 0, 729, 372))
+        self.page.setGeometry(QtCore.QRect(0, 0, 1057, 543))
         self.page.setObjectName("page")
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.page)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
@@ -170,7 +172,7 @@ class Ui_MainWindow(object):
         icon1.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/university.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.toolBox.addItem(self.page, icon1, "")
         self.page_2 = QtWidgets.QWidget()
-        self.page_2.setGeometry(QtCore.QRect(0, 0, 729, 372))
+        self.page_2.setGeometry(QtCore.QRect(0, 0, 297, 189))
         self.page_2.setObjectName("page_2")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.page_2)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -252,7 +254,7 @@ class Ui_MainWindow(object):
         icon2.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/adduser.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.toolBox.addItem(self.page_2, icon2, "")
         self.page_3 = QtWidgets.QWidget()
-        self.page_3.setGeometry(QtCore.QRect(0, 0, 449, 191))
+        self.page_3.setGeometry(QtCore.QRect(0, 0, 1057, 543))
         self.page_3.setObjectName("page_3")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.page_3)
         self.verticalLayout.setObjectName("verticalLayout")
@@ -332,16 +334,110 @@ class Ui_MainWindow(object):
         icon3 = QtGui.QIcon()
         icon3.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/users-line.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.toolBox.addItem(self.page_3, icon3, "")
+        self.page_4 = QtWidgets.QWidget()
+        self.page_4.setGeometry(QtCore.QRect(0, 0, 1057, 543))
+        self.page_4.setObjectName("page_4")
+        self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.page_4)
+        self.verticalLayout_6.setObjectName("verticalLayout_6")
+        self.verticalLayout_3 = QtWidgets.QVBoxLayout()
+        self.verticalLayout_3.setObjectName("verticalLayout_3")
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_8.addItem(spacerItem8)
+        self.comboBox_dia = QtWidgets.QComboBox(self.page_4)
+        self.comboBox_dia.setMinimumSize(QtCore.QSize(150, 40))
+        self.comboBox_dia.setMaximumSize(QtCore.QSize(150, 40))
+        self.comboBox_dia.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.comboBox_dia.setStyleSheet("background-color: #7E94Bf;\n"
+"color: #ffffff;\n"
+"font: 75 15pt \"MS Sans Serif\";\n"
+"border-radius:15px;")
+        self.comboBox_dia.setObjectName("comboBox_dia")
+        self.comboBox_dia.addItem("")
+        self.comboBox_dia.addItem("")
+        self.comboBox_dia.addItem("")
+        self.comboBox_dia.addItem("")
+        self.comboBox_dia.addItem("")
+        self.comboBox_dia.addItem("")
+        self.horizontalLayout_8.addWidget(self.comboBox_dia)
+        self.bt_asistencia = QtWidgets.QPushButton(self.page_4)
+        self.bt_asistencia.setMinimumSize(QtCore.QSize(100, 40))
+        self.bt_asistencia.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
+"color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
+        self.bt_asistencia.setObjectName("bt_asistencia")
+        self.horizontalLayout_8.addWidget(self.bt_asistencia)
+        self.verticalLayout_3.addLayout(self.horizontalLayout_8)
+        self.label_2 = QtWidgets.QLabel(self.page_4)
+        self.label_2.setStyleSheet("font: 75 16pt \"MS Shell Dlg 2\";")
+        self.label_2.setAlignment(QtCore.Qt.AlignCenter)
+        self.label_2.setObjectName("label_2")
+        self.verticalLayout_3.addWidget(self.label_2)
+        self.tableWidget = QtWidgets.QTableWidget(self.page_4)
+        self.tableWidget.setObjectName("tableWidget")
+        self.tableWidget.setColumnCount(10)
+        self.tableWidget.setRowCount(0)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(2, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(3, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(4, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(5, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(6, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(7, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(8, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.tableWidget.setHorizontalHeaderItem(9, item)
+        self.verticalLayout_3.addWidget(self.tableWidget)
+        self.bt_asistencia_2 = QtWidgets.QPushButton(self.page_4)
+        self.bt_asistencia_2.setMinimumSize(QtCore.QSize(100, 40))
+        self.bt_asistencia_2.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
+"color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
+        self.bt_asistencia_2.setObjectName("bt_asistencia_2")
+        self.verticalLayout_3.addWidget(self.bt_asistencia_2)
+        self.verticalLayout_6.addLayout(self.verticalLayout_3)
+        self.toolBox.addItem(self.page_4, "")
         self.verticalLayout_5.addWidget(self.toolBox)
         self.line = QtWidgets.QFrame(self.centralwidget)
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
         self.verticalLayout_5.addWidget(self.line)
+        self.line_2 = QtWidgets.QFrame(self.centralwidget)
+        self.line_2.setStyleSheet("background-color:#00007f;")
+        self.line_2.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line_2.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line_2.setObjectName("line_2")
+        self.verticalLayout_5.addWidget(self.line_2)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem8)
+        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem9)
         self.bt_delete = QtWidgets.QPushButton(self.centralwidget)
         self.bt_delete.setMinimumSize(QtCore.QSize(160, 61))
         self.bt_delete.setMaximumSize(QtCore.QSize(160, 61))
@@ -383,16 +479,13 @@ class Ui_MainWindow(object):
         self.bt_crear.setIconSize(QtCore.QSize(20, 20))
         self.bt_crear.setObjectName("bt_crear")
         self.horizontalLayout_2.addWidget(self.bt_crear)
-        spacerItem9 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-        self.horizontalLayout_2.addItem(spacerItem9)
+        spacerItem10 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        self.horizontalLayout_2.addItem(spacerItem10)
         self.verticalLayout_5.addLayout(self.horizontalLayout_2)
         MainWindow.setCentralWidget(self.centralwidget)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
-        self.toolBox.setCurrentIndex(0)
+        self.toolBox.setCurrentIndex(3)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -458,5 +551,35 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Sabado"))
         self.bt_sesion.setText(_translate("MainWindow", "Buscar"))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page_3), _translate("MainWindow", "Disponibilidad Seccion"))
+        self.comboBox_dia.setItemText(0, _translate("MainWindow", "Lunes"))
+        self.comboBox_dia.setItemText(1, _translate("MainWindow", "Martes"))
+        self.comboBox_dia.setItemText(2, _translate("MainWindow", "Miercoles"))
+        self.comboBox_dia.setItemText(3, _translate("MainWindow", "Jueves"))
+        self.comboBox_dia.setItemText(4, _translate("MainWindow", "Viernes"))
+        self.comboBox_dia.setItemText(5, _translate("MainWindow", "Sabado"))
+        self.bt_asistencia.setText(_translate("MainWindow", "Buscar"))
+        self.label_2.setText(_translate("MainWindow", "Control de asistencia de facilitadores"))
+        item = self.tableWidget.horizontalHeaderItem(0)
+        item.setText(_translate("MainWindow", "Nombres y Apellidos"))
+        item = self.tableWidget.horizontalHeaderItem(1)
+        item.setText(_translate("MainWindow", "Asignatura"))
+        item = self.tableWidget.horizontalHeaderItem(2)
+        item.setText(_translate("MainWindow", "Aula"))
+        item = self.tableWidget.horizontalHeaderItem(3)
+        item.setText(_translate("MainWindow", "Hora"))
+        item = self.tableWidget.horizontalHeaderItem(4)
+        item.setText(_translate("MainWindow", "Entrada"))
+        item = self.tableWidget.horizontalHeaderItem(5)
+        item.setText(_translate("MainWindow", "Firma"))
+        item = self.tableWidget.horizontalHeaderItem(6)
+        item.setText(_translate("MainWindow", "N°OBJ"))
+        item = self.tableWidget.horizontalHeaderItem(7)
+        item.setText(_translate("MainWindow", "Contenido"))
+        item = self.tableWidget.horizontalHeaderItem(8)
+        item.setText(_translate("MainWindow", "Salida"))
+        item = self.tableWidget.horizontalHeaderItem(9)
+        item.setText(_translate("MainWindow", "Firma"))
+        self.bt_asistencia_2.setText(_translate("MainWindow", "Imprimir"))
+        self.toolBox.setItemText(self.toolBox.indexOf(self.page_4), _translate("MainWindow", "Asistencia de docentes"))
         self.bt_delete.setText(_translate("MainWindow", "Eliminar Horarios"))
         self.bt_crear.setText(_translate("MainWindow", "Ver y Crear Horario"))

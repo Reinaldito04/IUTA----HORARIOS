@@ -17,10 +17,10 @@ def image_url_to_base64(image_url):
 
 
 
-def recuperar_datos_bd(aula):
+def recuperar_datos_bd(dia):
     conexion = sqlite3.connect("db/database.db")
     cursor = conexion.cursor()
-    cursor.execute("SELECT Dia, Hora, CodigoMat, CodigoAula, CedulaProf,Nivel FROM HorarioTest WHERE CodigoAula=?", (aula,))
+    cursor.execute("SELECT Dia, Hora, CodigoMat, CodigoAula, CedulaProf FROM HorarioTest WHERE Dia=?", (dia,))
     datos_base = cursor.fetchall()
     cursor.close()
     return datos_base
@@ -63,61 +63,52 @@ def convertir_formato_hora(hora):
     return hora
 
 
-def crear_pdf( ruta_salida,aula,periodo,Turno):
+def crear_pdf( ruta_salida,periodo,Turno,dia):
     imagen_url = 'https://www.eduopinions.com/wp-content/uploads/2018/02/Instituto-Universitario-de-Tecnolog%C3%ADa-de-Administraci%C3%B3n-Industrial-IUTA-logo-350x181.gif'
     
     imagen_base64 = image_url_to_base64(imagen_url)
   
     Turno = f'{Turno}'
     periodo =f'{periodo}'
-    aulatexto =f'{aula}'
+  
     fecha_actual = datetime.now()
     fecha_formateada = fecha_actual.strftime("%Y-%m-%d")
     conexion = sqlite3.connect("db/database.db")
     cursor = conexion.cursor()
-    cursor.execute("SELECT CodigoAula FROM Aulas WHERE Descripcion=?",(aula,))
-    ubicacion = cursor.fetchone()
-    ubicacion = ubicacion[0]
-    conexion.close()
+   
 
     print("Fecha actual:", fecha_formateada)
     if imagen_base64:
         # Definir los datos de la tabla
        
 
-        datos_base = recuperar_datos_bd(aula)        
+        datos_base = recuperar_datos_bd(dia)        
         filas_datos = []
         for dato in datos_base:
             dia = dato[0]
             hora = dato[1]
-
-            # Buscar si ya existe una fila con esta hora
-            fila_existente = next((fila for fila in filas_datos if fila["hora"] == hora), None)
-
-            # Si no existe, crear una nueva fila
-            if not fila_existente:
-                nueva_fila = {"hora": hora, "lunes": "", "martes": "", "miercoles": "", "jueves": "", "viernes": "", "sabado": ""}
-                filas_datos.append(nueva_fila)
-                fila_existente = nueva_fila
-
-            # Colocar los datos en la celda correspondiente al día
-            fila_existente[dia.lower()] = f"{dato[2]} </br> {dato[3]} </br> {dato[4]} </br> {dato[5]}"
-        horas_db = [fila['hora'] for fila in filas_datos]
-        filas_datos = sorted(filas_datos, key=lambda x: horas_db.index(x['hora']) if x['hora'] in horas_db else float('inf'))
-
-
-        filas_html = ""
-        for fila in filas_datos:
-            fila_html = "<tr>"
-            fila_html += f"<td>{fila.get('hora', '')}</td>"
-            fila_html += f"<td>{fila.get('lunes', '')}</td>"
-            fila_html += f"<td>{fila.get('martes', '')}</td>"
-            fila_html += f"<td>{fila.get('miercoles', '')}</td>"
-            fila_html += f"<td>{fila.get('jueves', '')}</td>"
-            fila_html += f"<td>{fila.get('viernes', '')}</td>"
-            fila_html += f"<td>{fila.get('sabado', '')}</td>"
-            fila_html += "</tr>"
-            filas_html += fila_html
+            nombre = dato[4]
+            asignatura = dato[2]
+            aula = dato[3]
+            # Agregar la fila HTML
+            fila_html = f"""
+                <tr>
+                    <td>{nombre}</td>
+                    <td>{asignatura}</td>
+                    <td>{aula}</td>
+                    <td>{hora}</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            """
+            filas_datos.append(fila_html)
+            
+    filas_html = ''.join(filas_datos)
+    
     html = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -126,10 +117,6 @@ def crear_pdf( ruta_salida,aula,periodo,Turno):
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Document</title>
         <style>
-        
-         @page {{
-            size: landscape;  /* Cambiar la orientación a horizontal */
-        }}
             .div-img {{
         margin-left: 20px;
       }}
@@ -178,14 +165,16 @@ def crear_pdf( ruta_salida,aula,periodo,Turno):
         text-align: center;
     }}
  
-    
+    @page {{
+            size: landscape;  /* Cambiar la orientación a horizontal */
+        }}
 
         </style>
     </head>
     <body>
     <div class="container-title">
     
-   <h2>HORARIO INDIVIDUAL DE AULA</h2>
+   <h2>Control de Asistencia de Facilitadores</h2>
     </div>
        <div class="div-img">
       <img
@@ -196,13 +185,6 @@ def crear_pdf( ruta_salida,aula,periodo,Turno):
       </div>
       
       <div class="container">
-        <div class="container-docente">
-          <p>UBICACION: {ubicacion} </p>
-        </div>  
-      
-        <div class="container-docente">
-          <p>AULA: {aulatexto} </p>
-        </div>
         
         <div class="container-periodo">
           <p>PERIODO : {periodo}</p>
@@ -215,13 +197,16 @@ def crear_pdf( ruta_salida,aula,periodo,Turno):
     
         <table class="horario-table">
             <tr class="horario-header">
-                <th>HORA</th>
-                <th>LUNES</th>
-                <th>MARTES</th>
-                <th>MIERCOLES</th>
-                <th>JUEVES</th>
-                <th>VIERNES</th>
-                <th>SABADO</th>
+                <th>Nombres y Apellidos</th>
+                <th>Asignatura</th>
+                <th>Aula</th>
+                <th>Hora</th>
+                <th>Entrada</th>
+                <th>Firma</th>
+                <th>N°OBJ</th>
+                <th>Contenido</th>
+                <th>Salida</th>
+                <th>Firma</th>
             </tr>
             {filas_html}
         </table>
