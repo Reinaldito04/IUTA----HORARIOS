@@ -171,7 +171,7 @@ class FormularioDialog(QDialog):
     def codigoSalon(self):
         consulta_like = "SELECT Descripcion, CodigoAula FROM Aulas WHERE Descripcion LIKE ?"
         
-        consulta_sql_salon = "SELECT  Descripcion,CodigoAula FROM Aulas;"
+        consulta_sql_salon = "SELECT  codigoAula,CodigoSede FROM Aulas;"
 
         dialogo = DialogoConsulta("Consulta de Salon", "Seleccione un salon:", consulta_sql_salon,consulta_like)
         if dialogo.exec_() == QDialog.Accepted:
@@ -950,8 +950,8 @@ class menuHorarioPlantilla(QMainWindow):
     
     
     def buscarAula(self):
-        consulta_like = "SELECT Descripcion,CodigoAula,codigo_sede FROM Aulas WHERE Descripcion LIKE ?"
-        consulta_sql_materia = "SELECT Descripcion,CodigoAula,codigo_sede FROM Aulas;"
+        consulta_like = "SELECT codigoAula,Descripcion,CodigoSede FROM Aulas WHERE codigoAula LIKE ?"
+        consulta_sql_materia = "SELECT codigoAula,Descripcion,CodigoSede FROM Aulas;"
         dialogo = DialogoConsulta("Consulta de Aula", "Seleccione una Aula:", consulta_sql=consulta_sql_materia,consulta_like=consulta_like)
         if dialogo.exec_() == QDialog.Accepted:
             codigo_materia = dialogo.item_seleccionado()
@@ -1190,7 +1190,7 @@ class menuHorarioPlantilla(QMainWindow):
         conexion.close()  # Cerrar la conexión a la base de datos al finalizar
     
     def buscarAsistencia(self):
-        print("hola")
+     
         dia=self.comboBox_dia.currentText()
         # Crear conexión a la base de datos
         try:
@@ -1585,6 +1585,7 @@ class SedesMenu(QMainWindow):
         self.reloaddata()
         self.bt_salir.clicked.connect(lambda : QApplication.quit())
         self.bt_salir_2.clicked.connect(self.regresaralmenu)
+        
     def regresaralmenu(self):
         menu = MenuPrincipal(self.admin)
         widget.addWidget(menu)
@@ -1702,11 +1703,12 @@ class AulasMenu(QMainWindow):
         menu = MenuPrincipal(self.admin)
         widget.addWidget(menu)
         widget.setCurrentIndex(widget.currentIndex()+1)
+        
     def reloaddata(self):
         try:
             conexion = sqlite3.connect("./db/database.db")
             cursor = conexion.cursor()
-            cursor.execute("SELECT CodigoAula,Descripcion,codigo_sede FROM Aulas")
+            cursor.execute("SELECT CodigoSede,Descripcion,codigoAula FROM Aulas")
             data = cursor.fetchall()
             self.tableWidget.setRowCount(len(data))  
 
@@ -1718,6 +1720,7 @@ class AulasMenu(QMainWindow):
             conexion.close()
         except Exception as e:
             QMessageBox.warning(self, "Error", f"Error al recuperar datos: {str(e)}")
+            
     def buscarparaeliminar(self):
         busqueda  = self.ln_busqueda.text()
         if not busqueda:
@@ -1725,7 +1728,7 @@ class AulasMenu(QMainWindow):
             return
         conexion =sqlite3.connect("./db/database.db")
         cursor = conexion.cursor()
-        cursor.execute("SELECT Descripcion,codigo_sede FROM Aulas WHERE CodigoAula =?",(busqueda,))
+        cursor.execute("SELECT Descripcion,codigoAula FROM Aulas WHERE codigoAula =?",(busqueda,))
         resultado = cursor.fetchone()
         if not resultado:
             QMessageBox.information(self,"Error","No hay ninguna sede con ese codigo")
@@ -1733,6 +1736,7 @@ class AulasMenu(QMainWindow):
         if resultado:
             self.txt_name_3.setText(resultado[0])
             self.txt_ubicacion.setText(resultado[1])
+            
     def eliminarAula(self):
         busqueda = self.ln_busqueda.text()
         if not busqueda:
@@ -1740,11 +1744,12 @@ class AulasMenu(QMainWindow):
             return
         conexion =sqlite3.connect("./db/database.db")
         cursor = conexion.cursor()
-        cursor.execute("DELETE FROM Aulas WHERE CodigoAula =?",(busqueda,))
+        cursor.execute("DELETE FROM Aulas WHERE codigoAula =?",(busqueda,))
         conexion.commit()
         self.txt_name_3.clear()
         self.txt_ubicacion.clear()
         QMessageBox.information(self,"Eliminado","Ha sido eliminado correctamente")
+        
     def aggaula(self):
         sede = self.txt_sedecodigo.text()
         nombre = self.txt_nombre.text()
@@ -1756,7 +1761,7 @@ class AulasMenu(QMainWindow):
         
         conexion = sqlite3.connect("./db/database.db")
         cursor = conexion.cursor()
-        cursor.execute("SELECT CodigoAula FROM Aulas WHERE CodigoAula=?", (aula,)
+        cursor.execute("SELECT codigoAula FROM Aulas WHERE codigoAula=?", (aula,)
                        )
         existing_teacher = cursor.fetchone()
         
@@ -1768,7 +1773,7 @@ class AulasMenu(QMainWindow):
             self.txt_codigoaula.clear()
             return
         else:
-            cursor.execute("INSERT INTO Aulas (CodigoAula, Descripcion,codigo_sede)  VALUES (?, ?, ?)", (sede, nombre, aula))
+            cursor.execute("INSERT INTO Aulas (CodigoSede, Descripcion,CodigoAula)  VALUES (?, ?, ?)", (sede, nombre, aula))
             conexion.commit()
             
             QMessageBox.information(self, "Éxito", "Los datos se almacenaron correctamente")
