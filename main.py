@@ -169,15 +169,26 @@ class FormularioDialog(QDialog):
             self.input_materia.setText(codigo_materia) 
             
     def codigoSalon(self):
-        consulta_like = "SELECT Descripcion, CodigoAula FROM Aulas WHERE Descripcion LIKE ?"
+        consulta_like = "SELECT codigoAula, Descripcion,CodigoSede FROM Aulas WHERE codigoAula LIKE ?"
         
-        consulta_sql_salon = "SELECT  codigoAula,CodigoSede FROM Aulas;"
+        consulta_sql_salon = "SELECT  codigoAula,Descripcion,CodigoSede FROM Aulas;"
 
         dialogo = DialogoConsulta("Consulta de Salon", "Seleccione un salon:", consulta_sql_salon,consulta_like)
         if dialogo.exec_() == QDialog.Accepted:
             codigoSalon = dialogo.item_seleccionado()
             self.input_salon.setText(codigoSalon)
             
+    def codigoSede(self,codigo):
+        conexion = sqlite3.connect("./db/database.db")
+        cursor =conexion.cursor()
+        cursor.execute("SELECT CodigoSede FROM Aulas WHERE CodigoAula=?",(codigo,))
+        resultado = cursor.fetchone()
+        sede  = resultado[0]
+        conexion.close()
+        return sede
+    
+        
+        
     def codigoProfesor(self):
         consulta_like = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido, Cedula FROM Profesores WHERE Nombre_Y_Apellido LIKE ?"
         
@@ -189,10 +200,11 @@ class FormularioDialog(QDialog):
             self.input_profesor.setText(codigo)
 
     def guardar(self):
+        
         codigoMateria = self.input_materia.text()
         codigoSalon = self.input_salon.text()
         cedulaProfesor = self.input_profesor.text()
-
+        CodigoSede = self.codigoSede(codigoSalon)
         if not (codigoMateria and codigoSalon and cedulaProfesor):
             QMessageBox.information(self, "Error", "Todos los campos son obligatorios")
             return None  # Devuelve None si hay campos faltantes
@@ -262,8 +274,8 @@ class FormularioDialog(QDialog):
             return None  # Devuelve None si el salón ya está siendo utilizado
 
         else:
-            cursor.execute("INSERT INTO HorarioTest (Dia,Hora,CodigoMat,CodigoAula,CedulaProf,Carrera,Sesion,Nivel,Modalidad) VALUES (?,?,?,?,?,?,?,?,?)",
-                           (self.dia,self.hora,codigoMateria,codigoSalon,cedulaProfesor,self.carrera,self.sesion,self.nivel,self.modalidad))
+            cursor.execute("INSERT INTO HorarioTest (Dia,Hora,CodigoMat,CodigoAula,CedulaProf,Carrera,Sesion,Nivel,Modalidad,CodigoSede) VALUES (?,?,?,?,?,?,?,?,?,?)",
+                           (self.dia,self.hora,codigoMateria,codigoSalon,cedulaProfesor,self.carrera,self.sesion,self.nivel,self.modalidad,CodigoSede))
             QMessageBox.information(self,"Exito","Se ha almacenado los datos correctamente")
             conexion.commit()
             conexion.close()
@@ -806,12 +818,25 @@ class menuHorarioPlantilla(QMainWindow):
         self.horas =[]
         self.datos_carga_horas = []  # Coloca los valores apropiados aquí
         self.bt_asistencia_2.clicked.connect(self.guardarPDFAsistencia)
+        self.datosComboboxSede()
+        
+        
+    
+    def datosComboboxSede(self):
+        conexion = sqlite3.connect("./db/database.db")
+        cursor =conexion.cursor()
+        cursor.execute("SELECT codigo_sede FROM sedes")
+        sedes = cursor.fetchall()
+        for sede in sedes:
+            self.comboBox_sede.addItem(sede[0])
+        
         
     def guardarPDFAsistencia(self):
         try:
             from   ui.pdfcrearAsistencia import crear_pdf
             
             dia=self.comboBox_dia.currentText()
+            sede = self.comboBox_sede.currentText()
           
             conexion = sqlite3.connect("./db/database.db")
             cursor = conexion.cursor()
@@ -828,7 +853,7 @@ class menuHorarioPlantilla(QMainWindow):
             if not ruta_salida:
                 return
             else:
-                crear_pdf(ruta_salida=ruta_salida,dia=dia,periodo=periodoAcademico,Turno=self.modalidad )
+                crear_pdf(ruta_salida=ruta_salida,dia=dia,periodo=periodoAcademico,Turno=self.modalidad,sede=sede)
                 if crear_pdf:
                     return ruta_salida   
         except Exception as e:
@@ -1190,7 +1215,7 @@ class menuHorarioPlantilla(QMainWindow):
         conexion.close()  # Cerrar la conexión a la base de datos al finalizar
     
     def buscarAsistencia(self):
-     
+        sede = self.comboBox_sede.currentText()
         dia=self.comboBox_dia.currentText()
         # Crear conexión a la base de datos
         try:
@@ -1199,9 +1224,10 @@ class menuHorarioPlantilla(QMainWindow):
 
             # Ejecutar la consulta para obtener los registros de la tabla HorarioTest para el dia especificado
             cursor.execute(
-                "SELECT  CedulaProf, CodigoMat, CodigoAula, Hora FROM HorarioTest WHERE Dia=? AND Modalidad=?", (dia,self.modalidad)
+                "SELECT  CedulaProf, CodigoMat, CodigoAula, Hora FROM HorarioTest WHERE Dia=? AND Modalidad=? AND CodigoSede=?", (dia,self.modalidad,sede)
             )
             data = cursor.fetchall()
+          
             self.tableWidget.setRowCount(len(data))  
 
             for row, row_data in enumerate(data):
