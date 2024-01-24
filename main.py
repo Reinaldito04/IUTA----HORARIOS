@@ -204,6 +204,48 @@ class FormularioDialog(QDialog):
         
         verificarProfesor= cursor.execute("SELECT * FROM HorarioTest WHERE Dia=? AND Hora=? AND CedulaProf=?",
                                           (self.dia,self.hora,cedulaProfesor))
+        
+        
+        #verificar si el profesor tiene dias disponibles 
+        
+        cursor.execute("SELECT Cedula FROM Profesores WHERE Nombres || ' ' || Apellidos =?", (cedulaProfesor,))
+        resultados_profesores = cursor.fetchall()
+        if resultados_profesores:
+            cedula = resultados_profesores[0][0]  # Accede al valor de la cédula en la posición 0
+
+            cursor.execute("SELECT * FROM DiasPreEstablecidos WHERE CedulaProfesor=?", (cedula,))
+            resultadosDias = cursor.fetchall()
+
+            for resultado in resultadosDias:
+                dia = resultado[0].strip()  # Elimina espacios en blanco adicionales
+                cedulaDia = resultado[1]  # Asigna la cédula del profesor desde la posición 1
+
+                print(f"Día desde la base de datos: {dia.lower()}")
+                print(f"Día desde la variable local: {self.dia.lower()}")
+
+                # Asegúrate de que la comparación sea insensible a mayúsculas y minúsculas
+                if self.dia.lower().strip() == dia.lower().strip():
+                    print("La comparación es igual")
+                    break
+           
+                
+                print (resultadosDias)
+            else:
+                # Si el bucle no se rompe, significa que no se encontró coincidencia
+                print("No se encontró coincidencia")
+                QMessageBox.warning(self, "Error", "El profesor no tiene este día disponible")
+                return
+               
+
+        else:
+            QMessageBox.warning(self, "Error", "Profesor no encontrado")
+
+        # Verifica si resultadosDias está vacío
+        if not resultadosDias:
+           pass
+                
+
+        
         if verificarProfesor.fetchone():
             QMessageBox.warning(self,"Error","Ya el profesor se encuentra dado clase en este momento")
             self.input_profesor.clear()
@@ -2102,6 +2144,39 @@ class MenuMaterias(QMainWindow):
         widget.setCurrentIndex(widget.currentIndex()+1)
 
 # CLASES DE LA VENTAN DE GESTION DE PROFESORES
+
+class DiasPreEstablecidosparaProfesor(QDialog):
+    def __init__(self,cedula):
+        super (DiasPreEstablecidosparaProfesor,self).__init__()
+        loadUi("./ui/diasPre.ui",self)
+        self.cedula = cedula
+        print (cedula)
+        self.bt_guardar.clicked.connect(self.almacenarDias)
+        
+    def almacenarDias(self):
+        dia = self.comboBox.currentText()
+        reply = QMessageBox.question(
+                    self,
+                    'Confirmación',
+                    f'¿Deseas agregar el día {dia}? ',
+                    QMessageBox.Yes | QMessageBox.No,
+                    QMessageBox.Yes
+                )
+        if reply ==QMessageBox.Yes:
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+            cursor.execute("INSERT INTO DiasPreEstablecidos (Dias,CedulaProfesor) VALUES (?,?)",
+                           (dia,self.cedula))
+            conexion.commit()
+            reply =QMessageBox.question(self,
+                                        "Confirmación",
+                                        '¿Deseas agregar otro dia?',
+                                        QMessageBox.Yes | QMessageBox.No,
+                                        QMessageBox.Yes
+                                        )
+            if reply==QMessageBox.No:
+                self.accept()
+            conexion.close()
 class MenuTeachers(QMainWindow):
     def __init__(self , admin):
         super(MenuTeachers , self).__init__()
@@ -2118,6 +2193,91 @@ class MenuTeachers(QMainWindow):
         self.bt_edit_2.clicked.connect(self.editData)
         self.bt_clear.clicked.connect(self.clearInputs)
         self.bt_act.clicked.connect(self.ViewData)
+     
+    def aggTeacher(self):
+        nombres = self.txt_name.text()
+        apellido = self.txt_apell.text()
+        cedula = self.txt_cedula.text()
+        telefono = self.txt_telefono.text()
+        correo = self.txt_mail.text()
+        titulos = self.txt_profesion.text()
+
+        # Validar la cédula (debe contener solo números y tener una longitud específica)
+        if not re.match(r'^\d{7,10}$', cedula):
+            QMessageBox.warning(self, "Error", "La cédula debe contener entre 7 y 10 digitos.")
+            return
+
+        # Validar el correo (debe contener @ y .com)
+        if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', correo):
+            QMessageBox.warning(self, "Error", "Formato de correo no válido.")
+            return
+
+        # Validar el teléfono (debe contener solo números y tener una longitud específica)
+        if not re.match(r'^\d{11}$', telefono):
+            QMessageBox.warning(self, "Error", "Formato de numero telefonico no valido \n intente no agregar espacios o simbolos, solo números.")
+            return
+
+        try:
+            conexion = sqlite3.connect("./db/database.db")
+            cursor = conexion.cursor()
+
+            # Comprobar si ya existe un profesor con el mismo nombre y apellido
+            cursor.execute("SELECT Cedula FROM Profesores WHERE Nombres=? AND Apellidos=?", (nombres, apellido))
+            existing_teacher_name = cursor.fetchone()
+
+            # Comprobar si ya existe un profesor con la misma cédula
+            cursor.execute("SELECT Cedula FROM Profesores WHERE Cedula=?", (cedula,))
+            existing_teacher_cedula = cursor.fetchone()
+
+            if existing_teacher_name:
+                QMessageBox.warning(self, "Advertencia", "Ya existe un profesor con el mismo nombre y apellido.")
+            elif existing_teacher_cedula:
+                QMessageBox.warning(self, "Advertencia", "Ya existe un profesor con la misma cédula.")
+            else:
+                # Si no existe, agregar el nuevo profesor a la base de datos
+                cursor.execute("INSERT INTO Profesores (Nombres, Apellidos, Cedula, Telefono, Mail, TituloProfesion) VALUES (?, ?, ?, ?, ?, ?)",
+                            (nombres, apellido, cedula, telefono, correo, titulos))
+                conexion.commit()
+                reply = QMessageBox.question(
+                    self,
+                    'Confirmación',
+                    '¿Deseas agregar algún dia especifico para este profesor?',
+                    QMessageBox.Yes | QMessageBox.No,
+                    QMessageBox.Yes
+                )
+                if reply ==QMessageBox.Yes:
+                    diasEspec = DiasPreEstablecidosparaProfesor(cedula=cedula)
+                    conexion.close()
+                    diasEspec.exec_()
+                else:
+                    self.almacenarDias(cedula=cedula)
+               
+                QMessageBox.information(self, "Éxito", "Los datos se almacenaron correctamente")
+
+            self.txt_name.clear()
+            self.txt_apell.clear()
+            self.txt_cedula.clear()
+            self.txt_telefono.clear()
+            self.txt_mail.clear()
+            self.txt_profesion.clear()
+
+            conexion.close()
+
+        except:
+            QMessageBox.warning(self, "Error", "Error con la base de datos")
+
+    def almacenarDias(self,cedula):
+        conexion = sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        cursor.execute("INSERT INTO DiasPreEstablecidos (Dias,CedulaProfesor) VALUES (?,?)",("Lunes",cedula))
+        cursor.execute("INSERT INTO DiasPreEstablecidos (Dias,CedulaProfesor) VALUES (?,?)",("Martes",cedula))
+        cursor.execute("INSERT INTO DiasPreEstablecidos (Dias,CedulaProfesor) VALUES (?,?)",("Miercoles",cedula))
+        cursor.execute("INSERT INTO DiasPreEstablecidos (Dias,CedulaProfesor) VALUES (?,?)",("Jueves",cedula))
+        cursor.execute("INSERT INTO DiasPreEstablecidos (Dias,CedulaProfesor) VALUES (?,?)",("Viernes",cedula))
+        cursor.execute("INSERT INTO DiasPreEstablecidos (Dias,CedulaProfesor) VALUES (?,?)",("Sabado",cedula))
+        conexion.commit()
+        conexion.close()
+
     def ViewData(self):
         print("click")
         try:
@@ -2230,66 +2390,7 @@ class MenuTeachers(QMainWindow):
         except sqlite3.Error as error:
             QMessageBox.critical(self, "Error", f"Error al registrar el profesor: {str(error)}")
             
-    
-    def aggTeacher(self):
-        nombres = self.txt_name.text()
-        apellido = self.txt_apell.text()
-        cedula = self.txt_cedula.text()
-        telefono = self.txt_telefono.text()
-        correo = self.txt_mail.text()
-        titulos = self.txt_profesion.text()
-
-        # Validar la cédula (debe contener solo números y tener una longitud específica)
-        if not re.match(r'^\d{7,10}$', cedula):
-            QMessageBox.warning(self, "Error", "La cédula debe contener entre 7 y 10 digitos.")
-            return
-
-        # Validar el correo (debe contener @ y .com)
-        if not re.match(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$', correo):
-            QMessageBox.warning(self, "Error", "Formato de correo no válido.")
-            return
-
-        # Validar el teléfono (debe contener solo números y tener una longitud específica)
-        if not re.match(r'^\d{11}$', telefono):
-            QMessageBox.warning(self, "Error", "Formato de numero telefonico no valido \n intente no agregar espacios o simbolos, solo números.")
-            return
-
-        try:
-            conexion = sqlite3.connect("./db/database.db")
-            cursor = conexion.cursor()
-
-            # Comprobar si ya existe un profesor con el mismo nombre y apellido
-            cursor.execute("SELECT Cedula FROM Profesores WHERE Nombres=? AND Apellidos=?", (nombres, apellido))
-            existing_teacher_name = cursor.fetchone()
-
-            # Comprobar si ya existe un profesor con la misma cédula
-            cursor.execute("SELECT Cedula FROM Profesores WHERE Cedula=?", (cedula,))
-            existing_teacher_cedula = cursor.fetchone()
-
-            if existing_teacher_name:
-                QMessageBox.warning(self, "Advertencia", "Ya existe un profesor con el mismo nombre y apellido.")
-            elif existing_teacher_cedula:
-                QMessageBox.warning(self, "Advertencia", "Ya existe un profesor con la misma cédula.")
-            else:
-                # Si no existe, agregar el nuevo profesor a la base de datos
-                cursor.execute("INSERT INTO Profesores (Nombres, Apellidos, Cedula, Telefono, Mail, TituloProfesion) VALUES (?, ?, ?, ?, ?, ?)",
-                            (nombres, apellido, cedula, telefono, correo, titulos))
-
-                conexion.commit()
-                QMessageBox.information(self, "Éxito", "Los datos se almacenaron correctamente")
-
-            self.txt_name.clear()
-            self.txt_apell.clear()
-            self.txt_cedula.clear()
-            self.txt_telefono.clear()
-            self.txt_mail.clear()
-            self.txt_profesion.clear()
-
-            conexion.close()
-
-        except:
-            QMessageBox.warning(self, "Error", "Error con la base de datos")
-
+   
 
     def backMenu(self):
         menu = MenuPrincipal(self.admin)
