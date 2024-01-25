@@ -214,78 +214,44 @@ class FormularioDialog(QDialog):
 
         
         
-        verificarProfesor= cursor.execute("SELECT * FROM HorarioTest WHERE Dia=? AND Hora=? AND CedulaProf=?",
-                                          (self.dia,self.hora,cedulaProfesor))
-        
-        
-        #verificar si el profesor tiene dias disponibles 
-        
-        cursor.execute("SELECT Cedula FROM Profesores WHERE Nombres || ' ' || Apellidos =?", (cedulaProfesor,))
-        resultados_profesores = cursor.fetchall()
-        if resultados_profesores:
-            cedula = resultados_profesores[0][0]  # Accede al valor de la cédula en la posición 0
+        VerificarModalidadProfesor = cursor.execute("SELECT * FROM ModuloProfesor WHERE Dia=? AND Hora=? AND CedulaProf=? AND Modalidad=?",(self.dia,self.hora,cedulaProfesor,self.modalidad))
+        resultadoModalidadProfesor  = VerificarModalidadProfesor.fetchone()
+        if not resultadoModalidadProfesor:
+            QMessageBox.information(self,"Error","El profesor no tiene este modulo disponible")
+            return
+        else:    
+            
+            
+            verificarProfesor= cursor.execute("SELECT * FROM HorarioTest WHERE Dia=? AND Hora=? AND CedulaProf=?",
+                                            (self.dia,self.hora,cedulaProfesor))        
+            if verificarProfesor.fetchone():
+                QMessageBox.warning(self,"Error","Ya el profesor se encuentra dado clase en este momento")
+                self.input_profesor.clear()
+                self.input_profesor.setPlaceholderText("Ingrese un profesor distinto...")
+                return None
 
-            cursor.execute("SELECT * FROM DiasPreEstablecidos WHERE CedulaProfesor=?", (cedula,))
-            resultadosDias = cursor.fetchall()
 
-            for resultado in resultadosDias:
-                dia = resultado[0].strip()  # Elimina espacios en blanco adicionales
-                cedulaDia = resultado[1]  # Asigna la cédula del profesor desde la posición 1
+            verificarHorario = cursor.execute("SELECT * FROM HorarioTest WHERE Dia=? AND Hora=? AND CodigoAula=?",
+                                            (self.dia, self.hora, codigoSalon))
+            if verificarHorario.fetchone():
+                QMessageBox.warning(self, "Error", "El salón ya está siendo utilizado en la misma hora")
+                self.input_salon.clear()
+                self.input_salon.setPlaceholderText("Ingrese un salón distinto...")
+                return None  # Devuelve None si el salón ya está siendo utilizado
 
-                print(f"Día desde la base de datos: {dia.lower()}")
-                print(f"Día desde la variable local: {self.dia.lower()}")
-
-                # Asegúrate de que la comparación sea insensible a mayúsculas y minúsculas
-                if self.dia.lower().strip() == dia.lower().strip():
-                    print("La comparación es igual")
-                    break
-           
-                
-                print (resultadosDias)
             else:
-                # Si el bucle no se rompe, significa que no se encontró coincidencia
-                print("No se encontró coincidencia")
-                QMessageBox.warning(self, "Error", "El profesor no tiene este día disponible")
-                return
-               
+                cursor.execute("INSERT INTO HorarioTest (Dia,Hora,CodigoMat,CodigoAula,CedulaProf,Carrera,Sesion,Nivel,Modalidad,CodigoSede) VALUES (?,?,?,?,?,?,?,?,?,?)",
+                            (self.dia,self.hora,codigoMateria,codigoSalon,cedulaProfesor,self.carrera,self.sesion,self.nivel,self.modalidad,CodigoSede))
+                QMessageBox.information(self,"Exito","Se ha almacenado los datos correctamente")
+                conexion.commit()
+                conexion.close()
+            
 
-        else:
-            QMessageBox.warning(self, "Error", "Profesor no encontrado")
-
-        # Verifica si resultadosDias está vacío
-        if not resultadosDias:
-           pass
-                
-
-        
-        if verificarProfesor.fetchone():
-            QMessageBox.warning(self,"Error","Ya el profesor se encuentra dado clase en este momento")
-            self.input_profesor.clear()
-            self.input_profesor.setPlaceholderText("Ingrese un profesor distinto...")
-            return None
-
-
-        verificarHorario = cursor.execute("SELECT * FROM HorarioTest WHERE Dia=? AND Hora=? AND CodigoAula=?",
-                                          (self.dia, self.hora, codigoSalon))
-        if verificarHorario.fetchone():
-            QMessageBox.warning(self, "Error", "El salón ya está siendo utilizado en la misma hora")
-            self.input_salon.clear()
-            self.input_salon.setPlaceholderText("Ingrese un salón distinto...")
-            return None  # Devuelve None si el salón ya está siendo utilizado
-
-        else:
-            cursor.execute("INSERT INTO HorarioTest (Dia,Hora,CodigoMat,CodigoAula,CedulaProf,Carrera,Sesion,Nivel,Modalidad,CodigoSede) VALUES (?,?,?,?,?,?,?,?,?,?)",
-                           (self.dia,self.hora,codigoMateria,codigoSalon,cedulaProfesor,self.carrera,self.sesion,self.nivel,self.modalidad,CodigoSede))
-            QMessageBox.information(self,"Exito","Se ha almacenado los datos correctamente")
-            conexion.commit()
-            conexion.close()
-           
-
-            print(f"El código de materia es {codigoMateria}, salón {codigoSalon}, cédula profesor {cedulaProfesor}")
-            text_for_checkbox = (f"{codigoMateria}\n{codigoSalon}\n{cedulaProfesor}")
-            self.establecer_texto_en_celda(text_for_checkbox)
-            self.hide()
-            return  codigoMateria,codigoSalon,cedulaProfesor
+                print(f"El código de materia es {codigoMateria}, salón {codigoSalon}, cédula profesor {cedulaProfesor}")
+                text_for_checkbox = (f"{codigoMateria}\n{codigoSalon}\n{cedulaProfesor}")
+                self.establecer_texto_en_celda(text_for_checkbox)
+                self.hide()
+                return  codigoMateria,codigoSalon,cedulaProfesor
 
     def establecer_texto_en_celda(self, texto):
         # Obtener la instancia de QTableWidget desde la instancia de Horario
@@ -819,9 +785,12 @@ class menuHorarioPlantilla(QMainWindow):
         self.datos_carga_horas = []  # Coloca los valores apropiados aquí
         self.bt_asistencia_2.clicked.connect(self.guardarPDFAsistencia)
         self.datosComboboxSede()
+        self.bt_moduloProfesor.clicked.connect(self.ModuloProfesor)
         
-        
-    
+    def ModuloProfesor(self):
+        modulo = ProfesorDisponib(admin=self.admin,modalidad=self.modalidad)
+        widget.addWidget(modulo)
+        widget.setCurrentIndex(widget.currentIndex()+1)
     def datosComboboxSede(self):
         conexion = sqlite3.connect("./db/database.db")
         cursor =conexion.cursor()
@@ -933,7 +902,7 @@ class menuHorarioPlantilla(QMainWindow):
             # Código a ejecutar si el usuario elige "Sí"
             conexion = sqlite3.connect("./db/database.db")
             cursor =conexion.cursor()
-            cursor.execute("DELETE FROM HorarioTest")
+            cursor.execute("DELETE FROM HorarioTest WHERE Modalidad=?",(self.modalidad))
             conexion.commit()
             conexion.close()
             QMessageBox.information(self,"Exito","Todos los horarios ha sido eliminados correctamente")
@@ -1267,9 +1236,131 @@ class menuHorarioPlantilla(QMainWindow):
             widget.addWidget(horario)
             widget.setCurrentIndex(widget.currentIndex()+1)
 
+
+class ProfesorDisponib(QMainWindow):
+    def __init__(self,admin,modalidad):
+        super(ProfesorDisponib,self).__init__()
+        loadUi("./ui/moduloProfesor.ui",self)
+        self.admin = admin
+        self.modalidad = modalidad
+        self.datos_tabla = [] 
+        self.cargarHoras()
+        self.tableWidget.setSelectionMode(QTableWidget.MultiSelection) 
+        self.seleccionados = []
+        self.tableWidget.cellClicked.connect(self.finalizarSeleccion)
+      
+        self.bt_guardarSeleccion.clicked.connect(self.almacenarModulos)
+        self.bt_profesor.clicked.connect(self.codigoProfesor)
+        self.bt_clear.clicked.connect(self.reset)
+  
+  
+    def reset(self):
+        self.ln_profesor.clear()
+       
+        self.tableWidget.clearContents()
+        self.cargarHoras()
+  
+    def codigoProfesor(self):
+        consulta_like = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido, Cedula FROM Profesores WHERE Nombre_Y_Apellido LIKE ?"
+        
+        consulta_sql_profesor = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido ,Cedula FROM Profesores;"
+
+        dialogo = DialogoConsulta("Consulta de Profesor", "Seleccione el nombre y apellido del profesor:" ,consulta_sql_profesor,consulta_like)
+        if dialogo.exec_() == QDialog.Accepted:
+            codigo = dialogo.item_seleccionado()
+            self.ln_profesor.setText(codigo)
+    def almacenarModulos(self):
+        profesor = self.ln_profesor.text()
+        if not profesor:
+            QMessageBox.warning(self,"Error","No se ha seleccionado ningún profesor")
+            return
+        if self.tableWidget.selectionMode() == QTableWidget.MultiSelection:
+            # Construir un mensaje para cada día seleccionado
+            mensajes_dias = []
+            for dia in self.seleccionados:
+                mensaje_dia = f"{dia['dia']} en la hora {dia['hora']}\n"  
+                mensajes_dias.append(mensaje_dia)
+
+            # Utilizar la información extraída para mostrar el mensaje
+            mensaje = f"Has seleccionado los días:\n{', '.join(mensajes_dias)}"
+            QMessageBox.information(self, "Dias seleccionados", mensaje)
+            respuesta = QMessageBox.question(self, "¿Deseas proceder?", "Seleccionaste días. ¿Deseas proceder?", QMessageBox.Yes | QMessageBox.No)
+            if respuesta == QMessageBox.Yes:
+                for dia in self.seleccionados:
+                        dias = dia['dia']
+                        hora = dia['hora']
+                        fila = dia['fila']
+                        columna = dia['columna']
+                        print(f"Formulario del día {dias} a las horas {hora}")
+                        conexion = sqlite3.connect("./db/database.db")
+                        cursor= conexion.cursor()
+                        cursor.execute("DELETE FROM ModuloProfesor WHERE CedulaProf=?",(profesor,))
+                        conexion.commit()
+                        cursor.execute("INSERT INTO ModuloProfesor (Dia,Hora,CedulaProf,Modalidad) VALUES (?,?,?,?)",(dias,hora,profesor,self.modalidad))
+                        conexion.commit()
+                       
+                        conexion.commit()
+               
+                QMessageBox.information(self,"Exito","Los Modulos fueron guardados correctamente")
+            else:
+                self.seleccionados = []
+                self.tableWidget.clearSelection()
+    def finalizarSeleccion(self, fila, columna):
+        if columna != 0:            
+                selected_indexes = self.tableWidget.selectedIndexes()
+
+                if selected_indexes:
+                    # Obtener la hora de la primera celda seleccionada
+                    hora = self.tableWidget.item(fila, 0).text()
+
+                    # Obtener el día según la columna
+                    dias = ["", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"]
+                    dia = dias[columna]
+
+                    # Crear un diccionario con la información del día actual
+                    dia_seleccionado = {
+                        'dia': dia,
+                        'hora': hora,
+                        'fila': fila,
+                        'columna': columna
+                    }
+                    # Agregar el día seleccionado a la lista
+                    self.seleccionados.append(dia_seleccionado)
+                   
+        
+    def cargarHoras(self):
+        conexion = sqlite3.connect("./db/database.db")
+        cursor = conexion.cursor()
+        # Ejecutar la consulta para obtener los datos ordenados
+        cursor.execute("SELECT Descripcion FROM Modulo WHERE Turno = ?", (self.modalidad,))
+
+        datos = cursor.fetchall()
+
+        # Configurar el número de filas en la tabla
+        self.tableWidget.setRowCount(len(datos))
+
+        # Limpiar la lista antes de cargar nuevos datos
+        self.datos_tabla.clear()
+
+        # Llenar la tabla con los datos ordenados y almacenarlos en la lista
+        for row, row_data in enumerate(datos):
+            for col, value in enumerate(row_data):
+                item = QTableWidgetItem(str(value))
+                self.tableWidget.setItem(row, col, item)
+                # Almacenar los datos en la lista
+                self.datos_tabla.append((row, col, str(value)))
+        conexion.close()  # Cerrar la conexión a la base de datos al finalizar
+
+    def obtener_horas(self):
+        # Obtener solo la primera columna (la hora) de los datos almacenados
+        horas = [fila[0] for fila in self.datos_almacenados if fila and fila[0] is not None]
+        print(horas)
+        return horas
 # CLASE DE VENTANA PARA VER Y CREAR HORARIOS CARGANDO LA
 # INFORMACION DE LA MODALIDAD SELECCIONADA EN EL menuHorarioPlantilla
 # Crear horarios con informacion de horas de acuerdo a la modalidad
+
+
 class crearHorarioPlantilla(QMainWindow):
     def __init__(self,admin,modalidad):
         super(crearHorarioPlantilla,self).__init__()
@@ -1479,7 +1570,7 @@ class crearHorarioPlantilla(QMainWindow):
                     hora = self.tableWidget.item(fila, 0).text()
 
                     # Obtener el día según la columna
-                    dias = ["", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]
+                    dias = ["", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado"]
                     dia = dias[columna]
 
                     # Crear un diccionario con la información del día actual
@@ -2268,21 +2359,7 @@ class MenuTeachers(QMainWindow):
                 # Si no existe, agregar el nuevo profesor a la base de datos
                 cursor.execute("INSERT INTO Profesores (Nombres, Apellidos, Cedula, Telefono, Mail, TituloProfesion) VALUES (?, ?, ?, ?, ?, ?)",
                             (nombres, apellido, cedula, telefono, correo, titulos))
-                conexion.commit()
-                reply = QMessageBox.question(
-                    self,
-                    'Confirmación',
-                    '¿Deseas agregar algún dia especifico para este profesor?',
-                    QMessageBox.Yes | QMessageBox.No,
-                    QMessageBox.Yes
-                )
-                if reply ==QMessageBox.Yes:
-                    diasEspec = DiasPreEstablecidosparaProfesor(cedula=cedula)
-                    conexion.close()
-                    diasEspec.exec_()
-                else:
-                    self.almacenarDias(cedula=cedula)
-               
+                conexion.commit()       
                 QMessageBox.information(self, "Éxito", "Los datos se almacenaron correctamente")
 
             self.txt_name.clear()

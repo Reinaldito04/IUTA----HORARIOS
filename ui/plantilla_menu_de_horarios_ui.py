@@ -219,6 +219,21 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem5)
+        self.bt_moduloProfesor = QtWidgets.QPushButton(self.page_2)
+        self.bt_moduloProfesor.setMinimumSize(QtCore.QSize(100, 40))
+        self.bt_moduloProfesor.setMaximumSize(QtCore.QSize(100, 40))
+        self.bt_moduloProfesor.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
+"color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
+        self.bt_moduloProfesor.setObjectName("bt_moduloProfesor")
+        self.horizontalLayout_4.addWidget(self.bt_moduloProfesor)
         self.bt_imprimirProfesor = QtWidgets.QPushButton(self.page_2)
         self.bt_imprimirProfesor.setMinimumSize(QtCore.QSize(100, 40))
         self.bt_imprimirProfesor.setMaximumSize(QtCore.QSize(100, 40))
@@ -498,7 +513,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.toolBox.setCurrentIndex(3)
+        self.toolBox.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -542,6 +557,7 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Viernes"))
         item = self.tableWidget_profesores.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "Sabado"))
+        self.bt_moduloProfesor.setText(_translate("MainWindow", "Modulos "))
         self.bt_imprimirProfesor.setText(_translate("MainWindow", "Imprimir"))
         self.bt_buscarProf.setText(_translate("MainWindow", "Buscar"))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page_2), _translate("MainWindow", "Disponibilidad Profesores"))
