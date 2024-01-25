@@ -216,6 +216,7 @@ class FormularioDialog(QDialog):
         
         VerificarModalidadProfesor = cursor.execute("SELECT * FROM ModuloProfesor WHERE Dia=? AND Hora=? AND CedulaProf=? AND Modalidad=?",(self.dia,self.hora,cedulaProfesor,self.modalidad))
         resultadoModalidadProfesor  = VerificarModalidadProfesor.fetchone()
+        print (resultadoModalidadProfesor)
         if not resultadoModalidadProfesor:
             QMessageBox.information(self,"Error","El profesor no tiene este modulo disponible")
             return
@@ -626,7 +627,13 @@ class modalidadRegistro(QMainWindow):
         self.cargardatosPrincipal()
         self.bt_search.clicked.connect(self.busquedaParaEliminar)
         self.bt_delete.clicked.connect(self.eliminarDatos)
+        self.bt_salir_2.clicked.connect(self.backMenu)
+        self.bt_salir.clicked.connect(lambda: QApplication.quit())
+    def backMenu(self):
         
+        menu= MenuPrincipal(admin=self.admin)
+        widget.addWidget(menu)
+        widget.setCurrentIndex(widget.currentIndex()+1)
     def busquedaParaEliminar(self):
         busqueda = self.ln_busqueda.text()
         if not busqueda:
@@ -1252,13 +1259,19 @@ class ProfesorDisponib(QMainWindow):
         self.bt_guardarSeleccion.clicked.connect(self.almacenarModulos)
         self.bt_profesor.clicked.connect(self.codigoProfesor)
         self.bt_clear.clicked.connect(self.reset)
+        self.bt_volver.clicked.connect(self.back)
   
   
+    def back(self):
+            horario = menuHorarioPlantilla(admin=self.admin,modalidad=self.modalidad)
+            widget.addWidget(horario)
+            widget.setCurrentIndex(widget.currentIndex()+1)
     def reset(self):
         self.ln_profesor.clear()
        
         self.tableWidget.clearContents()
         self.cargarHoras()
+        self.seleccionados = []
   
     def codigoProfesor(self):
         consulta_like = "SELECT Nombres || ' ' || Apellidos AS Nombre_Y_Apellido, Cedula FROM Profesores WHERE Nombre_Y_Apellido LIKE ?"
@@ -1286,21 +1299,22 @@ class ProfesorDisponib(QMainWindow):
             QMessageBox.information(self, "Dias seleccionados", mensaje)
             respuesta = QMessageBox.question(self, "¿Deseas proceder?", "Seleccionaste días. ¿Deseas proceder?", QMessageBox.Yes | QMessageBox.No)
             if respuesta == QMessageBox.Yes:
+                conexion = sqlite3.connect("./db/database.db")
+                cursor= conexion.cursor()
+                cursor.execute("DELETE FROM ModuloProfesor WHERE CedulaProf=? AND Modalidad=?",(profesor,self.modalidad))
                 for dia in self.seleccionados:
                         dias = dia['dia']
                         hora = dia['hora']
                         fila = dia['fila']
                         columna = dia['columna']
                         print(f"Formulario del día {dias} a las horas {hora}")
-                        conexion = sqlite3.connect("./db/database.db")
-                        cursor= conexion.cursor()
-                        cursor.execute("DELETE FROM ModuloProfesor WHERE CedulaProf=? AND Modalidad=?",(profesor,self.modalidad))
-                        conexion.commit()
-                        cursor.execute("INSERT INTO ModuloProfesor (Dia,Hora,CedulaProf,Modalidad) VALUES (?,?,?,?)",(dias,hora,profesor,self.modalidad))
-                        conexion.commit()
+                        
                        
-                        conexion.commit()
-               
+
+                            # Insertar nuevos registros
+                        cursor.execute("INSERT INTO ModuloProfesor (Dia, Hora, CedulaProf, Modalidad) VALUES (?,?,?,?)", (dias, hora, profesor, self.modalidad))     
+                conexion.commit()
+                conexion.close()
                 QMessageBox.information(self,"Exito","Los Modulos fueron guardados correctamente")
             else:
                 self.seleccionados = []

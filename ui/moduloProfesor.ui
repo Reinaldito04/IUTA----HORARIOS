@@ -66,7 +66,7 @@ background-color:#d9d9d9;</string>
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>48</x>
@@ -79,7 +79,7 @@ background-color:#d9d9d9;</string>
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QPushButton" name="btn_buscarSecc_5">
+        <widget class="QPushButton" name="bt_volver">
          <property name="minimumSize">
           <size>
            <width>80</width>
@@ -125,7 +125,7 @@ background-color:#d9d9d9;</string>
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>0</x>
