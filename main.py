@@ -1294,7 +1294,7 @@ class ProfesorDisponib(QMainWindow):
                         print(f"Formulario del día {dias} a las horas {hora}")
                         conexion = sqlite3.connect("./db/database.db")
                         cursor= conexion.cursor()
-                        cursor.execute("DELETE FROM ModuloProfesor WHERE CedulaProf=?",(profesor,))
+                        cursor.execute("DELETE FROM ModuloProfesor WHERE CedulaProf=? AND Modalidad=?",(profesor,self.modalidad))
                         conexion.commit()
                         cursor.execute("INSERT INTO ModuloProfesor (Dia,Hora,CedulaProf,Modalidad) VALUES (?,?,?,?)",(dias,hora,profesor,self.modalidad))
                         conexion.commit()
