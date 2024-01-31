@@ -172,7 +172,7 @@ class Ui_MainWindow(object):
         icon1.addPixmap(QtGui.QPixmap("/home/reinaldo/Documentos/dev/IUTA----HORARIOS/ui/imagenes/university.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.toolBox.addItem(self.page, icon1, "")
         self.page_2 = QtWidgets.QWidget()
-        self.page_2.setGeometry(QtCore.QRect(0, 0, 297, 189))
+        self.page_2.setGeometry(QtCore.QRect(0, 0, 1057, 543))
         self.page_2.setObjectName("page_2")
         self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.page_2)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
@@ -219,6 +219,21 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         spacerItem5 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_4.addItem(spacerItem5)
+        self.bt_moduloProfesor = QtWidgets.QPushButton(self.page_2)
+        self.bt_moduloProfesor.setMinimumSize(QtCore.QSize(100, 40))
+        self.bt_moduloProfesor.setMaximumSize(QtCore.QSize(100, 40))
+        self.bt_moduloProfesor.setStyleSheet("QPushButton{\n"
+"background-color:#253b59;\n"
+"color:white;\n"
+"font-size:14px;\n"
+"border-radius:15px;\n"
+"}\n"
+"QPushButton::Hover{\n"
+"background-color:#637aa6;\n"
+"}\n"
+"font-size:15px;")
+        self.bt_moduloProfesor.setObjectName("bt_moduloProfesor")
+        self.horizontalLayout_4.addWidget(self.bt_moduloProfesor)
         self.bt_imprimirProfesor = QtWidgets.QPushButton(self.page_2)
         self.bt_imprimirProfesor.setMinimumSize(QtCore.QSize(100, 40))
         self.bt_imprimirProfesor.setMaximumSize(QtCore.QSize(100, 40))
@@ -345,6 +360,19 @@ class Ui_MainWindow(object):
         self.horizontalLayout_8.setObjectName("horizontalLayout_8")
         spacerItem8 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_8.addItem(spacerItem8)
+        self.label_3 = QtWidgets.QLabel(self.page_4)
+        self.label_3.setObjectName("label_3")
+        self.horizontalLayout_8.addWidget(self.label_3)
+        self.comboBox_sede = QtWidgets.QComboBox(self.page_4)
+        self.comboBox_sede.setMinimumSize(QtCore.QSize(150, 40))
+        self.comboBox_sede.setMaximumSize(QtCore.QSize(150, 40))
+        self.comboBox_sede.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.comboBox_sede.setStyleSheet("background-color: #7E94Bf;\n"
+"color: #ffffff;\n"
+"font: 75 15pt \"MS Sans Serif\";\n"
+"border-radius:15px;")
+        self.comboBox_sede.setObjectName("comboBox_sede")
+        self.horizontalLayout_8.addWidget(self.comboBox_sede)
         self.comboBox_dia = QtWidgets.QComboBox(self.page_4)
         self.comboBox_dia.setMinimumSize(QtCore.QSize(150, 40))
         self.comboBox_dia.setMaximumSize(QtCore.QSize(150, 40))
@@ -485,7 +513,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
 
         self.retranslateUi(MainWindow)
-        self.toolBox.setCurrentIndex(3)
+        self.toolBox.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -529,6 +557,7 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Viernes"))
         item = self.tableWidget_profesores.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "Sabado"))
+        self.bt_moduloProfesor.setText(_translate("MainWindow", "Modulos "))
         self.bt_imprimirProfesor.setText(_translate("MainWindow", "Imprimir"))
         self.bt_buscarProf.setText(_translate("MainWindow", "Buscar"))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page_2), _translate("MainWindow", "Disponibilidad Profesores"))
@@ -551,6 +580,7 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Sabado"))
         self.bt_sesion.setText(_translate("MainWindow", "Buscar"))
         self.toolBox.setItemText(self.toolBox.indexOf(self.page_3), _translate("MainWindow", "Disponibilidad Seccion"))
+        self.label_3.setText(_translate("MainWindow", "Sede"))
         self.comboBox_dia.setItemText(0, _translate("MainWindow", "Lunes"))
         self.comboBox_dia.setItemText(1, _translate("MainWindow", "Martes"))
         self.comboBox_dia.setItemText(2, _translate("MainWindow", "Miercoles"))

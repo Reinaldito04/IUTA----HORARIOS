@@ -17,10 +17,10 @@ def image_url_to_base64(image_url):
 
 
 
-def recuperar_datos_bd(dia):
+def recuperar_datos_bd(dia,sede):
     conexion = sqlite3.connect("db/database.db")
     cursor = conexion.cursor()
-    cursor.execute("SELECT Dia, Hora, CodigoMat, CodigoAula, CedulaProf FROM HorarioTest WHERE Dia=?", (dia,))
+    cursor.execute("SELECT Dia, Hora, CodigoMat, CodigoAula, CedulaProf FROM HorarioTest WHERE Dia=? AND CodigoSede=?", (dia,sede))
     datos_base = cursor.fetchall()
     cursor.close()
     return datos_base
@@ -63,14 +63,14 @@ def convertir_formato_hora(hora):
     return hora
 
 
-def crear_pdf( ruta_salida,periodo,Turno,dia):
+def crear_pdf( ruta_salida,periodo,Turno,dia,sede):
     imagen_url = 'https://www.eduopinions.com/wp-content/uploads/2018/02/Instituto-Universitario-de-Tecnolog%C3%ADa-de-Administraci%C3%B3n-Industrial-IUTA-logo-350x181.gif'
     
     imagen_base64 = image_url_to_base64(imagen_url)
   
     Turno = f'{Turno}'
     periodo =f'{periodo}'
-  
+    sede = f'{sede}'
     fecha_actual = datetime.now()
     fecha_formateada = fecha_actual.strftime("%Y-%m-%d")
     conexion = sqlite3.connect("db/database.db")
@@ -82,7 +82,7 @@ def crear_pdf( ruta_salida,periodo,Turno,dia):
         # Definir los datos de la tabla
        
 
-        datos_base = recuperar_datos_bd(dia)        
+        datos_base = recuperar_datos_bd(dia,sede)        
         filas_datos = []
         for dato in datos_base:
             dia = dato[0]
@@ -188,6 +188,9 @@ def crear_pdf( ruta_salida,periodo,Turno,dia):
         
         <div class="container-periodo">
           <p>PERIODO : {periodo}</p>
+        </div>
+         <div class="container-periodo">
+          <p>SEDE : {sede}</p>
         </div>
       </div>
     </div>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>460</width>
+    <height>275</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>100</x>
+     <y>60</y>
+     <width>301</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>-1</pointsize>
+     <italic>true</italic>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-size:18px;</string>
+   </property>
+   <property name="text">
+    <string>Dias establecidos para el profesor</string>
+   </property>
+   <property name="scaledContents">
+    <bool>true</bool>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="comboBox">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>120</y>
+     <width>191</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">border-radius:15px;
+border-color:black;</string>
+   </property>
+   <item>
+    <property name="text">
+     <string>Lunes</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Martes</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Miercoles</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Jueves</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Viernes</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>Sabado</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QPushButton" name="bt_guardar">
+   <property name="geometry">
+    <rect>
+     <x>200</x>
+     <y>180</y>
+     <width>90</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Guardar</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
